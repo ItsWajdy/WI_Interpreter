@@ -74,7 +74,265 @@ class SimpleNode implements Node {
   }
   
   
-  public void interpret() {}
+  public String AtomValue;
+  public String AtomType;
+  public String CompOp;
+  public String ShiftOp;
+  public String AddOp;
+  public String MulOp;
+  public String SignOp = "-1";
+  
+  public int getId() { return this.id; }
+  public String getCompOp() { return this.CompOp; }
+  
+  public boolean evaluate() {
+	  if (this.id == GrammarTreeConstants.JJTTEST) {
+		  for (int i = 0; i < this.jjtGetNumChildren(); i++) {
+			  if (!this.jjtGetChild(i).evaluate()) {
+				  return false;
+			  }
+		  }
+		  return true;
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTORTEST) {
+		  boolean tmp = false;
+		  for (int i = 0 ; i < this.jjtGetNumChildren(); i++) {
+			  tmp |= this.jjtGetChild(i).evaluate();
+		  }
+		  return tmp;
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTXORTEST) {
+		  boolean tmp = false;
+		  for (int i = 0 ; i < this.jjtGetNumChildren(); i++) {
+			  tmp ^= this.jjtGetChild(i).evaluate();
+		  }
+		  return tmp;
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTANDTEST) {
+		  boolean tmp = true;
+		  for (int i = 0 ; i < this.jjtGetNumChildren(); i++) {
+			  tmp &= this.jjtGetChild(i).evaluate();
+		  }
+		  return tmp;
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTNOTTEST) {
+		  if (this.jjtGetChild(0).getId() == GrammarTreeConstants.JJTNOTTEST) {
+			  boolean tmp = !this.jjtGetChild(0).evaluate();
+		  
+			  if (!tmp) {
+				  return false;
+			  }
+		  }
+		  else {
+			  return this.jjtGetChild(0).evaluate();
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTCOMPARISON) {
+		  double lastVal = this.jjtGetChild(0).evaluateExpr();
+		  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
+			  if (this.jjtGetChild(i).getId() == GrammarTreeConstants.JJTCOMPOP) {
+				  if (this.jjtGetChild(i).getCompOp().equals(">")) {
+					  if (lastVal <= this.jjtGetChild(i+1).evaluateExpr())
+						  return false;
+				  }
+				  else if (this.jjtGetChild(i).getCompOp().equals("<")) {
+					  if (lastVal >= this.jjtGetChild(i+1).evaluateExpr())
+						  return false;
+				  }
+				  else if (this.jjtGetChild(i).getCompOp().equals("==")) {
+					  if (lastVal != this.jjtGetChild(i+1).evaluateExpr())
+						  return false;
+				  }
+				  else if (this.jjtGetChild(i).getCompOp().equals(">=")) {
+					  if (lastVal < this.jjtGetChild(i+1).evaluateExpr())
+						  return false;
+				  }
+				  else if (this.jjtGetChild(i).getCompOp().equals("<=")) {
+					  if (lastVal > this.jjtGetChild(i+1).evaluateExpr())
+						  return false;
+				  }
+				  else if (this.jjtGetChild(i).getCompOp().equals("!=")) {
+					  if (lastVal == this.jjtGetChild(i+1).evaluateExpr())
+						  return false;
+				  }
+			  }
+			  else {
+				  lastVal = this.jjtGetChild(i).evaluateExpr();
+			  }
+		  }
+	  }
+	  
+	  return true;
+  }
+  
+  public double evaluateExpr() {
+	  if (this.id == GrammarTreeConstants.JJTEXPR) {
+		  if (this.jjtGetNumChildren() > 1) {
+			  int ret = (int) this.jjtGetChild(0).evaluateExpr();
+			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
+				  ret = ret | (int) this.jjtGetChild(i).evaluateExpr();
+			  }
+			  return ret;
+		  }
+		  else {
+			  return this.jjtGetChild(0).evaluateExpr();
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTXOREXPR) {
+		  if (this.jjtGetNumChildren() > 1) {
+			  int ret = (int) this.jjtGetChild(0).evaluateExpr();
+			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
+				  ret = ret ^ (int) this.jjtGetChild(i).evaluateExpr();
+			  }
+			  return ret;
+		  }
+		  else {
+			  return this.jjtGetChild(0).evaluateExpr();
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTANDEXPR) {
+		  if (this.jjtGetNumChildren() > 1) {
+			  int ret = (int) this.jjtGetChild(0).evaluateExpr();
+			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
+				  ret = ret & (int) this.jjtGetChild(i).evaluateExpr();
+			  }
+			  return ret;
+		  }
+		  else {
+			  return this.jjtGetChild(0).evaluateExpr();
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTSHIFTEXPR) {
+		  if (this.jjtGetNumChildren() > 1) {
+			  int ret = (int) this.jjtGetChild(0).evaluateExpr();
+			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
+				  if (this.ShiftOp.equals(">>")) {
+					  ret >>= (int) this.jjtGetChild(i).evaluateExpr();
+				  }
+				  else if (this.ShiftOp.equals("<<")) {
+					  ret <<= (int) this.jjtGetChild(i).evaluateExpr();
+				  }
+			  }
+			  return ret;
+		  }
+		  else {
+			  return this.jjtGetChild(0).evaluateExpr();
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTARITHEXPR) {
+		  double ret = this.jjtGetChild(0).evaluateExpr();
+		  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
+			  if (this.AddOp.equals("+")) {
+				  ret += this.jjtGetChild(i).evaluateExpr();
+			  }
+			  else if (this.AddOp.equals("-")) {
+				  ret -= this.jjtGetChild(i).evaluateExpr();
+			  }
+		  }
+		  return ret;
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTTERM) {
+		  double ret = this.jjtGetChild(0).evaluateExpr();
+		  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
+			  if (this.MulOp.equals("*")) {
+				  ret *= this.jjtGetChild(i).evaluateExpr();
+			  }
+			  else if (this.MulOp.equals("/")) {
+				  ret /= this.jjtGetChild(i).evaluateExpr();
+			  }
+			  else if (this.MulOp.equals("%")) {
+				  ret %= this.jjtGetChild(i).evaluateExpr();
+			  }
+			  else if (this.MulOp.equals("//")) {
+				  ret /= this.jjtGetChild(i).evaluateExpr();
+				  ret = (int) ret;
+			  }
+		  }
+		  return ret;
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTFACTOR) {
+		  double ret = this.jjtGetChild(0).evaluateExpr();
+		  if (this.SignOp != null) {
+			  if (this.SignOp.equals("+"));
+			  else if (this.SignOp.equals("-")) {
+				  ret *= -1;
+			  }
+			  else if (this.SignOp.equals("~")) {
+				  ret = ~(int)ret;
+			  }
+			  return ret;
+		  }
+		  return ret;
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTPOWER) {
+		  double ret = this.jjtGetChild(0).evaluateExpr();
+		  if (this.jjtGetNumChildren() > 1) {
+			  ret = Math.pow(ret, this.jjtGetChild(1).evaluateExpr());
+		  }
+		  return ret;
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTATOMEXPR) {
+		  double ret = this.jjtGetChild(0).evaluateExpr();
+		  // TODO implement rest of ATOMEXPR
+		  return ret;
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTATOM) {
+		  return this.jjtGetChild(0).evaluateExpr();
+		  // TODO implement rest of ATOM
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTNUMBER) {
+		  double ret = Double.parseDouble(this.AtomValue);
+		  return ret;
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTSTRING) {
+		  //evaluateString();
+	  }
+	  return 0;
+  }
+  
+  public void interpret() {
+	  //System.out.println(GrammarTreeConstants.jjtNodeName[this.id]);
+	  if (this.id == GrammarTreeConstants.JJTINPUT) {
+		  for (int i = 0; i < this.jjtGetNumChildren(); i++) {
+			  this.jjtGetChild(i).interpret();
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTSIMPLESTMT) {
+		  for (int i = 0; i < this.jjtGetNumChildren(); i++) {
+			  this.jjtGetChild(i).interpret();
+		  }
+	  }
+	  
+	  else if (this.id == GrammarTreeConstants.JJTASSERTSTMT) {
+		  for (int i = 0; i < this.jjtGetNumChildren(); i++) {
+			  if (!this.jjtGetChild(i).evaluate()) {
+				  System.out.println("error");
+				  return;
+			  }
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTEXPRSTMT) {
+		  System.out.println(this.jjtGetNumChildren());
+		  for (int i = 0; i < this.jjtGetNumChildren(); i++) {
+			  this.jjtGetChild(i).interpret();
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTTESTLISTSTAREXPR) {
+		  System.out.println("testliststarexpr");
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTANNASSIGN) {
+		  System.out.println("annassign");
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTAUGASSIGN) {
+		  System.out.println("augassign");
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTYIELDEXPR) {
+		  System.out.println("yieldexpr");
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTTESTLIST) {
+		  System.out.println("tstlist");
+	  }
+  }
 }
 
 /* JavaCC - OriginalChecksum=ba01956f9461fbac24d4a42943ee0547 (do not edit this line) */

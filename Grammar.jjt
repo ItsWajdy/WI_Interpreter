@@ -1,7 +1,17 @@
 /**
  * JJTree template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
  */options{  static = true;}PARSER_BEGIN(Grammar)
-public class Grammar{  public static void main(String args [])  {    System.out.println("Reading from standard input...");    System.out.print("Enter an expression like \"1+(2+3)*var;\" :");    new Grammar(System.in);    try    {      SimpleNode n = Grammar.Input();      n.dump("");      System.out.println("Thank you.");    }    catch (Exception e)    {      System.out.println("Oops.");      System.out.println(e.getMessage());    }  }}PARSER_END(Grammar)SKIP :
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+public class Grammar{  public static void main(String args []) throws FileNotFoundException  {    Grammar parser = new Grammar(new FileInputStream("my_tests.txt"));
+    try { 
+   		SimpleNode root = parser.Input();
+   		root.interpret();
+   		//root.dump("  ");
+  	} catch (ParseException e) {
+  	  	System.out.println("Oops!");
+  	  	e.printStackTrace();
+  	}  }}PARSER_END(Grammar)SKIP :
 {
   "\t"
 | " "
@@ -73,6 +83,44 @@ TOKEN :
   < LAMBDA : "=>" >
 }
 
+TOKEN :
+{
+  < ABSTRACT : "abstract" >
+| < AND : "and" >
+| < ARGS : "args" >
+| < AS : "as" >
+| < ASSERT : "assert" >
+| < BREAK : "break" >
+| < CLASS : "class" >
+| < CONTINUE : "continue" >
+| < DEFINE : "define" >
+| < DO : "do" >
+| < ELSE : "else" >
+| < ELSEIF : "elseif" >
+| < FALSE : "false" >
+| < FINALLY : "finally" >
+| < FOLLOWS : "follows" >
+| < FOR : "for" >
+| < FROM : "from" >
+| < HANDLE : "handle" >
+| < IF : "if" >
+| < IMPORT : "import" >
+| < INTERFACE : "interface" >
+| < OR : "or" >
+| < PRIVATE : "private" >
+| < PROTECTED : "protected" >
+| < PUBLIC : "public" >
+| < RAISE : "raise" >
+| < RETURN : "return" >
+| < STATIC : "static" >
+| < THIS : "this" >
+| < TRUE : "true" >
+| < TRY : "try" >
+| < WHILE : "while" >
+| < WITH : "with" >
+| < XOR : "xor" >
+| < YIELD : "yield" >
+}
 
 SKIP :
 {
@@ -97,12 +145,18 @@ SimpleNode Input() :
   { return jjtThis; }
 }
 
-void Stmt() :
+void Stmt() #void :
 {}
 {
   LOOKAHEAD(2) CompoundStmt()
 | SimpleStmt()
-| < NEWLINE >
+| Newline()
+}
+
+void Newline() #void :
+{}
+{
+  < NEWLINE >
 }
 
 void SimpleStmt() :
@@ -112,7 +166,7 @@ void SimpleStmt() :
 }
 
 
-void SmallStmt() :
+void SmallStmt() #void :
 {}
 {
   FlowStmt() < NEWLINE >
@@ -125,8 +179,8 @@ void ExprStmt() :
 {}
 {
   TestlistStarExpr()  (Annassign()
-              | (Augassign()  (YieldExpr() | Testlist()))
-                      | (< ASSIGN >   (YieldExpr() | TestlistStarExpr()))*)
+              		| (Augassign()  (YieldExpr() | Testlist()))
+                    | (< ASSIGN >   (YieldExpr() | TestlistStarExpr()))*)
 }
 
 void Annassign() :
@@ -171,19 +225,19 @@ void FlowStmt() :
 void BreakStmt() :
 {}
 {
-  "break"
+  < BREAK >
 }
 
 void ContinueStmt() :
 {}
 {
-  "continue"
+  < CONTINUE >
 }
 
 void ReturnStmt() :
 {}
 {
-  "return" [LOOKAHEAD(2) Testlist()]
+  < RETURN > [LOOKAHEAD(2) Testlist()]
 }
 
 void YieldStmt() :
@@ -195,19 +249,19 @@ void YieldStmt() :
 void YieldExpr() :
 {}
 {
-  "yield" [LOOKAHEAD(2) YieldArg()]
+  < YIELD > [LOOKAHEAD(2) YieldArg()]
 }
 
 void YieldArg() :
 {}
 {
-  "from" Test() | Testlist()
+  < FROM > Test() | Testlist()
 }
 
 void RaiseStmt() :
 {}
 {
-  "raise" [LOOKAHEAD(2) Test() [LOOKAHEAD(2) "from" Test()]]
+  < RAISE > [LOOKAHEAD(2) Test() [LOOKAHEAD(2) < FROM > Test()]]
 }
 
 void ImportStmt() :
@@ -219,25 +273,25 @@ void ImportStmt() :
 void ImportName() :
 {}
 {
-  "import" DottedAsNames()
+  < IMPORT > DottedAsNames()
 }
 
 void ImportFrom() :
 {}
 {
-  ("from" (LOOKAHEAD(2) (< DOT > | < ELLIPSES >)* DottedName() | (< DOT > | < ELLIPSES >)+) "import" ("*" | "(" ImportAsNames() ")" | ImportAsNames()))
+  (< FROM > (LOOKAHEAD(2) (< DOT > | < ELLIPSES >)* DottedName() | (< DOT > | < ELLIPSES >)+) < IMPORT > ("*" | "(" ImportAsNames() ")" | ImportAsNames()))
 }
 
 void ImportAsName() :
 {}
 {
-  < NAME > ["as" < NAME >]
+  < NAME > [< AS > < NAME >]
 }
 
 void DottedAsName() :
 {}
 {
-  DottedName() ["as" < NAME >]
+  DottedName() [< AS > < NAME >]
 }
 
 void ImportAsNames() :
@@ -261,7 +315,7 @@ void DottedName() :
 void AssertStmt() :
 {}
 {
-  "assert" Test() [< COMMA > Test()]
+  < ASSERT > Test() [< COMMA > Test()]
 }
 
 void CompoundStmt() :
@@ -280,45 +334,45 @@ void CompoundStmt() :
 | WithStmt()
 | FuncDef()
 | LOOKAHEAD(3) ERROR_FuncDef()
-| LOOKAHEAD((Modifier())* "class") ClassDef()
-| LOOKAHEAD((Modifier())* "interface") InterfaceDef()
+| LOOKAHEAD((Modifier())* < CLASS >) ClassDef()
+| LOOKAHEAD((Modifier())* < INTERFACE >) InterfaceDef()
 | ERROR_ClassDef()
 }
 
 void IfStmt() :
 {}
 {
-  "if" Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ("elseif" Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()))* ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
+  < IF > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) (< ELSEIF > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()))* [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
 }
 
 void WhileStmt() :
 {}
 {
-  "while" Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
+  < WHILE > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
 }
 
 void DoStmt() :
 {}
 {
-  "do" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) "while" Test()
+  < DO > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) < WHILE > Test()
 }
 
 void ForStmt() :
 {}
 {
-  "for" Exprlist() "in" Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
+  < FOR > Exprlist() < IN > Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
 }
 
 void TryStmt() :
 {}
 {
-  ("try" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ((HandleClause() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()))+ ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())] ["finally" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())] | "finally" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())))
+  (< TRY > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ((HandleClause() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()))+ [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())] [< FINALLY > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())] | < FINALLY > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())))
 }
 
 void HandleClause() :
 {}
 {
-  "handle" [LOOKAHEAD(2) Test() ["as" < NAME >]]
+  < HANDLE > [LOOKAHEAD(2) Test() [< AS > < NAME >]]
 }
 
 void Suite() :
@@ -330,43 +384,43 @@ void Suite() :
 void WithStmt() :
 {}
 {
-  "with" WithItem() (< COMMA > WithItem())* (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())
+  < WITH > WithItem() (< COMMA > WithItem())* (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())
 }
 
 void WithItem() :
 {}
 {
-  Test() ["as" Expr()]
+  Test() [< AS > Expr()]
 }
 
 void Test() :
 {}
 {
-  LOOKAHEAD([VarArglist()] < LAMBDA >) LambDef() | OrTest() [LOOKAHEAD(2) "if" OrTest() "else" Test()]
+  LOOKAHEAD([VarArglist()] < LAMBDA >) LambDef() | (OrTest() [LOOKAHEAD(2) < IF > OrTest() < ELSE > Test()])
 }
 
 void OrTest() :
 {}
 {
-  XorTest() ("or" XorTest())*
+  XorTest() (< OR > XorTest())*
 }
 
 void XorTest() :
 {}
 {
-  AndTest() ("xor" AndTest())*
+  AndTest() (< XOR > AndTest())*
 }
 
 void AndTest() :
 {}
 {
-  NotTest() ("and" NotTest())*
+  NotTest() (< AND > NotTest())*
 }
 
 void NotTest() :
 {}
 {
-  "not" NotTest() | Comparison()
+  < NOT > NotTest() | Comparison()
 }
 
 void Comparison() :
@@ -376,18 +430,20 @@ void Comparison() :
 }
 
 void CompOp() :
-{}
+{ Token t = new Token(); }
 {
-  < GREATER >
-| < LESS >
-| < EQUALS >
-| < GREATEREQ >
-| < LESSEQ >
-| < NOTEQ >
-| < IN >
-| < NOT > < IN >
-| LOOKAHEAD(2) < IS >
-| < IS > < NOT >
+  (  t=< GREATER >
+| t=< LESS >
+| t=< EQUALS >
+| t=< GREATEREQ >
+| t=< LESSEQ >
+| t=< NOTEQ >
+| t=< IN >
+| t=< NOT > < IN >
+| LOOKAHEAD(2) t=< IS >
+| t=< IS > < NOT >
+)
+{ jjtThis.CompOp = t.image; }
 
 }
 
@@ -410,27 +466,31 @@ void AndExpr() :
 }
 
 void ShiftExpr() :
-{}
+{ Token t = new Token(); }
 {
-  ArithExpr() ((< SHIFTLEFT > | < SHIFTRIGHT >) ArithExpr())*
+  ArithExpr() (((t=< SHIFTLEFT >) | (t=< SHIFTRIGHT >)) ArithExpr())*
+  { jjtThis.ShiftOp = t.image; }
 }
 
 void ArithExpr() :
-{}
+{ Token t = new Token(); }
 {
-  Term() (LOOKAHEAD(2) (< PLUS > | < MINUS >) Term())*
+  Term() (LOOKAHEAD(2) ((t=< PLUS >) | (t=< MINUS >)) Term())*
+  { jjtThis.AddOp = t.image; }
 }
 
 void Term() :
-{}
+{ Token t = new Token(); }
 {
-  Factor() (LOOKAHEAD(2) (< MULTIPLY > | < DIVIDE > | < MOD > | < DIVIDEINT >) Factor())*
+  Factor() (LOOKAHEAD(2) ((t=< MULTIPLY >) | (t=< DIVIDE >) | (t=< MOD >) | (t=< DIVIDEINT >)) Factor())*
+  { jjtThis.MulOp = t.image; }
 }
 
 void Factor() :
-{}
+{ Token t = new Token(); }
 {
-  ((< PLUS > | < MINUS > | < TILDE >) Factor()) | Power()
+  (((t=< PLUS >) | (t=< MINUS >) | (t=< TILDE >)) Factor()) | Power()
+  { jjtThis.SignOp = t.image; }
 }
 
 void Power() :
@@ -448,15 +508,63 @@ void AtomExpr() :
 void Atom() :
 {}
 {
-  ("(" [YieldExpr() | TestlistComp()] ")")
+  (    ("(" [YieldExpr() | TestlistComp()] ")")
   | ("[" [TestlistComp()] "]")
-  | < NAME >
-  | < NUMBER >
+  | Name()
+  | Number()
   | < ELLIPSES >
-  | "true"
-  | "false"
-  | "args"
-  | (LOOKAHEAD(2) < STRING >)+
+  | True()
+  | False()
+  | Args()
+  | (LOOKAHEAD(2) String())+)
+}
+
+void Name() :
+{}
+{
+  < NAME >
+}
+
+void Number() :
+{ Token t; }
+{
+  t=< NUMBER >
+  {
+	jjtThis.AtomValue = t.image;
+  }
+}
+
+void True() :
+{ Token t; }
+{
+  t=< TRUE >
+  {
+	jjtThis.AtomValue = t.image;
+  }
+}
+
+void False() :
+{ Token t; }
+{
+  t=< FALSE >
+  {
+	jjtThis.AtomValue = t.image;
+  }
+}
+
+void Args() :
+{}
+{
+  < ARGS >
+}
+
+void String() :
+{ Token t; }
+{
+  t=< STRING >
+  {
+    jjtThis.AtomValue = t.image;
+  }
 }
 
 void TestlistComp() :
@@ -504,13 +612,13 @@ void CompIter() :
 void CompFor() :
 {}
 {
-  "for" Exprlist() "in" OrTest() [CompIter()]
+  < FOR > Exprlist() < IN > OrTest() [CompIter()]
 }
 
 void CompIf() :
 {}
 {
-  "if" TestNocond() [CompIter()]
+  < IF > TestNocond() [CompIter()]
 }
 
 void SliceOp() :
@@ -540,24 +648,24 @@ void Testlist() :
 void FuncDef() :
 {}
 {
-  "define" < NAME > Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())
+  < DEFINE > < NAME > Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())
 }
 
 
 void ClassDef() :
 {}
 {
-  (Modifier())* "class" < NAME > [< COLON> ClassName()] ["follows" InterfaceName() (< COMMA > InterfaceName())*] (LOOKAHEAD(2) < NEWLINE >)* (ClassSuite() | ERROR_ClassSuite())
+  (Modifier())* < CLASS > < NAME > [< COLON> ClassName()] [< FOLLOWS > InterfaceName() (< COMMA > InterfaceName())*] (LOOKAHEAD(2) < NEWLINE >)* (ClassSuite() | ERROR_ClassSuite())
 }
 
 void Modifier() :
 {}
 {
-  "public"
-| "private"
-| "protected"
-| "static"
-| "abstract"
+  < PUBLIC >
+| < PRIVATE >
+| < PROTECTED >
+| < STATIC >
+| < ABSTRACT >
 }
 
 void ClassName() :
@@ -585,13 +693,13 @@ void ClassStmt() :
 | LOOKAHEAD(2) ERROR_MethodDef()
 | LOOKAHEAD(3) ConstructorDef()
 | VarDef()
-| < NEWLINE >
+| Newline()
 }
 
 void MethodDef() :
 {}
 {
-  "define" (Modifier())* < NAME > Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())
+  < DEFINE > (Modifier())* < NAME > Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())
 }
 
 void ConstructorDef() :
@@ -609,7 +717,7 @@ void VarDef() :
 void InterfaceDef() :
 {}
 {
-  (Modifier())* "interface" < NAME > [< COLON> InterfaceName() (< COMMA > InterfaceName())*] (LOOKAHEAD(2) < NEWLINE >)* (ClassSuite() | ERROR_ClassSuite())
+  (Modifier())* < INTERFACE > < NAME > [< COLON> InterfaceName() (< COMMA > InterfaceName())*] (LOOKAHEAD(2) < NEWLINE >)* (ClassSuite() | ERROR_ClassSuite())
 }
 
 void Parameters() :
@@ -621,7 +729,7 @@ void Parameters() :
 void TypeDArglist() :
 {}
 {
-  TfpDef() [< ASSIGN > Test()] (LOOKAHEAD(2) < COMMA > TfpDef() [< ASSIGN > Test()])* [< COMMA > "args"]
+  TfpDef() [< ASSIGN > Test()] (LOOKAHEAD(2) < COMMA > TfpDef() [< ASSIGN > Test()])* [< COMMA > < ARGS >]
 }
 
 void TfpDef() :
@@ -662,7 +770,7 @@ void ERROR_IfStmt() :
 {}
 {
   { int line = -1; int column = -1; }
-  { line = getToken(0).beginLine; column = getToken(0).beginColumn; } < NAME > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ("elseif" Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()))* ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
+  { line = getToken(0).beginLine; column = getToken(0).beginColumn; } < NAME > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) (< ELSEIF > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()))* [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
 
   {
     error_printmessage("Definition Error\nLine: " + line + ". Column: " + column);
@@ -674,7 +782,7 @@ void ERROR_WhileStmt() :
 {}
 {
   { int line = -1; int column = -1; }
-  { line = getToken(0).beginLine; column = getToken(0).beginColumn; } < NAME > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
+  { line = getToken(0).beginLine; column = getToken(0).beginColumn; } < NAME > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
 
   {
     error_printmessage("Definition Error\nLine: " + line + ". Column: " + column);
@@ -686,7 +794,7 @@ void ERROR_DoStmt() :
 {}
 {
   { int line = -1; int column = -1; }
-  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) "while" Test()
+  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) < WHILE > Test()
 
   {
     error_printmessage("Definition Error\nLine: " + line + ". Column: " + column);
@@ -698,7 +806,7 @@ void ERROR_ForStmt1() :
 {}
 {
   { int line = -1; int column = -1; }
-  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > Exprlist() "in" Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
+  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > Exprlist() < IN > Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
 
   {
     error_printmessage("Definition Error\nLine: " + line + ". Column: " + column);
@@ -710,7 +818,7 @@ void ERROR_ForStmt2() :
 {}
 {
   { int line = -1; int column = -1; }
-  "for" Exprlist() { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
+  "for" Exprlist() { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
 
   {
     error_printmessage("Definition Error\nLine: " + line + ". Column: " + column);
@@ -746,7 +854,7 @@ void ERROR_ClassDef() :
 {}
 {
   { int line = -1; int column = -1; }
-  (Modifier())* { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > < NAME > [< COLON> ClassName()] ["follows" InterfaceName() (< COMMA > InterfaceName())*] (LOOKAHEAD(2) < NEWLINE >)* (ClassSuite() | ERROR_ClassSuite())
+  (Modifier())* { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > < NAME > [< COLON> ClassName()] [< FOLLOWS > InterfaceName() (< COMMA > InterfaceName())*] (LOOKAHEAD(2) < NEWLINE >)* (ClassSuite() | ERROR_ClassSuite())
   {
     error_printmessage("Class or Interface Definition Error\nLine: " + line + ". Column: " + column);
     //throw new ParseException();

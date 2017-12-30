@@ -2,106 +2,110 @@
 public interface GrammarTreeConstants
 {
   public int JJTINPUT = 0;
-  public int JJTSTMT = 1;
+  public int JJTVOID = 1;
   public int JJTSIMPLESTMT = 2;
-  public int JJTSMALLSTMT = 3;
-  public int JJTEXPRSTMT = 4;
-  public int JJTANNASSIGN = 5;
-  public int JJTTESTLISTSTAREXPR = 6;
-  public int JJTAUGASSIGN = 7;
-  public int JJTFLOWSTMT = 8;
-  public int JJTBREAKSTMT = 9;
-  public int JJTCONTINUESTMT = 10;
-  public int JJTRETURNSTMT = 11;
-  public int JJTYIELDSTMT = 12;
-  public int JJTYIELDEXPR = 13;
-  public int JJTYIELDARG = 14;
-  public int JJTRAISESTMT = 15;
-  public int JJTIMPORTSTMT = 16;
-  public int JJTIMPORTNAME = 17;
-  public int JJTIMPORTFROM = 18;
-  public int JJTIMPORTASNAME = 19;
-  public int JJTDOTTEDASNAME = 20;
-  public int JJTIMPORTASNAMES = 21;
-  public int JJTDOTTEDASNAMES = 22;
-  public int JJTDOTTEDNAME = 23;
-  public int JJTASSERTSTMT = 24;
-  public int JJTCOMPOUNDSTMT = 25;
-  public int JJTIFSTMT = 26;
-  public int JJTWHILESTMT = 27;
-  public int JJTDOSTMT = 28;
-  public int JJTFORSTMT = 29;
-  public int JJTTRYSTMT = 30;
-  public int JJTHANDLECLAUSE = 31;
-  public int JJTSUITE = 32;
-  public int JJTWITHSTMT = 33;
-  public int JJTWITHITEM = 34;
-  public int JJTTEST = 35;
-  public int JJTORTEST = 36;
-  public int JJTXORTEST = 37;
-  public int JJTANDTEST = 38;
-  public int JJTNOTTEST = 39;
-  public int JJTCOMPARISON = 40;
-  public int JJTCOMPOP = 41;
-  public int JJTEXPR = 42;
-  public int JJTXOREXPR = 43;
-  public int JJTANDEXPR = 44;
-  public int JJTSHIFTEXPR = 45;
-  public int JJTARITHEXPR = 46;
-  public int JJTTERM = 47;
-  public int JJTFACTOR = 48;
-  public int JJTPOWER = 49;
-  public int JJTATOMEXPR = 50;
-  public int JJTATOM = 51;
-  public int JJTTESTLISTCOMP = 52;
-  public int JJTTRAILER = 53;
-  public int JJTSUBSCRIPTLIST = 54;
-  public int JJTSUBSCRIPT = 55;
-  public int JJTARGLIST = 56;
-  public int JJTARGUMENT = 57;
-  public int JJTCOMPITER = 58;
-  public int JJTCOMPFOR = 59;
-  public int JJTCOMPIF = 60;
-  public int JJTSLICEOP = 61;
-  public int JJTEXPRLIST = 62;
-  public int JJTSTAREXPR = 63;
-  public int JJTTESTLIST = 64;
-  public int JJTFUNCDEF = 65;
-  public int JJTCLASSDEF = 66;
-  public int JJTMODIFIER = 67;
-  public int JJTCLASSNAME = 68;
-  public int JJTINTERFACENAME = 69;
-  public int JJTCLASSSUITE = 70;
-  public int JJTCLASSSTMT = 71;
-  public int JJTMETHODDEF = 72;
-  public int JJTCONSTRUCTORDEF = 73;
-  public int JJTVARDEF = 74;
-  public int JJTINTERFACEDEF = 75;
-  public int JJTPARAMETERS = 76;
-  public int JJTTYPEDARGLIST = 77;
-  public int JJTTFPDEF = 78;
-  public int JJTLAMBDEF = 79;
-  public int JJTLAMBDEFNOCOND = 80;
-  public int JJTVARARGLIST = 81;
-  public int JJTTESTNOCOND = 82;
-  public int JJTERROR_IFSTMT = 83;
-  public int JJTERROR_WHILESTMT = 84;
-  public int JJTERROR_DOSTMT = 85;
-  public int JJTERROR_FORSTMT1 = 86;
-  public int JJTERROR_FORSTMT2 = 87;
-  public int JJTERROR_SUITE = 88;
-  public int JJTERROR_FUNCDEF = 89;
-  public int JJTERROR_CLASSDEF = 90;
-  public int JJTERROR_CLASSSUITE = 91;
-  public int JJTERROR_METHODDEF = 92;
-  public int JJTERROR_PRINTMESSAGE = 93;
+  public int JJTEXPRSTMT = 3;
+  public int JJTANNASSIGN = 4;
+  public int JJTTESTLISTSTAREXPR = 5;
+  public int JJTAUGASSIGN = 6;
+  public int JJTFLOWSTMT = 7;
+  public int JJTBREAKSTMT = 8;
+  public int JJTCONTINUESTMT = 9;
+  public int JJTRETURNSTMT = 10;
+  public int JJTYIELDSTMT = 11;
+  public int JJTYIELDEXPR = 12;
+  public int JJTYIELDARG = 13;
+  public int JJTRAISESTMT = 14;
+  public int JJTIMPORTSTMT = 15;
+  public int JJTIMPORTNAME = 16;
+  public int JJTIMPORTFROM = 17;
+  public int JJTIMPORTASNAME = 18;
+  public int JJTDOTTEDASNAME = 19;
+  public int JJTIMPORTASNAMES = 20;
+  public int JJTDOTTEDASNAMES = 21;
+  public int JJTDOTTEDNAME = 22;
+  public int JJTASSERTSTMT = 23;
+  public int JJTCOMPOUNDSTMT = 24;
+  public int JJTIFSTMT = 25;
+  public int JJTWHILESTMT = 26;
+  public int JJTDOSTMT = 27;
+  public int JJTFORSTMT = 28;
+  public int JJTTRYSTMT = 29;
+  public int JJTHANDLECLAUSE = 30;
+  public int JJTSUITE = 31;
+  public int JJTWITHSTMT = 32;
+  public int JJTWITHITEM = 33;
+  public int JJTTEST = 34;
+  public int JJTORTEST = 35;
+  public int JJTXORTEST = 36;
+  public int JJTANDTEST = 37;
+  public int JJTNOTTEST = 38;
+  public int JJTCOMPARISON = 39;
+  public int JJTCOMPOP = 40;
+  public int JJTEXPR = 41;
+  public int JJTXOREXPR = 42;
+  public int JJTANDEXPR = 43;
+  public int JJTSHIFTEXPR = 44;
+  public int JJTARITHEXPR = 45;
+  public int JJTTERM = 46;
+  public int JJTFACTOR = 47;
+  public int JJTPOWER = 48;
+  public int JJTATOMEXPR = 49;
+  public int JJTATOM = 50;
+  public int JJTNAME = 51;
+  public int JJTNUMBER = 52;
+  public int JJTTRUE = 53;
+  public int JJTFALSE = 54;
+  public int JJTARGS = 55;
+  public int JJTSTRING = 56;
+  public int JJTTESTLISTCOMP = 57;
+  public int JJTTRAILER = 58;
+  public int JJTSUBSCRIPTLIST = 59;
+  public int JJTSUBSCRIPT = 60;
+  public int JJTARGLIST = 61;
+  public int JJTARGUMENT = 62;
+  public int JJTCOMPITER = 63;
+  public int JJTCOMPFOR = 64;
+  public int JJTCOMPIF = 65;
+  public int JJTSLICEOP = 66;
+  public int JJTEXPRLIST = 67;
+  public int JJTSTAREXPR = 68;
+  public int JJTTESTLIST = 69;
+  public int JJTFUNCDEF = 70;
+  public int JJTCLASSDEF = 71;
+  public int JJTMODIFIER = 72;
+  public int JJTCLASSNAME = 73;
+  public int JJTINTERFACENAME = 74;
+  public int JJTCLASSSUITE = 75;
+  public int JJTCLASSSTMT = 76;
+  public int JJTMETHODDEF = 77;
+  public int JJTCONSTRUCTORDEF = 78;
+  public int JJTVARDEF = 79;
+  public int JJTINTERFACEDEF = 80;
+  public int JJTPARAMETERS = 81;
+  public int JJTTYPEDARGLIST = 82;
+  public int JJTTFPDEF = 83;
+  public int JJTLAMBDEF = 84;
+  public int JJTLAMBDEFNOCOND = 85;
+  public int JJTVARARGLIST = 86;
+  public int JJTTESTNOCOND = 87;
+  public int JJTERROR_IFSTMT = 88;
+  public int JJTERROR_WHILESTMT = 89;
+  public int JJTERROR_DOSTMT = 90;
+  public int JJTERROR_FORSTMT1 = 91;
+  public int JJTERROR_FORSTMT2 = 92;
+  public int JJTERROR_SUITE = 93;
+  public int JJTERROR_FUNCDEF = 94;
+  public int JJTERROR_CLASSDEF = 95;
+  public int JJTERROR_CLASSSUITE = 96;
+  public int JJTERROR_METHODDEF = 97;
+  public int JJTERROR_PRINTMESSAGE = 98;
 
 
   public String[] jjtNodeName = {
     "Input",
-    "Stmt",
+    "void",
     "SimpleStmt",
-    "SmallStmt",
     "ExprStmt",
     "Annassign",
     "TestlistStarExpr",
@@ -150,6 +154,12 @@ public interface GrammarTreeConstants
     "Power",
     "AtomExpr",
     "Atom",
+    "Name",
+    "Number",
+    "True",
+    "False",
+    "Args",
+    "String",
     "TestlistComp",
     "Trailer",
     "Subscriptlist",
@@ -194,4 +204,4 @@ public interface GrammarTreeConstants
     "error_printmessage",
   };
 }
-/* JavaCC - OriginalChecksum=62f610aefd60a3c2833488c6c5549ced (do not edit this line) */
+/* JavaCC - OriginalChecksum=b57d60f4553a763e2ade481bcd96231b (do not edit this line) */

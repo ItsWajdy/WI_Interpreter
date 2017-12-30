@@ -2,10 +2,20 @@
 /*@egen*//**
  * JJTree template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
  */options{  static = true;}PARSER_BEGIN(Grammar)
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 public class Grammar/*@bgen(jjtree)*/implements GrammarTreeConstants/*@egen*/{/*@bgen(jjtree)*/
   protected static JJTGrammarState jjtree = new JJTGrammarState();
 
-/*@egen*/  public static void main(String args [])  {    System.out.println("Reading from standard input...");    System.out.print("Enter an expression like \"1+(2+3)*var;\" :");    new Grammar(System.in);    try    {      SimpleNode n = Grammar.Input();      n.dump("");      System.out.println("Thank you.");    }    catch (Exception e)    {      System.out.println("Oops.");      System.out.println(e.getMessage());    }  }}PARSER_END(Grammar)SKIP :
+/*@egen*/  public static void main(String args []) throws FileNotFoundException  {    Grammar parser = new Grammar(new FileInputStream("my_tests.txt"));
+    try { 
+   		SimpleNode root = parser.Input();
+   		root.interpret();
+   		//root.dump("  ");
+  	} catch (ParseException e) {
+  	  	System.out.println("Oops!");
+  	  	e.printStackTrace();
+  	}  }}PARSER_END(Grammar)SKIP :
 {
   "\t"
 | " "
@@ -77,6 +87,44 @@ TOKEN :
   < LAMBDA : "=>" >
 }
 
+TOKEN :
+{
+  < ABSTRACT : "abstract" >
+| < AND : "and" >
+| < ARGS : "args" >
+| < AS : "as" >
+| < ASSERT : "assert" >
+| < BREAK : "break" >
+| < CLASS : "class" >
+| < CONTINUE : "continue" >
+| < DEFINE : "define" >
+| < DO : "do" >
+| < ELSE : "else" >
+| < ELSEIF : "elseif" >
+| < FALSE : "false" >
+| < FINALLY : "finally" >
+| < FOLLOWS : "follows" >
+| < FOR : "for" >
+| < FROM : "from" >
+| < HANDLE : "handle" >
+| < IF : "if" >
+| < IMPORT : "import" >
+| < INTERFACE : "interface" >
+| < OR : "or" >
+| < PRIVATE : "private" >
+| < PROTECTED : "protected" >
+| < PUBLIC : "public" >
+| < RAISE : "raise" >
+| < RETURN : "return" >
+| < STATIC : "static" >
+| < THIS : "this" >
+| < TRUE : "true" >
+| < TRY : "try" >
+| < WHILE : "while" >
+| < WITH : "with" >
+| < XOR : "xor" >
+| < YIELD : "yield" >
+}
 
 SKIP :
 {
@@ -132,38 +180,18 @@ SimpleNode Input() :
 /*@egen*/
 }
 
-void Stmt() :
-{/*@bgen(jjtree) Stmt */
-  SimpleNode jjtn000 = new SimpleNode(JJTSTMT);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
-{/*@bgen(jjtree) Stmt */
-  try {
-/*@egen*/
+void Stmt()       :
+{}
+{
   LOOKAHEAD(2) CompoundStmt()
 | SimpleStmt()
-| < NEWLINE >/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-  }
-/*@egen*/
+| Newline()
+}
+
+void Newline()       :
+{}
+{
+  < NEWLINE >
 }
 
 void SimpleStmt() :
@@ -199,39 +227,13 @@ void SimpleStmt() :
 }
 
 
-void SmallStmt() :
-{/*@bgen(jjtree) SmallStmt */
-  SimpleNode jjtn000 = new SimpleNode(JJTSMALLSTMT);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
-{/*@bgen(jjtree) SmallStmt */
-  try {
-/*@egen*/
+void SmallStmt()       :
+{}
+{
   FlowStmt() < NEWLINE >
 | ImportStmt() < NEWLINE >
 | AssertStmt() < NEWLINE >
-| ExprStmt() < NEWLINE >/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-  }
-/*@egen*/
+| ExprStmt() < NEWLINE >
 }
 
 void ExprStmt() :
@@ -244,8 +246,8 @@ void ExprStmt() :
   try {
 /*@egen*/
   TestlistStarExpr()  (Annassign()
-              | (Augassign()  (YieldExpr() | Testlist()))
-                      | (< ASSIGN >   (YieldExpr() | TestlistStarExpr()))*)/*@bgen(jjtree)*/
+              		| (Augassign()  (YieldExpr() | Testlist()))
+                    | (< ASSIGN >   (YieldExpr() | TestlistStarExpr()))*)/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -406,7 +408,7 @@ void BreakStmt() :
 {/*@bgen(jjtree) BreakStmt */
   try {
 /*@egen*/
-  "break"/*@bgen(jjtree)*/
+  < BREAK >/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -424,7 +426,7 @@ void ContinueStmt() :
 {/*@bgen(jjtree) ContinueStmt */
   try {
 /*@egen*/
-  "continue"/*@bgen(jjtree)*/
+  < CONTINUE >/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -442,7 +444,7 @@ void ReturnStmt() :
 {/*@bgen(jjtree) ReturnStmt */
   try {
 /*@egen*/
-  "return" [LOOKAHEAD(2) Testlist()]/*@bgen(jjtree)*/
+  < RETURN > [LOOKAHEAD(2) Testlist()]/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -506,7 +508,7 @@ void YieldExpr() :
 {/*@bgen(jjtree) YieldExpr */
   try {
 /*@egen*/
-  "yield" [LOOKAHEAD(2) YieldArg()]/*@bgen(jjtree)*/
+  < YIELD > [LOOKAHEAD(2) YieldArg()]/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -538,7 +540,7 @@ void YieldArg() :
 {/*@bgen(jjtree) YieldArg */
   try {
 /*@egen*/
-  "from" Test() | Testlist()/*@bgen(jjtree)*/
+  < FROM > Test() | Testlist()/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -570,7 +572,7 @@ void RaiseStmt() :
 {/*@bgen(jjtree) RaiseStmt */
   try {
 /*@egen*/
-  "raise" [LOOKAHEAD(2) Test() [LOOKAHEAD(2) "from" Test()]]/*@bgen(jjtree)*/
+  < RAISE > [LOOKAHEAD(2) Test() [LOOKAHEAD(2) < FROM > Test()]]/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -634,7 +636,7 @@ void ImportName() :
 {/*@bgen(jjtree) ImportName */
   try {
 /*@egen*/
-  "import" DottedAsNames()/*@bgen(jjtree)*/
+  < IMPORT > DottedAsNames()/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -666,7 +668,7 @@ void ImportFrom() :
 {/*@bgen(jjtree) ImportFrom */
   try {
 /*@egen*/
-  ("from" (LOOKAHEAD(2) (< DOT > | < ELLIPSES >)* DottedName() | (< DOT > | < ELLIPSES >)+) "import" ("*" | "(" ImportAsNames() ")" | ImportAsNames()))/*@bgen(jjtree)*/
+  (< FROM > (LOOKAHEAD(2) (< DOT > | < ELLIPSES >)* DottedName() | (< DOT > | < ELLIPSES >)+) < IMPORT > ("*" | "(" ImportAsNames() ")" | ImportAsNames()))/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -698,7 +700,7 @@ void ImportAsName() :
 {/*@bgen(jjtree) ImportAsName */
   try {
 /*@egen*/
-  < NAME > ["as" < NAME >]/*@bgen(jjtree)*/
+  < NAME > [< AS > < NAME >]/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -716,7 +718,7 @@ void DottedAsName() :
 {/*@bgen(jjtree) DottedAsName */
   try {
 /*@egen*/
-  DottedName() ["as" < NAME >]/*@bgen(jjtree)*/
+  DottedName() [< AS > < NAME >]/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -830,7 +832,7 @@ void AssertStmt() :
 {/*@bgen(jjtree) AssertStmt */
   try {
 /*@egen*/
-  "assert" Test() [< COMMA > Test()]/*@bgen(jjtree)*/
+  < ASSERT > Test() [< COMMA > Test()]/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -875,8 +877,8 @@ void CompoundStmt() :
 | WithStmt()
 | FuncDef()
 | LOOKAHEAD(3) ERROR_FuncDef()
-| LOOKAHEAD((Modifier())* "class") ClassDef()
-| LOOKAHEAD((Modifier())* "interface") InterfaceDef()
+| LOOKAHEAD((Modifier())* < CLASS >) ClassDef()
+| LOOKAHEAD((Modifier())* < INTERFACE >) InterfaceDef()
 | ERROR_ClassDef()/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
@@ -909,7 +911,7 @@ void IfStmt() :
 {/*@bgen(jjtree) IfStmt */
   try {
 /*@egen*/
-  "if" Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ("elseif" Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()))* ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]/*@bgen(jjtree)*/
+  < IF > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) (< ELSEIF > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()))* [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -941,7 +943,7 @@ void WhileStmt() :
 {/*@bgen(jjtree) WhileStmt */
   try {
 /*@egen*/
-  "while" Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]/*@bgen(jjtree)*/
+  < WHILE > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -973,7 +975,7 @@ void DoStmt() :
 {/*@bgen(jjtree) DoStmt */
   try {
 /*@egen*/
-  "do" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) "while" Test()/*@bgen(jjtree)*/
+  < DO > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) < WHILE > Test()/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1005,7 +1007,7 @@ void ForStmt() :
 {/*@bgen(jjtree) ForStmt */
   try {
 /*@egen*/
-  "for" Exprlist() "in" Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]/*@bgen(jjtree)*/
+  < FOR > Exprlist() < IN > Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1037,7 +1039,7 @@ void TryStmt() :
 {/*@bgen(jjtree) TryStmt */
   try {
 /*@egen*/
-  ("try" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ((HandleClause() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()))+ ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())] ["finally" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())] | "finally" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())))/*@bgen(jjtree)*/
+  (< TRY > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ((HandleClause() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()))+ [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())] [< FINALLY > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())] | < FINALLY > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())))/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1069,7 +1071,7 @@ void HandleClause() :
 {/*@bgen(jjtree) HandleClause */
   try {
 /*@egen*/
-  "handle" [LOOKAHEAD(2) Test() ["as" < NAME >]]/*@bgen(jjtree)*/
+  < HANDLE > [LOOKAHEAD(2) Test() [< AS > < NAME >]]/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1133,7 +1135,7 @@ void WithStmt() :
 {/*@bgen(jjtree) WithStmt */
   try {
 /*@egen*/
-  "with" WithItem() (< COMMA > WithItem())* (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())/*@bgen(jjtree)*/
+  < WITH > WithItem() (< COMMA > WithItem())* (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1165,7 +1167,7 @@ void WithItem() :
 {/*@bgen(jjtree) WithItem */
   try {
 /*@egen*/
-  Test() ["as" Expr()]/*@bgen(jjtree)*/
+  Test() [< AS > Expr()]/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1197,7 +1199,7 @@ void Test() :
 {/*@bgen(jjtree) Test */
   try {
 /*@egen*/
-  LOOKAHEAD([VarArglist()] < LAMBDA >) LambDef() | OrTest() [LOOKAHEAD(2) "if" OrTest() "else" Test()]/*@bgen(jjtree)*/
+  LOOKAHEAD([VarArglist()] < LAMBDA >) LambDef() | (OrTest() [LOOKAHEAD(2) < IF > OrTest() < ELSE > Test()])/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1229,7 +1231,7 @@ void OrTest() :
 {/*@bgen(jjtree) OrTest */
   try {
 /*@egen*/
-  XorTest() ("or" XorTest())*/*@bgen(jjtree)*/
+  XorTest() (< OR > XorTest())*/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1261,7 +1263,7 @@ void XorTest() :
 {/*@bgen(jjtree) XorTest */
   try {
 /*@egen*/
-  AndTest() ("xor" AndTest())*/*@bgen(jjtree)*/
+  AndTest() (< XOR > AndTest())*/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1293,7 +1295,7 @@ void AndTest() :
 {/*@bgen(jjtree) AndTest */
   try {
 /*@egen*/
-  NotTest() ("and" NotTest())*/*@bgen(jjtree)*/
+  NotTest() (< AND > NotTest())*/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1325,7 +1327,7 @@ void NotTest() :
 {/*@bgen(jjtree) NotTest */
   try {
 /*@egen*/
-  "not" NotTest() | Comparison()/*@bgen(jjtree)*/
+  < NOT > NotTest() | Comparison()/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1385,20 +1387,27 @@ void CompOp() :
   SimpleNode jjtn000 = new SimpleNode(JJTCOMPOP);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+/*@egen*/ Token t = new Token(); }
 {/*@bgen(jjtree) CompOp */
   try {
 /*@egen*/
-  < GREATER >
-| < LESS >
-| < EQUALS >
-| < GREATEREQ >
-| < LESSEQ >
-| < NOTEQ >
-| < IN >
-| < NOT > < IN >
-| LOOKAHEAD(2) < IS >
-| < IS > < NOT >/*@bgen(jjtree)*/
+  (  t=< GREATER >
+| t=< LESS >
+| t=< EQUALS >
+| t=< GREATEREQ >
+| t=< LESSEQ >
+| t=< NOTEQ >
+| t=< IN >
+| t=< NOT > < IN >
+| LOOKAHEAD(2) t=< IS >
+| t=< IS > < NOT >
+)/*@bgen(jjtree)*/
+{
+  jjtree.closeNodeScope(jjtn000, true);
+  jjtc000 = false;
+}
+/*@egen*/
+{ jjtn000.CompOp = t.image; }/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -1509,11 +1518,17 @@ void ShiftExpr() :
   SimpleNode jjtn000 = new SimpleNode(JJTSHIFTEXPR);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+/*@egen*/ Token t = new Token(); }
 {/*@bgen(jjtree) ShiftExpr */
   try {
 /*@egen*/
-  ArithExpr() ((< SHIFTLEFT > | < SHIFTRIGHT >) ArithExpr())*/*@bgen(jjtree)*/
+  ArithExpr() (((t=< SHIFTLEFT >) | (t=< SHIFTRIGHT >)) ArithExpr())*/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  { jjtn000.ShiftOp = t.image; }/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1541,11 +1556,17 @@ void ArithExpr() :
   SimpleNode jjtn000 = new SimpleNode(JJTARITHEXPR);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+/*@egen*/ Token t = new Token(); }
 {/*@bgen(jjtree) ArithExpr */
   try {
 /*@egen*/
-  Term() (LOOKAHEAD(2) (< PLUS > | < MINUS >) Term())*/*@bgen(jjtree)*/
+  Term() (LOOKAHEAD(2) ((t=< PLUS >) | (t=< MINUS >)) Term())*/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  { jjtn000.AddOp = t.image; }/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1573,11 +1594,17 @@ void Term() :
   SimpleNode jjtn000 = new SimpleNode(JJTTERM);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+/*@egen*/ Token t = new Token(); }
 {/*@bgen(jjtree) Term */
   try {
 /*@egen*/
-  Factor() (LOOKAHEAD(2) (< MULTIPLY > | < DIVIDE > | < MOD > | < DIVIDEINT >) Factor())*/*@bgen(jjtree)*/
+  Factor() (LOOKAHEAD(2) ((t=< MULTIPLY >) | (t=< DIVIDE >) | (t=< MOD >) | (t=< DIVIDEINT >)) Factor())*/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  { jjtn000.MulOp = t.image; }/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1605,11 +1632,17 @@ void Factor() :
   SimpleNode jjtn000 = new SimpleNode(JJTFACTOR);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+/*@egen*/ Token t = new Token(); }
 {/*@bgen(jjtree) Factor */
   try {
 /*@egen*/
-  ((< PLUS > | < MINUS > | < TILDE >) Factor()) | Power()/*@bgen(jjtree)*/
+  (((t=< PLUS >) | (t=< MINUS >) | (t=< TILDE >)) Factor()) | Power()/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  { jjtn000.SignOp = t.image; }/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1705,15 +1738,15 @@ void Atom() :
 {/*@bgen(jjtree) Atom */
   try {
 /*@egen*/
-  ("(" [YieldExpr() | TestlistComp()] ")")
+  (    ("(" [YieldExpr() | TestlistComp()] ")")
   | ("[" [TestlistComp()] "]")
-  | < NAME >
-  | < NUMBER >
+  | Name()
+  | Number()
   | < ELLIPSES >
-  | "true"
-  | "false"
-  | "args"
-  | (LOOKAHEAD(2) < STRING >)+/*@bgen(jjtree)*/
+  | True()
+  | False()
+  | Args()
+  | (LOOKAHEAD(2) String())+)/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1728,6 +1761,146 @@ void Atom() :
       throw (ParseException)jjte000;
     }
     throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void Name() :
+{/*@bgen(jjtree) Name */
+  SimpleNode jjtn000 = new SimpleNode(JJTNAME);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/}
+{/*@bgen(jjtree) Name */
+  try {
+/*@egen*/
+  < NAME >/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void Number() :
+{/*@bgen(jjtree) Number */
+  SimpleNode jjtn000 = new SimpleNode(JJTNUMBER);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/ Token t; }
+{/*@bgen(jjtree) Number */
+  try {
+/*@egen*/
+  t=< NUMBER >/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  {
+	jjtn000.AtomValue = t.image;
+  }/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void True() :
+{/*@bgen(jjtree) True */
+  SimpleNode jjtn000 = new SimpleNode(JJTTRUE);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/ Token t; }
+{/*@bgen(jjtree) True */
+  try {
+/*@egen*/
+  t=< TRUE >/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  {
+	jjtn000.AtomValue = t.image;
+  }/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void False() :
+{/*@bgen(jjtree) False */
+  SimpleNode jjtn000 = new SimpleNode(JJTFALSE);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/ Token t; }
+{/*@bgen(jjtree) False */
+  try {
+/*@egen*/
+  t=< FALSE >/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  {
+	jjtn000.AtomValue = t.image;
+  }/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void Args() :
+{/*@bgen(jjtree) Args */
+  SimpleNode jjtn000 = new SimpleNode(JJTARGS);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/}
+{/*@bgen(jjtree) Args */
+  try {
+/*@egen*/
+  < ARGS >/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void String() :
+{/*@bgen(jjtree) String */
+  SimpleNode jjtn000 = new SimpleNode(JJTSTRING);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/ Token t; }
+{/*@bgen(jjtree) String */
+  try {
+/*@egen*/
+  t=< STRING >/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  {
+    jjtn000.AtomValue = t.image;
+  }/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -1969,7 +2142,7 @@ void CompFor() :
 {/*@bgen(jjtree) CompFor */
   try {
 /*@egen*/
-  "for" Exprlist() "in" OrTest() [CompIter()]/*@bgen(jjtree)*/
+  < FOR > Exprlist() < IN > OrTest() [CompIter()]/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -2001,7 +2174,7 @@ void CompIf() :
 {/*@bgen(jjtree) CompIf */
   try {
 /*@egen*/
-  "if" TestNocond() [CompIter()]/*@bgen(jjtree)*/
+  < IF > TestNocond() [CompIter()]/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -2161,7 +2334,7 @@ void FuncDef() :
 {/*@bgen(jjtree) FuncDef */
   try {
 /*@egen*/
-  "define" < NAME > Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())/*@bgen(jjtree)*/
+  < DEFINE > < NAME > Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -2194,7 +2367,7 @@ void ClassDef() :
 {/*@bgen(jjtree) ClassDef */
   try {
 /*@egen*/
-  (Modifier())* "class" < NAME > [< COLON> ClassName()] ["follows" InterfaceName() (< COMMA > InterfaceName())*] (LOOKAHEAD(2) < NEWLINE >)* (ClassSuite() | ERROR_ClassSuite())/*@bgen(jjtree)*/
+  (Modifier())* < CLASS > < NAME > [< COLON> ClassName()] [< FOLLOWS > InterfaceName() (< COMMA > InterfaceName())*] (LOOKAHEAD(2) < NEWLINE >)* (ClassSuite() | ERROR_ClassSuite())/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -2226,11 +2399,11 @@ void Modifier() :
 {/*@bgen(jjtree) Modifier */
   try {
 /*@egen*/
-  "public"
-| "private"
-| "protected"
-| "static"
-| "abstract"/*@bgen(jjtree)*/
+  < PUBLIC >
+| < PRIVATE >
+| < PROTECTED >
+| < STATIC >
+| < ABSTRACT >/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -2348,7 +2521,7 @@ void ClassStmt() :
 | LOOKAHEAD(2) ERROR_MethodDef()
 | LOOKAHEAD(3) ConstructorDef()
 | VarDef()
-| < NEWLINE >/*@bgen(jjtree)*/
+| Newline()/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -2380,7 +2553,7 @@ void MethodDef() :
 {/*@bgen(jjtree) MethodDef */
   try {
 /*@egen*/
-  "define" (Modifier())* < NAME > Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())/*@bgen(jjtree)*/
+  < DEFINE > (Modifier())* < NAME > Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -2476,7 +2649,7 @@ void InterfaceDef() :
 {/*@bgen(jjtree) InterfaceDef */
   try {
 /*@egen*/
-  (Modifier())* "interface" < NAME > [< COLON> InterfaceName() (< COMMA > InterfaceName())*] (LOOKAHEAD(2) < NEWLINE >)* (ClassSuite() | ERROR_ClassSuite())/*@bgen(jjtree)*/
+  (Modifier())* < INTERFACE > < NAME > [< COLON> InterfaceName() (< COMMA > InterfaceName())*] (LOOKAHEAD(2) < NEWLINE >)* (ClassSuite() | ERROR_ClassSuite())/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -2540,7 +2713,7 @@ void TypeDArglist() :
 {/*@bgen(jjtree) TypeDArglist */
   try {
 /*@egen*/
-  TfpDef() [< ASSIGN > Test()] (LOOKAHEAD(2) < COMMA > TfpDef() [< ASSIGN > Test()])* [< COMMA > "args"]/*@bgen(jjtree)*/
+  TfpDef() [< ASSIGN > Test()] (LOOKAHEAD(2) < COMMA > TfpDef() [< ASSIGN > Test()])* [< COMMA > < ARGS >]/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -2737,7 +2910,7 @@ void ERROR_IfStmt() :
   try {
 /*@egen*/
   { int line = -1; int column = -1; }
-  { line = getToken(0).beginLine; column = getToken(0).beginColumn; } < NAME > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ("elseif" Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()))* ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]/*@bgen(jjtree)*/
+  { line = getToken(0).beginLine; column = getToken(0).beginColumn; } < NAME > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) (< ELSEIF > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()))* [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]/*@bgen(jjtree)*/
   {
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
@@ -2780,7 +2953,7 @@ void ERROR_WhileStmt() :
   try {
 /*@egen*/
   { int line = -1; int column = -1; }
-  { line = getToken(0).beginLine; column = getToken(0).beginColumn; } < NAME > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]/*@bgen(jjtree)*/
+  { line = getToken(0).beginLine; column = getToken(0).beginColumn; } < NAME > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]/*@bgen(jjtree)*/
   {
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
@@ -2823,7 +2996,7 @@ void ERROR_DoStmt() :
   try {
 /*@egen*/
   { int line = -1; int column = -1; }
-  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) "while" Test()/*@bgen(jjtree)*/
+  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) < WHILE > Test()/*@bgen(jjtree)*/
   {
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
@@ -2866,7 +3039,7 @@ void ERROR_ForStmt1() :
   try {
 /*@egen*/
   { int line = -1; int column = -1; }
-  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > Exprlist() "in" Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]/*@bgen(jjtree)*/
+  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > Exprlist() < IN > Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]/*@bgen(jjtree)*/
   {
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
@@ -2909,7 +3082,7 @@ void ERROR_ForStmt2() :
   try {
 /*@egen*/
   { int line = -1; int column = -1; }
-  "for" Exprlist() { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]/*@bgen(jjtree)*/
+  "for" Exprlist() { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]/*@bgen(jjtree)*/
   {
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
@@ -3038,7 +3211,7 @@ void ERROR_ClassDef() :
   try {
 /*@egen*/
   { int line = -1; int column = -1; }
-  (Modifier())* { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > < NAME > [< COLON> ClassName()] ["follows" InterfaceName() (< COMMA > InterfaceName())*] (LOOKAHEAD(2) < NEWLINE >)* (ClassSuite() | ERROR_ClassSuite())/*@bgen(jjtree)*/
+  (Modifier())* { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > < NAME > [< COLON> ClassName()] [< FOLLOWS > InterfaceName() (< COMMA > InterfaceName())*] (LOOKAHEAD(2) < NEWLINE >)* (ClassSuite() | ERROR_ClassSuite())/*@bgen(jjtree)*/
   {
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;

@@ -91,17 +91,87 @@ public interface GrammarConstants {
   /** RegularExpression Id. */
   int LAMBDA = 43;
   /** RegularExpression Id. */
-  int NAME = 89;
+  int ABSTRACT = 44;
   /** RegularExpression Id. */
-  int NEWLINE = 90;
+  int AND = 45;
   /** RegularExpression Id. */
-  int STRING = 91;
+  int ARGS = 46;
   /** RegularExpression Id. */
-  int NUMBER = 92;
+  int AS = 47;
   /** RegularExpression Id. */
-  int INT = 93;
+  int ASSERT = 48;
   /** RegularExpression Id. */
-  int FLOAT = 94;
+  int BREAK = 49;
+  /** RegularExpression Id. */
+  int CLASS = 50;
+  /** RegularExpression Id. */
+  int CONTINUE = 51;
+  /** RegularExpression Id. */
+  int DEFINE = 52;
+  /** RegularExpression Id. */
+  int DO = 53;
+  /** RegularExpression Id. */
+  int ELSE = 54;
+  /** RegularExpression Id. */
+  int ELSEIF = 55;
+  /** RegularExpression Id. */
+  int FALSE = 56;
+  /** RegularExpression Id. */
+  int FINALLY = 57;
+  /** RegularExpression Id. */
+  int FOLLOWS = 58;
+  /** RegularExpression Id. */
+  int FOR = 59;
+  /** RegularExpression Id. */
+  int FROM = 60;
+  /** RegularExpression Id. */
+  int HANDLE = 61;
+  /** RegularExpression Id. */
+  int IF = 62;
+  /** RegularExpression Id. */
+  int IMPORT = 63;
+  /** RegularExpression Id. */
+  int INTERFACE = 64;
+  /** RegularExpression Id. */
+  int OR = 65;
+  /** RegularExpression Id. */
+  int PRIVATE = 66;
+  /** RegularExpression Id. */
+  int PROTECTED = 67;
+  /** RegularExpression Id. */
+  int PUBLIC = 68;
+  /** RegularExpression Id. */
+  int RAISE = 69;
+  /** RegularExpression Id. */
+  int RETURN = 70;
+  /** RegularExpression Id. */
+  int STATIC = 71;
+  /** RegularExpression Id. */
+  int THIS = 72;
+  /** RegularExpression Id. */
+  int TRUE = 73;
+  /** RegularExpression Id. */
+  int TRY = 74;
+  /** RegularExpression Id. */
+  int WHILE = 75;
+  /** RegularExpression Id. */
+  int WITH = 76;
+  /** RegularExpression Id. */
+  int XOR = 77;
+  /** RegularExpression Id. */
+  int YIELD = 78;
+  /** RegularExpression Id. */
+  int NAME = 90;
+  /** RegularExpression Id. */
+  int NEWLINE = 91;
+  /** RegularExpression Id. */
+  int STRING = 92;
+  /** RegularExpression Id. */
+  int NUMBER = 93;
+  /** RegularExpression Id. */
+  int INT = 94;
+  /** RegularExpression Id. */
+  int FLOAT = 95;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -154,51 +224,52 @@ public interface GrammarConstants {
     "\"{\"",
     "\"}\"",
     "\"=>\"",
-    "\"~~~\"",
-    "\"~~~\"",
-    "<token of kind 46>",
-    "\"break\"",
-    "\"continue\"",
-    "\"return\"",
-    "\"yield\"",
-    "\"from\"",
-    "\"raise\"",
-    "\"import\"",
-    "\"(\"",
-    "\")\"",
+    "\"abstract\"",
+    "\"and\"",
+    "\"args\"",
     "\"as\"",
     "\"assert\"",
+    "\"break\"",
     "\"class\"",
-    "\"interface\"",
-    "\"if\"",
-    "\"elseif\"",
-    "\"else\"",
-    "\"while\"",
+    "\"continue\"",
+    "\"define\"",
     "\"do\"",
-    "\"for\"",
-    "\"try\"",
+    "\"else\"",
+    "\"elseif\"",
+    "\"false\"",
     "\"finally\"",
+    "\"follows\"",
+    "\"for\"",
+    "\"from\"",
     "\"handle\"",
-    "\"with\"",
+    "\"if\"",
+    "\"import\"",
+    "\"interface\"",
     "\"or\"",
+    "\"private\"",
+    "\"protected\"",
+    "\"public\"",
+    "\"raise\"",
+    "\"return\"",
+    "\"static\"",
+    "\"this\"",
+    "\"true\"",
+    "\"try\"",
+    "\"while\"",
+    "\"with\"",
     "\"xor\"",
-    "\"and\"",
+    "\"yield\"",
+    "\"~~~\"",
+    "\"~~~\"",
+    "<token of kind 81>",
+    "\"(\"",
+    "\")\"",
     "\"|\"",
     "\"^\"",
     "\"&\"",
     "\"[\"",
     "\"]\"",
-    "\"true\"",
-    "\"false\"",
-    "\"args\"",
-    "\"define\"",
     "\"->\"",
-    "\"follows\"",
-    "\"public\"",
-    "\"private\"",
-    "\"protected\"",
-    "\"static\"",
-    "\"abstract\"",
     "<NAME>",
     "<NEWLINE>",
     "<STRING>",
