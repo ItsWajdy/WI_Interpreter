@@ -1,0 +1,803 @@
+/**
+ * JJTree template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */options{  static = true;}PARSER_BEGIN(Grammar)
+public class Grammar{  public static void main(String args [])  {    System.out.println("Reading from standard input...");    System.out.print("Enter an expression like \"1+(2+3)*var;\" :");    new Grammar(System.in);    try    {      SimpleNode n = Grammar.Input();      n.dump("");      System.out.println("Thank you.");    }    catch (Exception e)    {      System.out.println("Oops.");      System.out.println(e.getMessage());    }  }}PARSER_END(Grammar)SKIP :
+{
+  "\t"
+| " "
+}
+
+SPECIAL_TOKEN :
+{
+  < SINGLE_LINE_COMMENT: "~~" (~["~"]) (~["\n", "\r"])* (["\n", "\r"]) >
+}
+
+TOKEN :
+{
+  < PLUS : "+" >
+| < MINUS : "-" >
+| < MULTIPLY : "*" >
+| < DIVIDE : "/" >
+| < ASSIGN : "=" >
+| < MOD : "%" >
+| < TILDE : "~" (~["~"])>
+| < POWER : "**" >
+| < DIVIDEINT : "//" >
+| < SHIFTLEFT : "<<" >
+| < SHIFTRIGHT : ">>" >
+| < GREATER : ">" >
+| < LESS : "<" >
+| < EQUALS : "==" >
+| < GREATEREQ : ">=" >
+| < LESSEQ : "<=" >
+| < NOTEQ : "!=" >
+| < IN : "in" >
+| < NOT : "not" >
+| < IS : "is" >
+}
+
+TOKEN :
+{
+  < PLUSEQ : "+=" >
+| < MINUSEQ : "-=" >
+| < MULTIPLYEQ : "*=" >
+| < DIVIDEEQ : "/=" >
+| < MODEQ : "%=" >
+| < ANDEQ : "&=" >
+| < OREQ : "|=" >
+| < XOREQ : "^=" >
+| < SHIFTLEFTEQ : "<<=" >
+| < SHIFTRIGHTEQ : ">>=" >
+| < POWEREQ : "**=" >
+| < DIVIDEINTEQ : "//=" >
+}
+
+TOKEN :
+{
+  < COLON : ":" >
+| < SEMICOLON : ";" >
+| < ELLIPSES : "..." >
+| < DOT : "." >
+| < COMMA : "," >
+}
+
+
+TOKEN :
+{
+  < OPENBRACE : "{" >
+| < CLOSEBRACE : "}" >
+}
+
+TOKEN :
+{
+  < LAMBDA : "=>" >
+}
+
+
+SKIP :
+{
+  "~~~" : WithinComment
+}
+
+<WithinComment> SKIP :
+{
+  "~~~" : DEFAULT
+}
+
+<WithinComment> MORE :
+{
+  <~[]>
+}
+
+
+SimpleNode Input() :
+{}
+{
+  (Stmt())*
+  { return jjtThis; }
+}
+
+void Stmt() :
+{}
+{
+  LOOKAHEAD(2) CompoundStmt()
+| SimpleStmt()
+| < NEWLINE >
+}
+
+void SimpleStmt() :
+{}
+{
+  SmallStmt() (< SEMICOLON > SmallStmt())*
+}
+
+
+void SmallStmt() :
+{}
+{
+  FlowStmt() < NEWLINE >
+| ImportStmt() < NEWLINE >
+| AssertStmt() < NEWLINE >
+| ExprStmt() < NEWLINE >
+}
+
+void ExprStmt() :
+{}
+{
+  TestlistStarExpr()  (Annassign()
+              | (Augassign()  (YieldExpr() | Testlist()))
+                      | (< ASSIGN >   (YieldExpr() | TestlistStarExpr()))*)
+}
+
+void Annassign() :
+{}
+{
+  < COLON> Test() [< ASSIGN > Test()]
+}
+
+void TestlistStarExpr() :
+{}
+{
+  (Test() | StarExpr()) (< COMMA > (Test() | StarExpr()))*
+}
+
+void Augassign() :
+{}
+{
+  < PLUSEQ >
+| < MINUSEQ >
+| < MULTIPLYEQ >
+| < DIVIDEEQ >
+| < MODEQ >
+| < ANDEQ >
+| < OREQ >
+| < XOREQ >
+| < SHIFTRIGHTEQ >
+| < SHIFTLEFTEQ >
+| < POWEREQ >
+| < DIVIDEINTEQ >
+}
+
+void FlowStmt() :
+{}
+{
+  BreakStmt()
+| ContinueStmt()
+| ReturnStmt()
+| RaiseStmt()
+| YieldStmt()
+}
+
+void BreakStmt() :
+{}
+{
+  "break"
+}
+
+void ContinueStmt() :
+{}
+{
+  "continue"
+}
+
+void ReturnStmt() :
+{}
+{
+  "return" [LOOKAHEAD(2) Testlist()]
+}
+
+void YieldStmt() :
+{}
+{
+  YieldExpr()
+}
+
+void YieldExpr() :
+{}
+{
+  "yield" [LOOKAHEAD(2) YieldArg()]
+}
+
+void YieldArg() :
+{}
+{
+  "from" Test() | Testlist()
+}
+
+void RaiseStmt() :
+{}
+{
+  "raise" [LOOKAHEAD(2) Test() [LOOKAHEAD(2) "from" Test()]]
+}
+
+void ImportStmt() :
+{}
+{
+  ImportName() | ImportFrom()
+}
+
+void ImportName() :
+{}
+{
+  "import" DottedAsNames()
+}
+
+void ImportFrom() :
+{}
+{
+  ("from" (LOOKAHEAD(2) (< DOT > | < ELLIPSES >)* DottedName() | (< DOT > | < ELLIPSES >)+) "import" ("*" | "(" ImportAsNames() ")" | ImportAsNames()))
+}
+
+void ImportAsName() :
+{}
+{
+  < NAME > ["as" < NAME >]
+}
+
+void DottedAsName() :
+{}
+{
+  DottedName() ["as" < NAME >]
+}
+
+void ImportAsNames() :
+{}
+{
+  ImportAsName() (< COMMA > ImportAsName())*
+}
+
+void DottedAsNames() :
+{}
+{
+  DottedAsName() (< COMMA > DottedAsName())*
+}
+
+void DottedName() :
+{}
+{
+  < NAME > (< DOT > < NAME >)*
+}
+
+void AssertStmt() :
+{}
+{
+  "assert" Test() [< COMMA > Test()]
+}
+
+void CompoundStmt() :
+{}
+{ 
+  IfStmt()
+| LOOKAHEAD(3) ERROR_IfStmt()
+| WhileStmt()
+| LOOKAHEAD(3) ERROR_WhileStmt()
+| DoStmt()
+| LOOKAHEAD(3) ERROR_DoStmt()
+| LOOKAHEAD(3) ForStmt()
+| LOOKAHEAD(3) ERROR_ForStmt1()
+| LOOKAHEAD(3) ERROR_ForStmt2()
+| TryStmt()
+| WithStmt()
+| FuncDef()
+| LOOKAHEAD(3) ERROR_FuncDef()
+| LOOKAHEAD((Modifier())* "class") ClassDef()
+| LOOKAHEAD((Modifier())* "interface") InterfaceDef()
+| ERROR_ClassDef()
+}
+
+void IfStmt() :
+{}
+{
+  "if" Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ("elseif" Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()))* ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
+}
+
+void WhileStmt() :
+{}
+{
+  "while" Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
+}
+
+void DoStmt() :
+{}
+{
+  "do" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) "while" Test()
+}
+
+void ForStmt() :
+{}
+{
+  "for" Exprlist() "in" Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
+}
+
+void TryStmt() :
+{}
+{
+  ("try" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ((HandleClause() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()))+ ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())] ["finally" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())] | "finally" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())))
+}
+
+void HandleClause() :
+{}
+{
+  "handle" [LOOKAHEAD(2) Test() ["as" < NAME >]]
+}
+
+void Suite() :
+{}
+{
+  (((< OPENBRACE > (Stmt())+ < CLOSEBRACE >)) (LOOKAHEAD(2) < NEWLINE >)*)
+}
+
+void WithStmt() :
+{}
+{
+  "with" WithItem() (< COMMA > WithItem())* (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())
+}
+
+void WithItem() :
+{}
+{
+  Test() ["as" Expr()]
+}
+
+void Test() :
+{}
+{
+  LOOKAHEAD([VarArglist()] < LAMBDA >) LambDef() | OrTest() [LOOKAHEAD(2) "if" OrTest() "else" Test()]
+}
+
+void OrTest() :
+{}
+{
+  XorTest() ("or" XorTest())*
+}
+
+void XorTest() :
+{}
+{
+  AndTest() ("xor" AndTest())*
+}
+
+void AndTest() :
+{}
+{
+  NotTest() ("and" NotTest())*
+}
+
+void NotTest() :
+{}
+{
+  "not" NotTest() | Comparison()
+}
+
+void Comparison() :
+{}
+{
+  Expr() (LOOKAHEAD(2) CompOp() Expr())*
+}
+
+void CompOp() :
+{}
+{
+  < GREATER >
+| < LESS >
+| < EQUALS >
+| < GREATEREQ >
+| < LESSEQ >
+| < NOTEQ >
+| < IN >
+| < NOT > < IN >
+| LOOKAHEAD(2) < IS >
+| < IS > < NOT >
+
+}
+
+void Expr() :
+{}
+{
+  XorExpr() ("|" XorExpr())*
+}
+
+void XorExpr() :
+{}
+{
+  AndExpr() ("^" AndExpr())*
+}
+
+void AndExpr() :
+{}
+{
+  ShiftExpr() ("&" ShiftExpr())*
+}
+
+void ShiftExpr() :
+{}
+{
+  ArithExpr() ((< SHIFTLEFT > | < SHIFTRIGHT >) ArithExpr())*
+}
+
+void ArithExpr() :
+{}
+{
+  Term() (LOOKAHEAD(2) (< PLUS > | < MINUS >) Term())*
+}
+
+void Term() :
+{}
+{
+  Factor() (LOOKAHEAD(2) (< MULTIPLY > | < DIVIDE > | < MOD > | < DIVIDEINT >) Factor())*
+}
+
+void Factor() :
+{}
+{
+  ((< PLUS > | < MINUS > | < TILDE >) Factor()) | Power()
+}
+
+void Power() :
+{}
+{
+  AtomExpr() ["**" Factor()]
+}
+
+void AtomExpr() :
+{}
+{
+  Atom() (LOOKAHEAD(2) Trailer())*
+}
+
+void Atom() :
+{}
+{
+  ("(" [YieldExpr() | TestlistComp()] ")")
+  | ("[" [TestlistComp()] "]")
+  | < NAME >
+  | < NUMBER >
+  | < ELLIPSES >
+  | "true"
+  | "false"
+  | "args"
+  | (LOOKAHEAD(2) < STRING >)+
+}
+
+void TestlistComp() :
+{}
+{
+  (Test() | StarExpr()) (CompFor() | (< COMMA > (Test() | StarExpr()))*)
+}
+
+void Trailer() :
+{}
+{
+  "(" [Arglist()] ")" | "[" Subscriptlist() "]" | < DOT > < NAME >
+}
+
+void Subscriptlist() :
+{}
+{
+  Subscript() (< COMMA > Subscript())*
+}
+
+void Subscript() :
+{}
+{
+  LOOKAHEAD(2) Test() | [Test()] < COLON> [Test()] [SliceOp()]
+}
+
+void Arglist() :
+{}
+{
+  Argument() (< COMMA > Argument())*
+}
+
+void Argument() :
+{}
+{
+  (LOOKAHEAD(3) Test() [CompFor()] | Test() < ASSIGN > Test() | "*" Test())
+}
+
+void CompIter() :
+{}
+{
+  CompFor() | CompIf()
+}
+
+void CompFor() :
+{}
+{
+  "for" Exprlist() "in" OrTest() [CompIter()]
+}
+
+void CompIf() :
+{}
+{
+  "if" TestNocond() [CompIter()]
+}
+
+void SliceOp() :
+{}
+{
+  < COLON> [Test()]
+}
+
+void Exprlist() :
+{}
+{
+  (Expr() | StarExpr()) (< COMMA > (Expr() | StarExpr()))*
+}
+
+void StarExpr() :
+{}
+{
+  "*" Expr()
+}
+
+void Testlist() :
+{}
+{
+  Test() (< COMMA > Test())*
+}
+
+void FuncDef() :
+{}
+{
+  "define" < NAME > Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())
+}
+
+
+void ClassDef() :
+{}
+{
+  (Modifier())* "class" < NAME > [< COLON> ClassName()] ["follows" InterfaceName() (< COMMA > InterfaceName())*] (LOOKAHEAD(2) < NEWLINE >)* (ClassSuite() | ERROR_ClassSuite())
+}
+
+void Modifier() :
+{}
+{
+  "public"
+| "private"
+| "protected"
+| "static"
+| "abstract"
+}
+
+void ClassName() :
+{}
+{
+  DottedAsName()
+}
+
+void InterfaceName() :
+{}
+{
+  DottedAsName()
+}
+
+void ClassSuite() :
+{}
+{
+  < OPENBRACE > (ClassStmt())* < CLOSEBRACE >
+}
+
+void ClassStmt() :
+{}
+{
+  MethodDef()
+| LOOKAHEAD(2) ERROR_MethodDef()
+| LOOKAHEAD(3) ConstructorDef()
+| VarDef()
+| < NEWLINE >
+}
+
+void MethodDef() :
+{}
+{
+  "define" (Modifier())* < NAME > Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())
+}
+
+void ConstructorDef() :
+{}
+{
+  (Modifier())* < NAME > Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())
+}
+
+void VarDef() :
+{}
+{
+  (Modifier())* SimpleStmt()
+}
+
+void InterfaceDef() :
+{}
+{
+  (Modifier())* "interface" < NAME > [< COLON> InterfaceName() (< COMMA > InterfaceName())*] (LOOKAHEAD(2) < NEWLINE >)* (ClassSuite() | ERROR_ClassSuite())
+}
+
+void Parameters() :
+{}
+{
+  "(" [TypeDArglist()] ")"
+}
+
+void TypeDArglist() :
+{}
+{
+  TfpDef() [< ASSIGN > Test()] (LOOKAHEAD(2) < COMMA > TfpDef() [< ASSIGN > Test()])* [< COMMA > "args"]
+}
+
+void TfpDef() :
+{}
+{
+  < NAME > [< COLON> Test()]
+}
+
+void LambDef() :
+{}
+{
+  [VarArglist()] < LAMBDA > Test()
+}
+
+void LambDefNocond() :
+{}
+{
+  ([VarArglist()] < LAMBDA > TestNocond())
+}
+
+void VarArglist() :
+{}
+{
+  < NAME > [< ASSIGN > Test()] (LOOKAHEAD(2) < COMMA > < NAME > [< ASSIGN > Test()])*
+}
+
+void TestNocond() :
+{}
+{
+  LOOKAHEAD(2) OrTest() | LambDefNocond()
+}
+
+
+
+// Error Handling
+
+void ERROR_IfStmt() :
+{}
+{
+  { int line = -1; int column = -1; }
+  { line = getToken(0).beginLine; column = getToken(0).beginColumn; } < NAME > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ("elseif" Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()))* ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
+
+  {
+    error_printmessage("Definition Error\nLine: " + line + ". Column: " + column);
+    //throw new ParseException();
+  }
+}
+
+void ERROR_WhileStmt() :
+{}
+{
+  { int line = -1; int column = -1; }
+  { line = getToken(0).beginLine; column = getToken(0).beginColumn; } < NAME > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
+
+  {
+    error_printmessage("Definition Error\nLine: " + line + ". Column: " + column);
+    //throw new ParseException();
+  }
+}
+
+void ERROR_DoStmt() :
+{}
+{
+  { int line = -1; int column = -1; }
+  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) "while" Test()
+
+  {
+    error_printmessage("Definition Error\nLine: " + line + ". Column: " + column);
+    //throw new ParseException();
+  }
+}
+
+void ERROR_ForStmt1() :
+{}
+{
+  { int line = -1; int column = -1; }
+  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > Exprlist() "in" Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
+
+  {
+    error_printmessage("Definition Error\nLine: " + line + ". Column: " + column);
+    //throw new ParseException();
+  }
+}
+
+void ERROR_ForStmt2() :
+{}
+{
+  { int line = -1; int column = -1; }
+  "for" Exprlist() { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) ["else" (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
+
+  {
+    error_printmessage("Definition Error\nLine: " + line + ". Column: " + column);
+    //throw new ParseException();
+  }
+}
+
+void ERROR_Suite() :
+{}
+{
+  { int line = -1; int column = -1; }
+  ((({ line = getToken(0).beginLine; column = getToken(0).beginColumn; } (Stmt())+ < CLOSEBRACE >)) (LOOKAHEAD(2) < NEWLINE >)*)
+
+  {
+    error_printmessage("Suite Definition Error\nLine: " + line + ". Column: " + column);
+    //throw new ParseException();
+  }
+}
+
+void ERROR_FuncDef() :
+{}
+{
+  { int line = -1; int column = -1; }
+  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > < NAME > Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())
+
+  {
+    error_printmessage("Function Definition Error\nLine: " + line + ". Column: " + column);
+    //throw new ParseException();
+  }
+}
+
+void ERROR_ClassDef() :
+{}
+{
+  { int line = -1; int column = -1; }
+  (Modifier())* { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > < NAME > [< COLON> ClassName()] ["follows" InterfaceName() (< COMMA > InterfaceName())*] (LOOKAHEAD(2) < NEWLINE >)* (ClassSuite() | ERROR_ClassSuite())
+  {
+    error_printmessage("Class or Interface Definition Error\nLine: " + line + ". Column: " + column);
+    //throw new ParseException();
+  }
+}
+
+void ERROR_ClassSuite() :
+{}
+{
+  { int line = -1; int column = -1; }
+  ({ line = getToken(0).beginLine; column = getToken(0).beginColumn; } (ClassStmt())* < CLOSEBRACE >)
+
+  {
+    error_printmessage("ClassSuite Definition Error\nLine: " + line + ". Column: " + column);
+    //throw new ParseException();
+  }
+}
+
+void ERROR_MethodDef() :
+{}
+{
+  { int line = -1; int column = -1; }
+  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > (Modifier())* < NAME > Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())
+
+  {
+    error_printmessage("Method Definition Error\nLine: " + line + ". Column: " + column);
+    //throw new ParseException();
+  }
+}
+
+
+
+
+TOKEN :
+{
+  < NAME : ["a"-"z", "A"-"Z", "$", "_"] (["a"-"z", "A"-"Z", "0"-"9", "$", "_"])* >
+| < NEWLINE : "\n" | "\r" >
+| < STRING : ("\"" (~["\n", "\r"])* "\"") | ("\'" (~["\n", "\r"])* "\'") >
+}
+
+TOKEN :
+{
+  < NUMBER : < FLOAT > | < INT > >
+| < INT : (["1"-"9"] (["0"-"9"])*) | ("0") >
+| < FLOAT : ["1"-"9"] (["0"-"9"])* "." (["0"-"9"])+ >
+}
+
+
+JAVACODE
+void error_printmessage(String s) {
+  System.out.println("\n---------- EXCEPTION ENCOUNTERED ----------");
+  System.out.println(s);
+  System.out.println("\n");
+}
