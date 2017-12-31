@@ -43,5 +43,8 @@ interface Node {
   
   public String getCompOp();
   public String getAugassignOp();
+  public String getAddOp();
+  public String getShiftOp();
+  public String getMulOp();
 }
 /* JavaCC - OriginalChecksum=a7d9d685ec867dd5f1d1a896975d7357 (do not edit this line) */

@@ -1242,7 +1242,7 @@ void OrTest() :
 {/*@bgen(jjtree) OrTest */
   try {
 /*@egen*/
-  XorTest() (< OR > XorTest())*/*@bgen(jjtree)*/
+  (XorTest() (< OR > XorTest())*)/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1274,7 +1274,7 @@ void XorTest() :
 {/*@bgen(jjtree) XorTest */
   try {
 /*@egen*/
-  AndTest() (< XOR > AndTest())*/*@bgen(jjtree)*/
+  (AndTest() (< XOR > AndTest())*)/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1306,7 +1306,7 @@ void AndTest() :
 {/*@bgen(jjtree) AndTest */
   try {
 /*@egen*/
-  NotTest() (< AND > NotTest())*/*@bgen(jjtree)*/
+  (NotTest() (< AND > NotTest())*)/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1338,7 +1338,7 @@ void NotTest() :
 {/*@bgen(jjtree) NotTest */
   try {
 /*@egen*/
-  < NOT > NotTest() | Comparison()/*@bgen(jjtree)*/
+  (< NOT > NotTest()) | Comparison()/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1370,7 +1370,7 @@ void Comparison() :
 {/*@bgen(jjtree) Comparison */
   try {
 /*@egen*/
-  Expr() (LOOKAHEAD(2) CompOp() Expr())*/*@bgen(jjtree)*/
+  (Expr() (LOOKAHEAD(2) CompOp() Expr())*)/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1437,7 +1437,7 @@ void Expr() :
 {/*@bgen(jjtree) Expr */
   try {
 /*@egen*/
-  XorExpr() ("|" XorExpr())*/*@bgen(jjtree)*/
+  (XorExpr() ("|" XorExpr())*)/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1469,7 +1469,7 @@ void XorExpr() :
 {/*@bgen(jjtree) XorExpr */
   try {
 /*@egen*/
-  AndExpr() ("^" AndExpr())*/*@bgen(jjtree)*/
+  (AndExpr() ("^" AndExpr())*)/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1501,7 +1501,7 @@ void AndExpr() :
 {/*@bgen(jjtree) AndExpr */
   try {
 /*@egen*/
-  ShiftExpr() ("&" ShiftExpr())*/*@bgen(jjtree)*/
+  (ShiftExpr() ("&" ShiftExpr())*)/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1529,17 +1529,11 @@ void ShiftExpr() :
   SimpleNode jjtn000 = new SimpleNode(JJTSHIFTEXPR);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
-/*@egen*/ Token t = new Token(); }
+/*@egen*/}
 {/*@bgen(jjtree) ShiftExpr */
   try {
 /*@egen*/
-  ArithExpr() (((t=< SHIFTLEFT >) | (t=< SHIFTRIGHT >)) ArithExpr())*/*@bgen(jjtree)*/
-  {
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-  }
-/*@egen*/
-  { jjtn000.ShiftOp = t.image; }/*@bgen(jjtree)*/
+  (ArithExpr() (((ShiftLeft()) | (ShiftRight())) ArithExpr())*)/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1554,6 +1548,58 @@ void ShiftExpr() :
       throw (ParseException)jjte000;
     }
     throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void ShiftLeft() :
+{/*@bgen(jjtree) ShiftLeft */
+  SimpleNode jjtn000 = new SimpleNode(JJTSHIFTLEFT);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/ Token t; }
+{/*@bgen(jjtree) ShiftLeft */
+  try {
+/*@egen*/
+  t=< SHIFTLEFT >/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  {
+    jjtn000.ShiftOp = t.image;
+  }/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void ShiftRight() :
+{/*@bgen(jjtree) ShiftRight */
+  SimpleNode jjtn000 = new SimpleNode(JJTSHIFTRIGHT);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/ Token t; }
+{/*@bgen(jjtree) ShiftRight */
+  try {
+/*@egen*/
+  t=< SHIFTRIGHT >/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  {
+    jjtn000.ShiftOp = t.image;
+  }/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -1567,17 +1613,11 @@ void ArithExpr() :
   SimpleNode jjtn000 = new SimpleNode(JJTARITHEXPR);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
-/*@egen*/ Token t = new Token(); }
+/*@egen*/}
 {/*@bgen(jjtree) ArithExpr */
   try {
 /*@egen*/
-  Term() (LOOKAHEAD(2) ((t=< PLUS >) | (t=< MINUS >)) Term())*/*@bgen(jjtree)*/
-  {
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-  }
-/*@egen*/
-  { jjtn000.AddOp = t.image; }/*@bgen(jjtree)*/
+  (Term() (LOOKAHEAD(2) ((Plus()) | (Minus())) Term())*)/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1592,6 +1632,58 @@ void ArithExpr() :
       throw (ParseException)jjte000;
     }
     throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void Plus() :
+{/*@bgen(jjtree) Plus */
+  SimpleNode jjtn000 = new SimpleNode(JJTPLUS);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/ Token t; }
+{/*@bgen(jjtree) Plus */
+  try {
+/*@egen*/
+  t=< PLUS >/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  {
+    jjtn000.AddOp = t.image;
+  }/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void Minus() :
+{/*@bgen(jjtree) Minus */
+  SimpleNode jjtn000 = new SimpleNode(JJTMINUS);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/ Token t; }
+{/*@bgen(jjtree) Minus */
+  try {
+/*@egen*/
+  t=< MINUS >/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  {
+    jjtn000.AddOp = t.image;
+  }/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);
@@ -1605,17 +1697,11 @@ void Term() :
   SimpleNode jjtn000 = new SimpleNode(JJTTERM);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
-/*@egen*/ Token t = new Token(); }
+/*@egen*/}
 {/*@bgen(jjtree) Term */
   try {
 /*@egen*/
-  Factor() (LOOKAHEAD(2) ((t=< MULTIPLY >) | (t=< DIVIDE >) | (t=< MOD >) | (t=< DIVIDEINT >)) Factor())*/*@bgen(jjtree)*/
-  {
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-  }
-/*@egen*/
-  { jjtn000.MulOp = t.image; }/*@bgen(jjtree)*/
+  (Factor() (LOOKAHEAD(2) ((Multiply()) | (Divide()) | (Mod()) | (DivideInt())) Factor())*)/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1638,22 +1724,120 @@ void Term() :
 /*@egen*/
 }
 
-void Factor() :
-{/*@bgen(jjtree) Factor */
-  SimpleNode jjtn000 = new SimpleNode(JJTFACTOR);
+void Multiply() :
+{/*@bgen(jjtree) Multiply */
+  SimpleNode jjtn000 = new SimpleNode(JJTMULTIPLY);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
-/*@egen*/ Token t = new Token(); }
-{/*@bgen(jjtree) Factor */
+/*@egen*/ Token t; }
+{/*@bgen(jjtree) Multiply */
   try {
 /*@egen*/
-  (((t=< PLUS >) | (t=< MINUS >) | (t=< TILDE >)) Factor()) | Power()/*@bgen(jjtree)*/
+  t=< MULTIPLY >/*@bgen(jjtree)*/
   {
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
   }
 /*@egen*/
-  { jjtn000.SignOp = t.image; }/*@bgen(jjtree)*/
+  {
+    jjtn000.MulOp = t.image;
+  }/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void Divide() :
+{/*@bgen(jjtree) Divide */
+  SimpleNode jjtn000 = new SimpleNode(JJTDIVIDE);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/ Token t; }
+{/*@bgen(jjtree) Divide */
+  try {
+/*@egen*/
+  t=< DIVIDE >/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  {
+    jjtn000.MulOp = t.image;
+  }/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void Mod() :
+{/*@bgen(jjtree) Mod */
+  SimpleNode jjtn000 = new SimpleNode(JJTMOD);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/ Token t; }
+{/*@bgen(jjtree) Mod */
+  try {
+/*@egen*/
+  t=< MOD >/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  {
+    jjtn000.MulOp = t.image;
+  }/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void DivideInt() :
+{/*@bgen(jjtree) DivideInt */
+  SimpleNode jjtn000 = new SimpleNode(JJTDIVIDEINT);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/ Token t; }
+{/*@bgen(jjtree) DivideInt */
+  try {
+/*@egen*/
+  t=< DIVIDEINT >/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  {
+    jjtn000.MulOp = t.image;
+  }/*@bgen(jjtree)*/
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void Factor() :
+{/*@bgen(jjtree) Factor */
+  SimpleNode jjtn000 = new SimpleNode(JJTFACTOR);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/}
+{/*@bgen(jjtree) Factor */
+  try {
+/*@egen*/
+  (((Plus()) | (Minus()) | (Tilde())) Factor()) | Power()/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -1668,6 +1852,32 @@ void Factor() :
       throw (ParseException)jjte000;
     }
     throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void Tilde() :
+{/*@bgen(jjtree) Tilde */
+  SimpleNode jjtn000 = new SimpleNode(JJTTILDE);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/ Token t; }
+{/*@bgen(jjtree) Tilde */
+  try {
+/*@egen*/
+  t=< TILDE >/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  {
+    jjtn000.AddOp = t.image;
+  }/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);

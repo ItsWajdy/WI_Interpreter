@@ -408,31 +408,31 @@ void Test() :
 void OrTest() :
 {}
 {
-  XorTest() (< OR > XorTest())*
+  (XorTest() (< OR > XorTest())*)
 }
 
 void XorTest() :
 {}
 {
-  AndTest() (< XOR > AndTest())*
+  (AndTest() (< XOR > AndTest())*)
 }
 
 void AndTest() :
 {}
 {
-  NotTest() (< AND > NotTest())*
+  (NotTest() (< AND > NotTest())*)
 }
 
 void NotTest() :
 {}
 {
-  < NOT > NotTest() | Comparison()
+  (< NOT > NotTest()) | Comparison()
 }
 
 void Comparison() :
 {}
 {
-  Expr() (LOOKAHEAD(2) CompOp() Expr())*
+  (Expr() (LOOKAHEAD(2) CompOp() Expr())*)
 }
 
 void CompOp() :
@@ -456,47 +456,124 @@ void CompOp() :
 void Expr() :
 {}
 {
-  XorExpr() ("|" XorExpr())*
+  (XorExpr() ("|" XorExpr())*)
 }
 
 void XorExpr() :
 {}
 {
-  AndExpr() ("^" AndExpr())*
+  (AndExpr() ("^" AndExpr())*)
 }
 
 void AndExpr() :
 {}
 {
-  ShiftExpr() ("&" ShiftExpr())*
+  (ShiftExpr() ("&" ShiftExpr())*)
 }
 
 void ShiftExpr() :
-{ Token t = new Token(); }
+{}
 {
-  ArithExpr() (((t=< SHIFTLEFT >) | (t=< SHIFTRIGHT >)) ArithExpr())*
-  { jjtThis.ShiftOp = t.image; }
+  (ArithExpr() (((ShiftLeft()) | (ShiftRight())) ArithExpr())*)
+}
+
+void ShiftLeft() :
+{ Token t; }
+{
+  t=< SHIFTLEFT >
+  {
+    jjtThis.ShiftOp = t.image;
+  }
+}
+
+void ShiftRight() :
+{ Token t; }
+{
+  t=< SHIFTRIGHT >
+  {
+    jjtThis.ShiftOp = t.image;
+  }
 }
 
 void ArithExpr() :
-{ Token t = new Token(); }
+{}
 {
-  Term() (LOOKAHEAD(2) ((t=< PLUS >) | (t=< MINUS >)) Term())*
-  { jjtThis.AddOp = t.image; }
+  (Term() (LOOKAHEAD(2) ((Plus()) | (Minus())) Term())*)
+}
+
+void Plus() :
+{ Token t; }
+{
+  t=< PLUS >
+  {
+    jjtThis.AddOp = t.image;
+  }
+}
+
+void Minus() :
+{ Token t; }
+{
+  t=< MINUS >
+  {
+    jjtThis.AddOp = t.image;
+  }
 }
 
 void Term() :
-{ Token t = new Token(); }
+{}
 {
-  Factor() (LOOKAHEAD(2) ((t=< MULTIPLY >) | (t=< DIVIDE >) | (t=< MOD >) | (t=< DIVIDEINT >)) Factor())*
-  { jjtThis.MulOp = t.image; }
+  (Factor() (LOOKAHEAD(2) ((Multiply()) | (Divide()) | (Mod()) | (DivideInt())) Factor())*)
+}
+
+void Multiply() :
+{ Token t; }
+{
+  t=< MULTIPLY >
+  {
+    jjtThis.MulOp = t.image;
+  }
+}
+
+void Divide() :
+{ Token t; }
+{
+  t=< DIVIDE >
+  {
+    jjtThis.MulOp = t.image;
+  }
+}
+
+void Mod() :
+{ Token t; }
+{
+  t=< MOD >
+  {
+    jjtThis.MulOp = t.image;
+  }
+}
+
+void DivideInt() :
+{ Token t; }
+{
+  t=< DIVIDEINT >
+  {
+    jjtThis.MulOp = t.image;
+  }
 }
 
 void Factor() :
-{ Token t = new Token(); }
+{}
 {
-  (((t=< PLUS >) | (t=< MINUS >) | (t=< TILDE >)) Factor()) | Power()
-  { jjtThis.SignOp = t.image; }
+  (((Plus()) | (Minus()) | (Tilde())) Factor()) | Power()
+}
+
+void Tilde() :
+{ Token t; }
+{
+  t=< TILDE >
+  {
+    jjtThis.AddOp = t.image;
+  }
 }
 
 void Power() :

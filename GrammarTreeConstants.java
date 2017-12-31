@@ -46,50 +46,59 @@ public interface GrammarTreeConstants
   public int JJTXOREXPR = 42;
   public int JJTANDEXPR = 43;
   public int JJTSHIFTEXPR = 44;
-  public int JJTARITHEXPR = 45;
-  public int JJTTERM = 46;
-  public int JJTFACTOR = 47;
-  public int JJTPOWER = 48;
-  public int JJTATOMEXPR = 49;
-  public int JJTATOM = 50;
-  public int JJTNAME = 51;
-  public int JJTNUMBER = 52;
-  public int JJTTRUE = 53;
-  public int JJTFALSE = 54;
-  public int JJTARGS = 55;
-  public int JJTSTRING = 56;
-  public int JJTTESTLISTCOMP = 57;
-  public int JJTTRAILER = 58;
-  public int JJTSUBSCRIPTLIST = 59;
-  public int JJTSUBSCRIPT = 60;
-  public int JJTARGLIST = 61;
-  public int JJTARGUMENT = 62;
-  public int JJTCOMPITER = 63;
-  public int JJTCOMPFOR = 64;
-  public int JJTCOMPIF = 65;
-  public int JJTSLICEOP = 66;
-  public int JJTEXPRLIST = 67;
-  public int JJTSTAREXPR = 68;
-  public int JJTTESTLIST = 69;
-  public int JJTFUNCDEF = 70;
-  public int JJTCLASSDEF = 71;
-  public int JJTMODIFIER = 72;
-  public int JJTCLASSNAME = 73;
-  public int JJTINTERFACENAME = 74;
-  public int JJTCLASSSUITE = 75;
-  public int JJTCLASSSTMT = 76;
-  public int JJTMETHODDEF = 77;
-  public int JJTCONSTRUCTORDEF = 78;
-  public int JJTVARDEF = 79;
-  public int JJTINTERFACEDEF = 80;
-  public int JJTPARAMETERS = 81;
-  public int JJTTYPEDARGLIST = 82;
-  public int JJTTFPDEF = 83;
-  public int JJTLAMBDEF = 84;
-  public int JJTLAMBDEFNOCOND = 85;
-  public int JJTVARARGLIST = 86;
-  public int JJTTESTNOCOND = 87;
-  public int JJTERROR_PRINTMESSAGE = 88;
+  public int JJTSHIFTLEFT = 45;
+  public int JJTSHIFTRIGHT = 46;
+  public int JJTARITHEXPR = 47;
+  public int JJTPLUS = 48;
+  public int JJTMINUS = 49;
+  public int JJTTERM = 50;
+  public int JJTMULTIPLY = 51;
+  public int JJTDIVIDE = 52;
+  public int JJTMOD = 53;
+  public int JJTDIVIDEINT = 54;
+  public int JJTFACTOR = 55;
+  public int JJTTILDE = 56;
+  public int JJTPOWER = 57;
+  public int JJTATOMEXPR = 58;
+  public int JJTATOM = 59;
+  public int JJTNAME = 60;
+  public int JJTNUMBER = 61;
+  public int JJTTRUE = 62;
+  public int JJTFALSE = 63;
+  public int JJTARGS = 64;
+  public int JJTSTRING = 65;
+  public int JJTTESTLISTCOMP = 66;
+  public int JJTTRAILER = 67;
+  public int JJTSUBSCRIPTLIST = 68;
+  public int JJTSUBSCRIPT = 69;
+  public int JJTARGLIST = 70;
+  public int JJTARGUMENT = 71;
+  public int JJTCOMPITER = 72;
+  public int JJTCOMPFOR = 73;
+  public int JJTCOMPIF = 74;
+  public int JJTSLICEOP = 75;
+  public int JJTEXPRLIST = 76;
+  public int JJTSTAREXPR = 77;
+  public int JJTTESTLIST = 78;
+  public int JJTFUNCDEF = 79;
+  public int JJTCLASSDEF = 80;
+  public int JJTMODIFIER = 81;
+  public int JJTCLASSNAME = 82;
+  public int JJTINTERFACENAME = 83;
+  public int JJTCLASSSUITE = 84;
+  public int JJTCLASSSTMT = 85;
+  public int JJTMETHODDEF = 86;
+  public int JJTCONSTRUCTORDEF = 87;
+  public int JJTVARDEF = 88;
+  public int JJTINTERFACEDEF = 89;
+  public int JJTPARAMETERS = 90;
+  public int JJTTYPEDARGLIST = 91;
+  public int JJTTFPDEF = 92;
+  public int JJTLAMBDEF = 93;
+  public int JJTLAMBDEFNOCOND = 94;
+  public int JJTVARARGLIST = 95;
+  public int JJTTESTNOCOND = 96;
+  public int JJTERROR_PRINTMESSAGE = 97;
 
 
   public String[] jjtNodeName = {
@@ -138,9 +147,18 @@ public interface GrammarTreeConstants
     "XorExpr",
     "AndExpr",
     "ShiftExpr",
+    "ShiftLeft",
+    "ShiftRight",
     "ArithExpr",
+    "Plus",
+    "Minus",
     "Term",
+    "Multiply",
+    "Divide",
+    "Mod",
+    "DivideInt",
     "Factor",
+    "Tilde",
     "Power",
     "AtomExpr",
     "Atom",
@@ -184,4 +202,4 @@ public interface GrammarTreeConstants
     "error_printmessage",
   };
 }
-/* JavaCC - OriginalChecksum=036d928805a5f1f12cc9aaffefb7dbef (do not edit this line) */
+/* JavaCC - OriginalChecksum=1d31ae9f8f21863e4ff7f3b3e02b5dd0 (do not edit this line) */
