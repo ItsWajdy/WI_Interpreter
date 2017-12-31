@@ -5412,21 +5412,86 @@ public class Grammar/*@bgen(jjtree)*/implements GrammarTreeConstants, GrammarCon
 
 // Error Handling
   static final public void ERROR_IfStmt() throws ParseException {
- /*@bgen(jjtree) ERROR_IfStmt */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_IFSTMT);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-    try {
     int line = -1; int column = -1;
     line = getToken(0).beginLine; column = getToken(0).beginColumn;
-      jj_consume_token(NAME);
+    jj_consume_token(NAME);
+    Test();
+    label_61:
+    while (true) {
+      if (jj_2_52(2)) {
+        ;
+      } else {
+        break label_61;
+      }
+      jj_consume_token(NEWLINE);
+    }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case OPENBRACE:
+      Suite();
+      break;
+    case PLUS:
+    case MINUS:
+    case MULTIPLY:
+    case TILDE:
+    case NOT:
+    case ELLIPSES:
+    case LAMBDA:
+    case ABSTRACT:
+    case ARGS:
+    case ASSERT:
+    case BREAK:
+    case CLASS:
+    case CONTINUE:
+    case DEFINE:
+    case DO:
+    case FALSE:
+    case FOR:
+    case FROM:
+    case IF:
+    case IMPORT:
+    case INTERFACE:
+    case PRIVATE:
+    case PROTECTED:
+    case PUBLIC:
+    case RAISE:
+    case RETURN:
+    case STATIC:
+    case TRUE:
+    case TRY:
+    case WHILE:
+    case WITH:
+    case YIELD:
+    case 82:
+    case 87:
+    case NAME:
+    case NEWLINE:
+    case STRING:
+    case NUMBER:
+      ERROR_Suite();
+      break;
+    default:
+      jj_la1[134] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    label_62:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case ELSEIF:
+        ;
+        break;
+      default:
+        jj_la1[135] = jj_gen;
+        break label_62;
+      }
+      jj_consume_token(ELSEIF);
       Test();
-      label_61:
+      label_63:
       while (true) {
-        if (jj_2_52(2)) {
+        if (jj_2_53(2)) {
           ;
         } else {
-          break label_61;
+          break label_63;
         }
         jj_consume_token(NEWLINE);
       }
@@ -5475,189 +5540,154 @@ public class Grammar/*@bgen(jjtree)*/implements GrammarTreeConstants, GrammarCon
         ERROR_Suite();
         break;
       default:
-        jj_la1[134] = jj_gen;
+        jj_la1[136] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
-      label_62:
+    }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case ELSE:
+      jj_consume_token(ELSE);
+      label_64:
       while (true) {
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case ELSEIF:
+        if (jj_2_54(2)) {
           ;
-          break;
-        default:
-          jj_la1[135] = jj_gen;
-          break label_62;
+        } else {
+          break label_64;
         }
-        jj_consume_token(ELSEIF);
-        Test();
-        label_63:
-        while (true) {
-          if (jj_2_53(2)) {
-            ;
-          } else {
-            break label_63;
-          }
-          jj_consume_token(NEWLINE);
-        }
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case OPENBRACE:
-          Suite();
-          break;
-        case PLUS:
-        case MINUS:
-        case MULTIPLY:
-        case TILDE:
-        case NOT:
-        case ELLIPSES:
-        case LAMBDA:
-        case ABSTRACT:
-        case ARGS:
-        case ASSERT:
-        case BREAK:
-        case CLASS:
-        case CONTINUE:
-        case DEFINE:
-        case DO:
-        case FALSE:
-        case FOR:
-        case FROM:
-        case IF:
-        case IMPORT:
-        case INTERFACE:
-        case PRIVATE:
-        case PROTECTED:
-        case PUBLIC:
-        case RAISE:
-        case RETURN:
-        case STATIC:
-        case TRUE:
-        case TRY:
-        case WHILE:
-        case WITH:
-        case YIELD:
-        case 82:
-        case 87:
-        case NAME:
-        case NEWLINE:
-        case STRING:
-        case NUMBER:
-          ERROR_Suite();
-          break;
-        default:
-          jj_la1[136] = jj_gen;
-          jj_consume_token(-1);
-          throw new ParseException();
-        }
+        jj_consume_token(NEWLINE);
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case ELSE:
-        jj_consume_token(ELSE);
-        label_64:
-        while (true) {
-          if (jj_2_54(2)) {
-            ;
-          } else {
-            break label_64;
-          }
-          jj_consume_token(NEWLINE);
-        }
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case OPENBRACE:
-          Suite();
-          break;
-        case PLUS:
-        case MINUS:
-        case MULTIPLY:
-        case TILDE:
-        case NOT:
-        case ELLIPSES:
-        case LAMBDA:
-        case ABSTRACT:
-        case ARGS:
-        case ASSERT:
-        case BREAK:
-        case CLASS:
-        case CONTINUE:
-        case DEFINE:
-        case DO:
-        case FALSE:
-        case FOR:
-        case FROM:
-        case IF:
-        case IMPORT:
-        case INTERFACE:
-        case PRIVATE:
-        case PROTECTED:
-        case PUBLIC:
-        case RAISE:
-        case RETURN:
-        case STATIC:
-        case TRUE:
-        case TRY:
-        case WHILE:
-        case WITH:
-        case YIELD:
-        case 82:
-        case 87:
-        case NAME:
-        case NEWLINE:
-        case STRING:
-        case NUMBER:
-          ERROR_Suite();
-          break;
-        default:
-          jj_la1[137] = jj_gen;
-          jj_consume_token(-1);
-          throw new ParseException();
-        }
+      case OPENBRACE:
+        Suite();
+        break;
+      case PLUS:
+      case MINUS:
+      case MULTIPLY:
+      case TILDE:
+      case NOT:
+      case ELLIPSES:
+      case LAMBDA:
+      case ABSTRACT:
+      case ARGS:
+      case ASSERT:
+      case BREAK:
+      case CLASS:
+      case CONTINUE:
+      case DEFINE:
+      case DO:
+      case FALSE:
+      case FOR:
+      case FROM:
+      case IF:
+      case IMPORT:
+      case INTERFACE:
+      case PRIVATE:
+      case PROTECTED:
+      case PUBLIC:
+      case RAISE:
+      case RETURN:
+      case STATIC:
+      case TRUE:
+      case TRY:
+      case WHILE:
+      case WITH:
+      case YIELD:
+      case 82:
+      case 87:
+      case NAME:
+      case NEWLINE:
+      case STRING:
+      case NUMBER:
+        ERROR_Suite();
         break;
       default:
-        jj_la1[138] = jj_gen;
-        ;
+        jj_la1[137] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
       }
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
+      break;
+    default:
+      jj_la1[138] = jj_gen;
+      ;
+    }
     error_printmessage("Definition Error\u005cnLine: " + line + ". Column: " + column);
     //throw new ParseException();
 
-    } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      {if (true) throw (RuntimeException)jjte000;}
-    }
-    if (jjte000 instanceof ParseException) {
-      {if (true) throw (ParseException)jjte000;}
-    }
-    {if (true) throw (Error)jjte000;}
-    } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-    }
   }
 
   static final public void ERROR_WhileStmt() throws ParseException {
- /*@bgen(jjtree) ERROR_WhileStmt */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_WHILESTMT);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-    try {
     int line = -1; int column = -1;
     line = getToken(0).beginLine; column = getToken(0).beginColumn;
-      jj_consume_token(NAME);
-      Test();
-      label_65:
+    jj_consume_token(NAME);
+    Test();
+    label_65:
+    while (true) {
+      if (jj_2_55(2)) {
+        ;
+      } else {
+        break label_65;
+      }
+      jj_consume_token(NEWLINE);
+    }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case OPENBRACE:
+      Suite();
+      break;
+    case PLUS:
+    case MINUS:
+    case MULTIPLY:
+    case TILDE:
+    case NOT:
+    case ELLIPSES:
+    case LAMBDA:
+    case ABSTRACT:
+    case ARGS:
+    case ASSERT:
+    case BREAK:
+    case CLASS:
+    case CONTINUE:
+    case DEFINE:
+    case DO:
+    case FALSE:
+    case FOR:
+    case FROM:
+    case IF:
+    case IMPORT:
+    case INTERFACE:
+    case PRIVATE:
+    case PROTECTED:
+    case PUBLIC:
+    case RAISE:
+    case RETURN:
+    case STATIC:
+    case TRUE:
+    case TRY:
+    case WHILE:
+    case WITH:
+    case YIELD:
+    case 82:
+    case 87:
+    case NAME:
+    case NEWLINE:
+    case STRING:
+    case NUMBER:
+      ERROR_Suite();
+      break;
+    default:
+      jj_la1[139] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case ELSE:
+      jj_consume_token(ELSE);
+      label_66:
       while (true) {
-        if (jj_2_55(2)) {
+        if (jj_2_56(2)) {
           ;
         } else {
-          break label_65;
+          break label_66;
         }
         jj_consume_token(NEWLINE);
       }
@@ -5706,215 +5736,163 @@ public class Grammar/*@bgen(jjtree)*/implements GrammarTreeConstants, GrammarCon
         ERROR_Suite();
         break;
       default:
-        jj_la1[139] = jj_gen;
+        jj_la1[140] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case ELSE:
-        jj_consume_token(ELSE);
-        label_66:
-        while (true) {
-          if (jj_2_56(2)) {
-            ;
-          } else {
-            break label_66;
-          }
-          jj_consume_token(NEWLINE);
-        }
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case OPENBRACE:
-          Suite();
-          break;
-        case PLUS:
-        case MINUS:
-        case MULTIPLY:
-        case TILDE:
-        case NOT:
-        case ELLIPSES:
-        case LAMBDA:
-        case ABSTRACT:
-        case ARGS:
-        case ASSERT:
-        case BREAK:
-        case CLASS:
-        case CONTINUE:
-        case DEFINE:
-        case DO:
-        case FALSE:
-        case FOR:
-        case FROM:
-        case IF:
-        case IMPORT:
-        case INTERFACE:
-        case PRIVATE:
-        case PROTECTED:
-        case PUBLIC:
-        case RAISE:
-        case RETURN:
-        case STATIC:
-        case TRUE:
-        case TRY:
-        case WHILE:
-        case WITH:
-        case YIELD:
-        case 82:
-        case 87:
-        case NAME:
-        case NEWLINE:
-        case STRING:
-        case NUMBER:
-          ERROR_Suite();
-          break;
-        default:
-          jj_la1[140] = jj_gen;
-          jj_consume_token(-1);
-          throw new ParseException();
-        }
-        break;
-      default:
-        jj_la1[141] = jj_gen;
-        ;
-      }
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
+      break;
+    default:
+      jj_la1[141] = jj_gen;
+      ;
+    }
     error_printmessage("Definition Error\u005cnLine: " + line + ". Column: " + column);
     //throw new ParseException();
 
-    } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      {if (true) throw (RuntimeException)jjte000;}
-    }
-    if (jjte000 instanceof ParseException) {
-      {if (true) throw (ParseException)jjte000;}
-    }
-    {if (true) throw (Error)jjte000;}
-    } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-    }
   }
 
   static final public void ERROR_DoStmt() throws ParseException {
- /*@bgen(jjtree) ERROR_DoStmt */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_DOSTMT);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-    try {
     int line = -1; int column = -1;
     line = getToken(1).beginLine; column = getToken(1).beginColumn;
-      jj_consume_token(NAME);
-      label_67:
-      while (true) {
-        if (jj_2_57(2)) {
-          ;
-        } else {
-          break label_67;
-        }
-        jj_consume_token(NEWLINE);
+    jj_consume_token(NAME);
+    label_67:
+    while (true) {
+      if (jj_2_57(2)) {
+        ;
+      } else {
+        break label_67;
       }
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case OPENBRACE:
-        Suite();
-        break;
-      case PLUS:
-      case MINUS:
-      case MULTIPLY:
-      case TILDE:
-      case NOT:
-      case ELLIPSES:
-      case LAMBDA:
-      case ABSTRACT:
-      case ARGS:
-      case ASSERT:
-      case BREAK:
-      case CLASS:
-      case CONTINUE:
-      case DEFINE:
-      case DO:
-      case FALSE:
-      case FOR:
-      case FROM:
-      case IF:
-      case IMPORT:
-      case INTERFACE:
-      case PRIVATE:
-      case PROTECTED:
-      case PUBLIC:
-      case RAISE:
-      case RETURN:
-      case STATIC:
-      case TRUE:
-      case TRY:
-      case WHILE:
-      case WITH:
-      case YIELD:
-      case 82:
-      case 87:
-      case NAME:
-      case NEWLINE:
-      case STRING:
-      case NUMBER:
-        ERROR_Suite();
-        break;
-      default:
-        jj_la1[142] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-      jj_consume_token(WHILE);
-      Test();
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
+      jj_consume_token(NEWLINE);
+    }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case OPENBRACE:
+      Suite();
+      break;
+    case PLUS:
+    case MINUS:
+    case MULTIPLY:
+    case TILDE:
+    case NOT:
+    case ELLIPSES:
+    case LAMBDA:
+    case ABSTRACT:
+    case ARGS:
+    case ASSERT:
+    case BREAK:
+    case CLASS:
+    case CONTINUE:
+    case DEFINE:
+    case DO:
+    case FALSE:
+    case FOR:
+    case FROM:
+    case IF:
+    case IMPORT:
+    case INTERFACE:
+    case PRIVATE:
+    case PROTECTED:
+    case PUBLIC:
+    case RAISE:
+    case RETURN:
+    case STATIC:
+    case TRUE:
+    case TRY:
+    case WHILE:
+    case WITH:
+    case YIELD:
+    case 82:
+    case 87:
+    case NAME:
+    case NEWLINE:
+    case STRING:
+    case NUMBER:
+      ERROR_Suite();
+      break;
+    default:
+      jj_la1[142] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    jj_consume_token(WHILE);
+    Test();
     error_printmessage("Definition Error\u005cnLine: " + line + ". Column: " + column);
     //throw new ParseException();
 
-    } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      {if (true) throw (RuntimeException)jjte000;}
-    }
-    if (jjte000 instanceof ParseException) {
-      {if (true) throw (ParseException)jjte000;}
-    }
-    {if (true) throw (Error)jjte000;}
-    } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-    }
   }
 
   static final public void ERROR_ForStmt1() throws ParseException {
- /*@bgen(jjtree) ERROR_ForStmt1 */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_FORSTMT1);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-    try {
     int line = -1; int column = -1;
     line = getToken(1).beginLine; column = getToken(1).beginColumn;
-      jj_consume_token(NAME);
-      Exprlist();
-      jj_consume_token(IN);
-      Testlist();
-      label_68:
+    jj_consume_token(NAME);
+    Exprlist();
+    jj_consume_token(IN);
+    Testlist();
+    label_68:
+    while (true) {
+      if (jj_2_58(2)) {
+        ;
+      } else {
+        break label_68;
+      }
+      jj_consume_token(NEWLINE);
+    }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case OPENBRACE:
+      Suite();
+      break;
+    case PLUS:
+    case MINUS:
+    case MULTIPLY:
+    case TILDE:
+    case NOT:
+    case ELLIPSES:
+    case LAMBDA:
+    case ABSTRACT:
+    case ARGS:
+    case ASSERT:
+    case BREAK:
+    case CLASS:
+    case CONTINUE:
+    case DEFINE:
+    case DO:
+    case FALSE:
+    case FOR:
+    case FROM:
+    case IF:
+    case IMPORT:
+    case INTERFACE:
+    case PRIVATE:
+    case PROTECTED:
+    case PUBLIC:
+    case RAISE:
+    case RETURN:
+    case STATIC:
+    case TRUE:
+    case TRY:
+    case WHILE:
+    case WITH:
+    case YIELD:
+    case 82:
+    case 87:
+    case NAME:
+    case NEWLINE:
+    case STRING:
+    case NUMBER:
+      ERROR_Suite();
+      break;
+    default:
+      jj_la1[143] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case ELSE:
+      jj_consume_token(ELSE);
+      label_69:
       while (true) {
-        if (jj_2_58(2)) {
+        if (jj_2_59(2)) {
           ;
         } else {
-          break label_68;
+          break label_69;
         }
         jj_consume_token(NEWLINE);
       }
@@ -5963,120 +5941,94 @@ public class Grammar/*@bgen(jjtree)*/implements GrammarTreeConstants, GrammarCon
         ERROR_Suite();
         break;
       default:
-        jj_la1[143] = jj_gen;
+        jj_la1[144] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case ELSE:
-        jj_consume_token(ELSE);
-        label_69:
-        while (true) {
-          if (jj_2_59(2)) {
-            ;
-          } else {
-            break label_69;
-          }
-          jj_consume_token(NEWLINE);
-        }
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case OPENBRACE:
-          Suite();
-          break;
-        case PLUS:
-        case MINUS:
-        case MULTIPLY:
-        case TILDE:
-        case NOT:
-        case ELLIPSES:
-        case LAMBDA:
-        case ABSTRACT:
-        case ARGS:
-        case ASSERT:
-        case BREAK:
-        case CLASS:
-        case CONTINUE:
-        case DEFINE:
-        case DO:
-        case FALSE:
-        case FOR:
-        case FROM:
-        case IF:
-        case IMPORT:
-        case INTERFACE:
-        case PRIVATE:
-        case PROTECTED:
-        case PUBLIC:
-        case RAISE:
-        case RETURN:
-        case STATIC:
-        case TRUE:
-        case TRY:
-        case WHILE:
-        case WITH:
-        case YIELD:
-        case 82:
-        case 87:
-        case NAME:
-        case NEWLINE:
-        case STRING:
-        case NUMBER:
-          ERROR_Suite();
-          break;
-        default:
-          jj_la1[144] = jj_gen;
-          jj_consume_token(-1);
-          throw new ParseException();
-        }
-        break;
-      default:
-        jj_la1[145] = jj_gen;
-        ;
-      }
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
+      break;
+    default:
+      jj_la1[145] = jj_gen;
+      ;
+    }
     error_printmessage("Definition Error\u005cnLine: " + line + ". Column: " + column);
     //throw new ParseException();
 
-    } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      {if (true) throw (RuntimeException)jjte000;}
-    }
-    if (jjte000 instanceof ParseException) {
-      {if (true) throw (ParseException)jjte000;}
-    }
-    {if (true) throw (Error)jjte000;}
-    } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-    }
   }
 
   static final public void ERROR_ForStmt2() throws ParseException {
- /*@bgen(jjtree) ERROR_ForStmt2 */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_FORSTMT2);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-    try {
     int line = -1; int column = -1;
-      jj_consume_token(FOR);
-      Exprlist();
+    jj_consume_token(FOR);
+    Exprlist();
                      line = getToken(1).beginLine; column = getToken(1).beginColumn;
-      jj_consume_token(NAME);
-      Testlist();
-      label_70:
+    jj_consume_token(NAME);
+    Testlist();
+    label_70:
+    while (true) {
+      if (jj_2_60(2)) {
+        ;
+      } else {
+        break label_70;
+      }
+      jj_consume_token(NEWLINE);
+    }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case OPENBRACE:
+      Suite();
+      break;
+    case PLUS:
+    case MINUS:
+    case MULTIPLY:
+    case TILDE:
+    case NOT:
+    case ELLIPSES:
+    case LAMBDA:
+    case ABSTRACT:
+    case ARGS:
+    case ASSERT:
+    case BREAK:
+    case CLASS:
+    case CONTINUE:
+    case DEFINE:
+    case DO:
+    case FALSE:
+    case FOR:
+    case FROM:
+    case IF:
+    case IMPORT:
+    case INTERFACE:
+    case PRIVATE:
+    case PROTECTED:
+    case PUBLIC:
+    case RAISE:
+    case RETURN:
+    case STATIC:
+    case TRUE:
+    case TRY:
+    case WHILE:
+    case WITH:
+    case YIELD:
+    case 82:
+    case 87:
+    case NAME:
+    case NEWLINE:
+    case STRING:
+    case NUMBER:
+      ERROR_Suite();
+      break;
+    default:
+      jj_la1[146] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case ELSE:
+      jj_consume_token(ELSE);
+      label_71:
       while (true) {
-        if (jj_2_60(2)) {
+        if (jj_2_61(2)) {
           ;
         } else {
-          break label_70;
+          break label_71;
         }
         jj_consume_token(NEWLINE);
       }
@@ -6125,558 +6077,279 @@ public class Grammar/*@bgen(jjtree)*/implements GrammarTreeConstants, GrammarCon
         ERROR_Suite();
         break;
       default:
-        jj_la1[146] = jj_gen;
+        jj_la1[147] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case ELSE:
-        jj_consume_token(ELSE);
-        label_71:
-        while (true) {
-          if (jj_2_61(2)) {
-            ;
-          } else {
-            break label_71;
-          }
-          jj_consume_token(NEWLINE);
-        }
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case OPENBRACE:
-          Suite();
-          break;
-        case PLUS:
-        case MINUS:
-        case MULTIPLY:
-        case TILDE:
-        case NOT:
-        case ELLIPSES:
-        case LAMBDA:
-        case ABSTRACT:
-        case ARGS:
-        case ASSERT:
-        case BREAK:
-        case CLASS:
-        case CONTINUE:
-        case DEFINE:
-        case DO:
-        case FALSE:
-        case FOR:
-        case FROM:
-        case IF:
-        case IMPORT:
-        case INTERFACE:
-        case PRIVATE:
-        case PROTECTED:
-        case PUBLIC:
-        case RAISE:
-        case RETURN:
-        case STATIC:
-        case TRUE:
-        case TRY:
-        case WHILE:
-        case WITH:
-        case YIELD:
-        case 82:
-        case 87:
-        case NAME:
-        case NEWLINE:
-        case STRING:
-        case NUMBER:
-          ERROR_Suite();
-          break;
-        default:
-          jj_la1[147] = jj_gen;
-          jj_consume_token(-1);
-          throw new ParseException();
-        }
-        break;
-      default:
-        jj_la1[148] = jj_gen;
-        ;
-      }
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
+      break;
+    default:
+      jj_la1[148] = jj_gen;
+      ;
+    }
     error_printmessage("Definition Error\u005cnLine: " + line + ". Column: " + column);
     //throw new ParseException();
 
-    } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      {if (true) throw (RuntimeException)jjte000;}
-    }
-    if (jjte000 instanceof ParseException) {
-      {if (true) throw (ParseException)jjte000;}
-    }
-    {if (true) throw (Error)jjte000;}
-    } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-    }
   }
 
   static final public void ERROR_Suite() throws ParseException {
- /*@bgen(jjtree) ERROR_Suite */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_SUITE);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-    try {
     int line = -1; int column = -1;
        line = getToken(0).beginLine; column = getToken(0).beginColumn;
-      label_72:
-      while (true) {
-        Stmt();
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case PLUS:
-        case MINUS:
-        case MULTIPLY:
-        case TILDE:
-        case NOT:
-        case ELLIPSES:
-        case LAMBDA:
-        case ABSTRACT:
-        case ARGS:
-        case ASSERT:
-        case BREAK:
-        case CLASS:
-        case CONTINUE:
-        case DEFINE:
-        case DO:
-        case FALSE:
-        case FOR:
-        case FROM:
-        case IF:
-        case IMPORT:
-        case INTERFACE:
-        case PRIVATE:
-        case PROTECTED:
-        case PUBLIC:
-        case RAISE:
-        case RETURN:
-        case STATIC:
-        case TRUE:
-        case TRY:
-        case WHILE:
-        case WITH:
-        case YIELD:
-        case 82:
-        case 87:
-        case NAME:
-        case NEWLINE:
-        case STRING:
-        case NUMBER:
-          ;
-          break;
-        default:
-          jj_la1[149] = jj_gen;
-          break label_72;
-        }
+    label_72:
+    while (true) {
+      Stmt();
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case PLUS:
+      case MINUS:
+      case MULTIPLY:
+      case TILDE:
+      case NOT:
+      case ELLIPSES:
+      case LAMBDA:
+      case ABSTRACT:
+      case ARGS:
+      case ASSERT:
+      case BREAK:
+      case CLASS:
+      case CONTINUE:
+      case DEFINE:
+      case DO:
+      case FALSE:
+      case FOR:
+      case FROM:
+      case IF:
+      case IMPORT:
+      case INTERFACE:
+      case PRIVATE:
+      case PROTECTED:
+      case PUBLIC:
+      case RAISE:
+      case RETURN:
+      case STATIC:
+      case TRUE:
+      case TRY:
+      case WHILE:
+      case WITH:
+      case YIELD:
+      case 82:
+      case 87:
+      case NAME:
+      case NEWLINE:
+      case STRING:
+      case NUMBER:
+        ;
+        break;
+      default:
+        jj_la1[149] = jj_gen;
+        break label_72;
       }
-      jj_consume_token(CLOSEBRACE);
-      label_73:
-      while (true) {
-        if (jj_2_62(2)) {
-          ;
-        } else {
-          break label_73;
-        }
-        jj_consume_token(NEWLINE);
+    }
+    jj_consume_token(CLOSEBRACE);
+    label_73:
+    while (true) {
+      if (jj_2_62(2)) {
+        ;
+      } else {
+        break label_73;
       }
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
+      jj_consume_token(NEWLINE);
+    }
     error_printmessage("Suite Definition Error\u005cnLine: " + line + ". Column: " + column);
     //throw new ParseException();
 
-    } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      {if (true) throw (RuntimeException)jjte000;}
-    }
-    if (jjte000 instanceof ParseException) {
-      {if (true) throw (ParseException)jjte000;}
-    }
-    {if (true) throw (Error)jjte000;}
-    } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-    }
   }
 
   static final public void ERROR_FuncDef() throws ParseException {
- /*@bgen(jjtree) ERROR_FuncDef */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_FUNCDEF);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-    try {
     int line = -1; int column = -1;
     line = getToken(1).beginLine; column = getToken(1).beginColumn;
-      jj_consume_token(NAME);
-      jj_consume_token(NAME);
-      Parameters();
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 89:
-        jj_consume_token(89);
-        Test();
-        break;
-      default:
-        jj_la1[150] = jj_gen;
+    jj_consume_token(NAME);
+    jj_consume_token(NAME);
+    Parameters();
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case 89:
+      jj_consume_token(89);
+      Test();
+      break;
+    default:
+      jj_la1[150] = jj_gen;
+      ;
+    }
+    label_74:
+    while (true) {
+      if (jj_2_63(2)) {
         ;
+      } else {
+        break label_74;
       }
-      label_74:
-      while (true) {
-        if (jj_2_63(2)) {
-          ;
-        } else {
-          break label_74;
-        }
-        jj_consume_token(NEWLINE);
-      }
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case OPENBRACE:
-        Suite();
-        break;
-      case PLUS:
-      case MINUS:
-      case MULTIPLY:
-      case TILDE:
-      case NOT:
-      case ELLIPSES:
-      case LAMBDA:
-      case ABSTRACT:
-      case ARGS:
-      case ASSERT:
-      case BREAK:
-      case CLASS:
-      case CONTINUE:
-      case DEFINE:
-      case DO:
-      case FALSE:
-      case FOR:
-      case FROM:
-      case IF:
-      case IMPORT:
-      case INTERFACE:
-      case PRIVATE:
-      case PROTECTED:
-      case PUBLIC:
-      case RAISE:
-      case RETURN:
-      case STATIC:
-      case TRUE:
-      case TRY:
-      case WHILE:
-      case WITH:
-      case YIELD:
-      case 82:
-      case 87:
-      case NAME:
-      case NEWLINE:
-      case STRING:
-      case NUMBER:
-        ERROR_Suite();
-        break;
-      default:
-        jj_la1[151] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
+      jj_consume_token(NEWLINE);
+    }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case OPENBRACE:
+      Suite();
+      break;
+    case PLUS:
+    case MINUS:
+    case MULTIPLY:
+    case TILDE:
+    case NOT:
+    case ELLIPSES:
+    case LAMBDA:
+    case ABSTRACT:
+    case ARGS:
+    case ASSERT:
+    case BREAK:
+    case CLASS:
+    case CONTINUE:
+    case DEFINE:
+    case DO:
+    case FALSE:
+    case FOR:
+    case FROM:
+    case IF:
+    case IMPORT:
+    case INTERFACE:
+    case PRIVATE:
+    case PROTECTED:
+    case PUBLIC:
+    case RAISE:
+    case RETURN:
+    case STATIC:
+    case TRUE:
+    case TRY:
+    case WHILE:
+    case WITH:
+    case YIELD:
+    case 82:
+    case 87:
+    case NAME:
+    case NEWLINE:
+    case STRING:
+    case NUMBER:
+      ERROR_Suite();
+      break;
+    default:
+      jj_la1[151] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
     error_printmessage("Function Definition Error\u005cnLine: " + line + ". Column: " + column);
     //throw new ParseException();
 
-    } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      {if (true) throw (RuntimeException)jjte000;}
-    }
-    if (jjte000 instanceof ParseException) {
-      {if (true) throw (ParseException)jjte000;}
-    }
-    {if (true) throw (Error)jjte000;}
-    } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-    }
   }
 
   static final public void ERROR_ClassDef() throws ParseException {
- /*@bgen(jjtree) ERROR_ClassDef */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_CLASSDEF);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-    try {
     int line = -1; int column = -1;
-      label_75:
-      while (true) {
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case ABSTRACT:
-        case PRIVATE:
-        case PROTECTED:
-        case PUBLIC:
-        case STATIC:
-          ;
-          break;
-        default:
-          jj_la1[152] = jj_gen;
-          break label_75;
-        }
-        Modifier();
-      }
-                  line = getToken(1).beginLine; column = getToken(1).beginColumn;
-      jj_consume_token(NAME);
-      jj_consume_token(NAME);
+    label_75:
+    while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case COLON:
-        jj_consume_token(COLON);
-        ClassName();
-        break;
-      default:
-        jj_la1[153] = jj_gen;
-        ;
-      }
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case FOLLOWS:
-        jj_consume_token(FOLLOWS);
-        InterfaceName();
-        label_76:
-        while (true) {
-          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-          case COMMA:
-            ;
-            break;
-          default:
-            jj_la1[154] = jj_gen;
-            break label_76;
-          }
-          jj_consume_token(COMMA);
-          InterfaceName();
-        }
-        break;
-      default:
-        jj_la1[155] = jj_gen;
-        ;
-      }
-      label_77:
-      while (true) {
-        if (jj_2_64(2)) {
-          ;
-        } else {
-          break label_77;
-        }
-        jj_consume_token(NEWLINE);
-      }
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case OPENBRACE:
-        ClassSuite();
-        break;
-      case PLUS:
-      case MINUS:
-      case MULTIPLY:
-      case TILDE:
-      case NOT:
-      case ELLIPSES:
-      case CLOSEBRACE:
-      case LAMBDA:
       case ABSTRACT:
-      case ARGS:
-      case ASSERT:
-      case BREAK:
-      case CONTINUE:
-      case DEFINE:
-      case FALSE:
-      case FROM:
-      case IMPORT:
       case PRIVATE:
       case PROTECTED:
       case PUBLIC:
-      case RAISE:
-      case RETURN:
       case STATIC:
-      case TRUE:
-      case YIELD:
-      case 82:
-      case 87:
-      case NAME:
-      case NEWLINE:
-      case STRING:
-      case NUMBER:
-        ERROR_ClassSuite();
+        ;
         break;
       default:
-        jj_la1[156] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
+        jj_la1[152] = jj_gen;
+        break label_75;
       }
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
+      Modifier();
+    }
+                  line = getToken(1).beginLine; column = getToken(1).beginColumn;
+    jj_consume_token(NAME);
+    jj_consume_token(NAME);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case COLON:
+      jj_consume_token(COLON);
+      ClassName();
+      break;
+    default:
+      jj_la1[153] = jj_gen;
+      ;
+    }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case FOLLOWS:
+      jj_consume_token(FOLLOWS);
+      InterfaceName();
+      label_76:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case COMMA:
+          ;
+          break;
+        default:
+          jj_la1[154] = jj_gen;
+          break label_76;
+        }
+        jj_consume_token(COMMA);
+        InterfaceName();
+      }
+      break;
+    default:
+      jj_la1[155] = jj_gen;
+      ;
+    }
+    label_77:
+    while (true) {
+      if (jj_2_64(2)) {
+        ;
+      } else {
+        break label_77;
+      }
+      jj_consume_token(NEWLINE);
+    }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case OPENBRACE:
+      ClassSuite();
+      break;
+    case PLUS:
+    case MINUS:
+    case MULTIPLY:
+    case TILDE:
+    case NOT:
+    case ELLIPSES:
+    case CLOSEBRACE:
+    case LAMBDA:
+    case ABSTRACT:
+    case ARGS:
+    case ASSERT:
+    case BREAK:
+    case CONTINUE:
+    case DEFINE:
+    case FALSE:
+    case FROM:
+    case IMPORT:
+    case PRIVATE:
+    case PROTECTED:
+    case PUBLIC:
+    case RAISE:
+    case RETURN:
+    case STATIC:
+    case TRUE:
+    case YIELD:
+    case 82:
+    case 87:
+    case NAME:
+    case NEWLINE:
+    case STRING:
+    case NUMBER:
+      ERROR_ClassSuite();
+      break;
+    default:
+      jj_la1[156] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
     error_printmessage("Class or Interface Definition Error\u005cnLine: " + line + ". Column: " + column);
     //throw new ParseException();
 
-    } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      {if (true) throw (RuntimeException)jjte000;}
-    }
-    if (jjte000 instanceof ParseException) {
-      {if (true) throw (ParseException)jjte000;}
-    }
-    {if (true) throw (Error)jjte000;}
-    } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-    }
   }
 
   static final public void ERROR_ClassSuite() throws ParseException {
- /*@bgen(jjtree) ERROR_ClassSuite */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_CLASSSUITE);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-    try {
     int line = -1; int column = -1;
      line = getToken(0).beginLine; column = getToken(0).beginColumn;
-      label_78:
-      while (true) {
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case PLUS:
-        case MINUS:
-        case MULTIPLY:
-        case TILDE:
-        case NOT:
-        case ELLIPSES:
-        case LAMBDA:
-        case ABSTRACT:
-        case ARGS:
-        case ASSERT:
-        case BREAK:
-        case CONTINUE:
-        case DEFINE:
-        case FALSE:
-        case FROM:
-        case IMPORT:
-        case PRIVATE:
-        case PROTECTED:
-        case PUBLIC:
-        case RAISE:
-        case RETURN:
-        case STATIC:
-        case TRUE:
-        case YIELD:
-        case 82:
-        case 87:
-        case NAME:
-        case NEWLINE:
-        case STRING:
-        case NUMBER:
-          ;
-          break;
-        default:
-          jj_la1[157] = jj_gen;
-          break label_78;
-        }
-        ClassStmt();
-      }
-      jj_consume_token(CLOSEBRACE);
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-    error_printmessage("ClassSuite Definition Error\u005cnLine: " + line + ". Column: " + column);
-    //throw new ParseException();
-
-    } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      {if (true) throw (RuntimeException)jjte000;}
-    }
-    if (jjte000 instanceof ParseException) {
-      {if (true) throw (ParseException)jjte000;}
-    }
-    {if (true) throw (Error)jjte000;}
-    } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-    }
-  }
-
-  static final public void ERROR_MethodDef() throws ParseException {
- /*@bgen(jjtree) ERROR_MethodDef */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_METHODDEF);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-    try {
-    int line = -1; int column = -1;
-    line = getToken(1).beginLine; column = getToken(1).beginColumn;
-      jj_consume_token(NAME);
-      label_79:
-      while (true) {
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case ABSTRACT:
-        case PRIVATE:
-        case PROTECTED:
-        case PUBLIC:
-        case STATIC:
-          ;
-          break;
-        default:
-          jj_la1[158] = jj_gen;
-          break label_79;
-        }
-        Modifier();
-      }
-      jj_consume_token(NAME);
-      Parameters();
+    label_78:
+    while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 89:
-        jj_consume_token(89);
-        Test();
-        break;
-      default:
-        jj_la1[159] = jj_gen;
-        ;
-      }
-      label_80:
-      while (true) {
-        if (jj_2_65(2)) {
-          ;
-        } else {
-          break label_80;
-        }
-        jj_consume_token(NEWLINE);
-      }
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case OPENBRACE:
-        Suite();
-        break;
       case PLUS:
       case MINUS:
       case MULTIPLY:
@@ -6688,16 +6361,11 @@ public class Grammar/*@bgen(jjtree)*/implements GrammarTreeConstants, GrammarCon
       case ARGS:
       case ASSERT:
       case BREAK:
-      case CLASS:
       case CONTINUE:
       case DEFINE:
-      case DO:
       case FALSE:
-      case FOR:
       case FROM:
-      case IF:
       case IMPORT:
-      case INTERFACE:
       case PRIVATE:
       case PROTECTED:
       case PUBLIC:
@@ -6705,9 +6373,6 @@ public class Grammar/*@bgen(jjtree)*/implements GrammarTreeConstants, GrammarCon
       case RETURN:
       case STATIC:
       case TRUE:
-      case TRY:
-      case WHILE:
-      case WITH:
       case YIELD:
       case 82:
       case 87:
@@ -6715,37 +6380,112 @@ public class Grammar/*@bgen(jjtree)*/implements GrammarTreeConstants, GrammarCon
       case NEWLINE:
       case STRING:
       case NUMBER:
-        ERROR_Suite();
+        ;
         break;
       default:
-        jj_la1[160] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
+        jj_la1[157] = jj_gen;
+        break label_78;
       }
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
+      ClassStmt();
+    }
+    jj_consume_token(CLOSEBRACE);
+    error_printmessage("ClassSuite Definition Error\u005cnLine: " + line + ". Column: " + column);
+    //throw new ParseException();
+
+  }
+
+  static final public void ERROR_MethodDef() throws ParseException {
+    int line = -1; int column = -1;
+    line = getToken(1).beginLine; column = getToken(1).beginColumn;
+    jj_consume_token(NAME);
+    label_79:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case ABSTRACT:
+      case PRIVATE:
+      case PROTECTED:
+      case PUBLIC:
+      case STATIC:
+        ;
+        break;
+      default:
+        jj_la1[158] = jj_gen;
+        break label_79;
+      }
+      Modifier();
+    }
+    jj_consume_token(NAME);
+    Parameters();
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case 89:
+      jj_consume_token(89);
+      Test();
+      break;
+    default:
+      jj_la1[159] = jj_gen;
+      ;
+    }
+    label_80:
+    while (true) {
+      if (jj_2_65(2)) {
+        ;
+      } else {
+        break label_80;
+      }
+      jj_consume_token(NEWLINE);
+    }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case OPENBRACE:
+      Suite();
+      break;
+    case PLUS:
+    case MINUS:
+    case MULTIPLY:
+    case TILDE:
+    case NOT:
+    case ELLIPSES:
+    case LAMBDA:
+    case ABSTRACT:
+    case ARGS:
+    case ASSERT:
+    case BREAK:
+    case CLASS:
+    case CONTINUE:
+    case DEFINE:
+    case DO:
+    case FALSE:
+    case FOR:
+    case FROM:
+    case IF:
+    case IMPORT:
+    case INTERFACE:
+    case PRIVATE:
+    case PROTECTED:
+    case PUBLIC:
+    case RAISE:
+    case RETURN:
+    case STATIC:
+    case TRUE:
+    case TRY:
+    case WHILE:
+    case WITH:
+    case YIELD:
+    case 82:
+    case 87:
+    case NAME:
+    case NEWLINE:
+    case STRING:
+    case NUMBER:
+      ERROR_Suite();
+      break;
+    default:
+      jj_la1[160] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
     error_printmessage("Method Definition Error\u005cnLine: " + line + ". Column: " + column);
     //throw new ParseException();
 
-    } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      {if (true) throw (RuntimeException)jjte000;}
-    }
-    if (jjte000 instanceof ParseException) {
-      {if (true) throw (ParseException)jjte000;}
-    }
-    {if (true) throw (Error)jjte000;}
-    } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-    }
   }
 
   static void error_printmessage(String s) throws ParseException {

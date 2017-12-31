@@ -89,17 +89,7 @@ public interface GrammarTreeConstants
   public int JJTLAMBDEFNOCOND = 85;
   public int JJTVARARGLIST = 86;
   public int JJTTESTNOCOND = 87;
-  public int JJTERROR_IFSTMT = 88;
-  public int JJTERROR_WHILESTMT = 89;
-  public int JJTERROR_DOSTMT = 90;
-  public int JJTERROR_FORSTMT1 = 91;
-  public int JJTERROR_FORSTMT2 = 92;
-  public int JJTERROR_SUITE = 93;
-  public int JJTERROR_FUNCDEF = 94;
-  public int JJTERROR_CLASSDEF = 95;
-  public int JJTERROR_CLASSSUITE = 96;
-  public int JJTERROR_METHODDEF = 97;
-  public int JJTERROR_PRINTMESSAGE = 98;
+  public int JJTERROR_PRINTMESSAGE = 88;
 
 
   public String[] jjtNodeName = {
@@ -191,17 +181,7 @@ public interface GrammarTreeConstants
     "LambDefNocond",
     "VarArglist",
     "TestNocond",
-    "ERROR_IfStmt",
-    "ERROR_WhileStmt",
-    "ERROR_DoStmt",
-    "ERROR_ForStmt1",
-    "ERROR_ForStmt2",
-    "ERROR_Suite",
-    "ERROR_FuncDef",
-    "ERROR_ClassDef",
-    "ERROR_ClassSuite",
-    "ERROR_MethodDef",
     "error_printmessage",
   };
 }
-/* JavaCC - OriginalChecksum=b57d60f4553a763e2ade481bcd96231b (do not edit this line) */
+/* JavaCC - OriginalChecksum=036d928805a5f1f12cc9aaffefb7dbef (do not edit this line) */

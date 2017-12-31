@@ -1,10 +1,13 @@
 
+import java.util.*;
+
 // TODO refactor after naming language
 public class WI_Value {
 	public static final int WI_NAME = 0;
 	public static final int WI_NUMBER = 1;
 	public static final int WI_BOOL = 2;
 	public static final int WI_STRING = 3;
+	public static final int WI_UNDEFINED = -1;
 	
 	private String value;
 	private int wi_type;

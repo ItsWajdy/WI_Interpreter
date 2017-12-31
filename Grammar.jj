@@ -2919,433 +2919,123 @@ void TestNocond() :
 
 // Error Handling
 
-void ERROR_IfStmt() :
-{/*@bgen(jjtree) ERROR_IfStmt */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_IFSTMT);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
-{/*@bgen(jjtree) ERROR_IfStmt */
-  try {
-/*@egen*/
+void ERROR_IfStmt()       :
+{}
+{
   { int line = -1; int column = -1; }
-  { line = getToken(0).beginLine; column = getToken(0).beginColumn; } < NAME > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) (< ELSEIF > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()))* [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]/*@bgen(jjtree)*/
-  {
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-  }
-/*@egen*/
+  { line = getToken(0).beginLine; column = getToken(0).beginColumn; } < NAME > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) (< ELSEIF > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()))* [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
 
   {
     error_printmessage("Definition Error\nLine: " + line + ". Column: " + column);
     //throw new ParseException();
-  }/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
   }
-/*@egen*/
 }
 
-void ERROR_WhileStmt() :
-{/*@bgen(jjtree) ERROR_WhileStmt */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_WHILESTMT);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
-{/*@bgen(jjtree) ERROR_WhileStmt */
-  try {
-/*@egen*/
+void ERROR_WhileStmt()       :
+{}
+{
   { int line = -1; int column = -1; }
-  { line = getToken(0).beginLine; column = getToken(0).beginColumn; } < NAME > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]/*@bgen(jjtree)*/
-  {
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-  }
-/*@egen*/
+  { line = getToken(0).beginLine; column = getToken(0).beginColumn; } < NAME > Test() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
 
   {
     error_printmessage("Definition Error\nLine: " + line + ". Column: " + column);
     //throw new ParseException();
-  }/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
   }
-/*@egen*/
 }
 
-void ERROR_DoStmt() :
-{/*@bgen(jjtree) ERROR_DoStmt */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_DOSTMT);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
-{/*@bgen(jjtree) ERROR_DoStmt */
-  try {
-/*@egen*/
+void ERROR_DoStmt()       :
+{}
+{
   { int line = -1; int column = -1; }
-  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) < WHILE > Test()/*@bgen(jjtree)*/
-  {
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-  }
-/*@egen*/
+  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) < WHILE > Test()
 
   {
     error_printmessage("Definition Error\nLine: " + line + ". Column: " + column);
     //throw new ParseException();
-  }/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
   }
-/*@egen*/
 }
 
-void ERROR_ForStmt1() :
-{/*@bgen(jjtree) ERROR_ForStmt1 */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_FORSTMT1);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
-{/*@bgen(jjtree) ERROR_ForStmt1 */
-  try {
-/*@egen*/
+void ERROR_ForStmt1()       :
+{}
+{
   { int line = -1; int column = -1; }
-  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > Exprlist() < IN > Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]/*@bgen(jjtree)*/
-  {
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-  }
-/*@egen*/
+  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > Exprlist() < IN > Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
 
   {
     error_printmessage("Definition Error\nLine: " + line + ". Column: " + column);
     //throw new ParseException();
-  }/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
   }
-/*@egen*/
 }
 
-void ERROR_ForStmt2() :
-{/*@bgen(jjtree) ERROR_ForStmt2 */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_FORSTMT2);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
-{/*@bgen(jjtree) ERROR_ForStmt2 */
-  try {
-/*@egen*/
+void ERROR_ForStmt2()       :
+{}
+{
   { int line = -1; int column = -1; }
-  "for" Exprlist() { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]/*@bgen(jjtree)*/
-  {
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-  }
-/*@egen*/
+  "for" Exprlist() { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > Testlist() (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite()) [< ELSE > (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())]
 
   {
     error_printmessage("Definition Error\nLine: " + line + ". Column: " + column);
     //throw new ParseException();
-  }/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
   }
-/*@egen*/
 }
 
-void ERROR_Suite() :
-{/*@bgen(jjtree) ERROR_Suite */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_SUITE);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
-{/*@bgen(jjtree) ERROR_Suite */
-  try {
-/*@egen*/
+void ERROR_Suite()       :
+{}
+{
   { int line = -1; int column = -1; }
-  ((({ line = getToken(0).beginLine; column = getToken(0).beginColumn; } (Stmt())+ < CLOSEBRACE >)) (LOOKAHEAD(2) < NEWLINE >)*)/*@bgen(jjtree)*/
-  {
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-  }
-/*@egen*/
+  ((({ line = getToken(0).beginLine; column = getToken(0).beginColumn; } (Stmt())+ < CLOSEBRACE >)) (LOOKAHEAD(2) < NEWLINE >)*)
 
   {
     error_printmessage("Suite Definition Error\nLine: " + line + ". Column: " + column);
     //throw new ParseException();
-  }/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
   }
-/*@egen*/
 }
 
-void ERROR_FuncDef() :
-{/*@bgen(jjtree) ERROR_FuncDef */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_FUNCDEF);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
-{/*@bgen(jjtree) ERROR_FuncDef */
-  try {
-/*@egen*/
+void ERROR_FuncDef()       :
+{}
+{
   { int line = -1; int column = -1; }
-  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > < NAME > Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())/*@bgen(jjtree)*/
-  {
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-  }
-/*@egen*/
+  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > < NAME > Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())
 
   {
     error_printmessage("Function Definition Error\nLine: " + line + ". Column: " + column);
     //throw new ParseException();
-  }/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
   }
-/*@egen*/
 }
 
-void ERROR_ClassDef() :
-{/*@bgen(jjtree) ERROR_ClassDef */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_CLASSDEF);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
-{/*@bgen(jjtree) ERROR_ClassDef */
-  try {
-/*@egen*/
+void ERROR_ClassDef()       :
+{}
+{
   { int line = -1; int column = -1; }
-  (Modifier())* { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > < NAME > [< COLON> ClassName()] [< FOLLOWS > InterfaceName() (< COMMA > InterfaceName())*] (LOOKAHEAD(2) < NEWLINE >)* (ClassSuite() | ERROR_ClassSuite())/*@bgen(jjtree)*/
-  {
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-  }
-/*@egen*/
+  (Modifier())* { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > < NAME > [< COLON> ClassName()] [< FOLLOWS > InterfaceName() (< COMMA > InterfaceName())*] (LOOKAHEAD(2) < NEWLINE >)* (ClassSuite() | ERROR_ClassSuite())
   {
     error_printmessage("Class or Interface Definition Error\nLine: " + line + ". Column: " + column);
     //throw new ParseException();
-  }/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
   }
-/*@egen*/
 }
 
-void ERROR_ClassSuite() :
-{/*@bgen(jjtree) ERROR_ClassSuite */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_CLASSSUITE);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
-{/*@bgen(jjtree) ERROR_ClassSuite */
-  try {
-/*@egen*/
+void ERROR_ClassSuite()       :
+{}
+{
   { int line = -1; int column = -1; }
-  ({ line = getToken(0).beginLine; column = getToken(0).beginColumn; } (ClassStmt())* < CLOSEBRACE >)/*@bgen(jjtree)*/
-  {
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-  }
-/*@egen*/
+  ({ line = getToken(0).beginLine; column = getToken(0).beginColumn; } (ClassStmt())* < CLOSEBRACE >)
 
   {
     error_printmessage("ClassSuite Definition Error\nLine: " + line + ". Column: " + column);
     //throw new ParseException();
-  }/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
   }
-/*@egen*/
 }
 
-void ERROR_MethodDef() :
-{/*@bgen(jjtree) ERROR_MethodDef */
-  SimpleNode jjtn000 = new SimpleNode(JJTERROR_METHODDEF);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
-{/*@bgen(jjtree) ERROR_MethodDef */
-  try {
-/*@egen*/
+void ERROR_MethodDef()       :
+{}
+{
   { int line = -1; int column = -1; }
-  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > (Modifier())* < NAME > Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())/*@bgen(jjtree)*/
-  {
-    jjtree.closeNodeScope(jjtn000, true);
-    jjtc000 = false;
-  }
-/*@egen*/
+  { line = getToken(1).beginLine; column = getToken(1).beginColumn; } < NAME > (Modifier())* < NAME > Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())
 
   {
     error_printmessage("Method Definition Error\nLine: " + line + ". Column: " + column);
     //throw new ParseException();
-  }/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
   }
-/*@egen*/
 }
 
 

@@ -37,9 +37,9 @@ interface Node {
   
   public int getId();
   
-  public WI_Value evaluate() throws ParseException;
+  public WI_Value evaluate(HashMap<String, WI_Value> st) throws ParseException;
   
-  public WI_Value evaluateExpr() throws ParseException;
+  public WI_Value evaluateExpr(HashMap<String, WI_Value> st) throws ParseException;
   
   public String getCompOp();
   public String getAugassignOp();

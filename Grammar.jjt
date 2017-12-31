@@ -775,7 +775,7 @@ void TestNocond() :
 
 // Error Handling
 
-void ERROR_IfStmt() :
+void ERROR_IfStmt() #void :
 {}
 {
   { int line = -1; int column = -1; }
@@ -787,7 +787,7 @@ void ERROR_IfStmt() :
   }
 }
 
-void ERROR_WhileStmt() :
+void ERROR_WhileStmt() #void :
 {}
 {
   { int line = -1; int column = -1; }
@@ -799,7 +799,7 @@ void ERROR_WhileStmt() :
   }
 }
 
-void ERROR_DoStmt() :
+void ERROR_DoStmt() #void :
 {}
 {
   { int line = -1; int column = -1; }
@@ -811,7 +811,7 @@ void ERROR_DoStmt() :
   }
 }
 
-void ERROR_ForStmt1() :
+void ERROR_ForStmt1() #void :
 {}
 {
   { int line = -1; int column = -1; }
@@ -823,7 +823,7 @@ void ERROR_ForStmt1() :
   }
 }
 
-void ERROR_ForStmt2() :
+void ERROR_ForStmt2() #void :
 {}
 {
   { int line = -1; int column = -1; }
@@ -835,7 +835,7 @@ void ERROR_ForStmt2() :
   }
 }
 
-void ERROR_Suite() :
+void ERROR_Suite() #void :
 {}
 {
   { int line = -1; int column = -1; }
@@ -847,7 +847,7 @@ void ERROR_Suite() :
   }
 }
 
-void ERROR_FuncDef() :
+void ERROR_FuncDef() #void :
 {}
 {
   { int line = -1; int column = -1; }
@@ -859,7 +859,7 @@ void ERROR_FuncDef() :
   }
 }
 
-void ERROR_ClassDef() :
+void ERROR_ClassDef() #void :
 {}
 {
   { int line = -1; int column = -1; }
@@ -870,7 +870,7 @@ void ERROR_ClassDef() :
   }
 }
 
-void ERROR_ClassSuite() :
+void ERROR_ClassSuite() #void :
 {}
 {
   { int line = -1; int column = -1; }
@@ -882,7 +882,7 @@ void ERROR_ClassSuite() :
   }
 }
 
-void ERROR_MethodDef() :
+void ERROR_MethodDef() #void :
 {}
 {
   { int line = -1; int column = -1; }
