@@ -31,13 +31,13 @@ interface Node {
   /** Return the number of children the node has. */
   public int jjtGetNumChildren();
   
-  public void interpret();
+  public void interpret() throws ParseException;
   
   public int getId();
   
-  public boolean evaluate();
+  public WI_Value evaluate() throws ParseException;
   
-  public double evaluateExpr();
+  public WI_Value evaluateExpr() throws ParseException;
   
   public String getCompOp();
 }

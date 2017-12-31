@@ -339,27 +339,36 @@ void Augassign() :
   SimpleNode jjtn000 = new SimpleNode(JJTAUGASSIGN);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+/*@egen*/ Token t; }
 {/*@bgen(jjtree) Augassign */
-  try {
+try {
 /*@egen*/
-  < PLUSEQ >
-| < MINUSEQ >
-| < MULTIPLYEQ >
-| < DIVIDEEQ >
-| < MODEQ >
-| < ANDEQ >
-| < OREQ >
-| < XOREQ >
-| < SHIFTRIGHTEQ >
-| < SHIFTLEFTEQ >
-| < POWEREQ >
-| < DIVIDEINTEQ >/*@bgen(jjtree)*/
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
+(  t=< PLUSEQ >
+| t=< MINUSEQ >
+| t=< MULTIPLYEQ >
+| t=< DIVIDEEQ >
+| t=< MODEQ >
+| t=< ANDEQ >
+| t=< OREQ >
+| t=< XOREQ >
+| t=< SHIFTRIGHTEQ >
+| t=< SHIFTLEFTEQ >
+| t=< POWEREQ >
+| t=< DIVIDEINTEQ >
+)/*@bgen(jjtree)*/
+{
+  jjtree.closeNodeScope(jjtn000, true);
+  jjtc000 = false;
+}
+/*@egen*/
+{
+  jjtn000.AugassignOp = t.image;
+}/*@bgen(jjtree)*/
+} finally {
+  if (jjtc000) {
+    jjtree.closeNodeScope(jjtn000, true);
   }
+}
 /*@egen*/
 }
 

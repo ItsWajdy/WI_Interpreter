@@ -81,46 +81,81 @@ class SimpleNode implements Node {
   public String AddOp;
   public String MulOp;
   public String SignOp = "-1";
+  public String AugassignOp;
   
   public int getId() { return this.id; }
   public String getCompOp() { return this.CompOp; }
   
-  public boolean evaluate() {
-	  if (this.id == GrammarTreeConstants.JJTTEST) {
-		  for (int i = 0; i < this.jjtGetNumChildren(); i++) {
-			  if (!this.jjtGetChild(i).evaluate()) {
-				  return false;
-			  }
+  public WI_Value evaluate() throws ParseException {
+	  if (this.id == GrammarTreeConstants.JJTTESTLISTSTAREXPR) {
+		  // TODO implement multiple assignment
+		  return this.jjtGetChild(0).evaluate();
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTTEST) {
+		  if (this.jjtGetNumChildren() == 1) {
+			  return this.jjtGetChild(0).evaluate();
 		  }
-		  return true;
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTORTEST) {
-		  boolean tmp = false;
-		  for (int i = 0 ; i < this.jjtGetNumChildren(); i++) {
-			  tmp |= this.jjtGetChild(i).evaluate();
+		  if (this.jjtGetNumChildren() > 1) {
+			  boolean tmp = false;
+			  for (int i = 0 ; i < this.jjtGetNumChildren(); i++) {
+				  tmp |= this.jjtGetChild(i).evaluate().EvalBool();
+			  }
+			  if (tmp) {
+				  return new WI_Value("true", WI_Value.WI_BOOL);
+			  }
+			  else {
+				  return new WI_Value("false", WI_Value.WI_BOOL);
+			  }
 		  }
-		  return tmp;
+		  else {
+			  return this.jjtGetChild(0).evaluate();
+		  }
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTXORTEST) {
-		  boolean tmp = false;
-		  for (int i = 0 ; i < this.jjtGetNumChildren(); i++) {
-			  tmp ^= this.jjtGetChild(i).evaluate();
+		  if (this.jjtGetNumChildren() > 1) {
+			  boolean tmp = this.jjtGetChild(0).evaluate().EvalBool();
+			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
+				  tmp ^= this.jjtGetChild(i).evaluate().EvalBool();
+			  }
+			  if (tmp) {
+				  return new WI_Value("true", WI_Value.WI_BOOL);
+			  }
+			  else {
+				  return new WI_Value("false", WI_Value.WI_BOOL);
+			  }
 		  }
-		  return tmp;
+		  else {
+			  return this.jjtGetChild(0).evaluate();
+		  }
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTANDTEST) {
-		  boolean tmp = true;
-		  for (int i = 0 ; i < this.jjtGetNumChildren(); i++) {
-			  tmp &= this.jjtGetChild(i).evaluate();
+		  if (this.jjtGetNumChildren() > 1) {
+			  boolean tmp = true;
+			  for (int i = 0 ; i < this.jjtGetNumChildren(); i++) {
+				  tmp &= this.jjtGetChild(i).evaluate().EvalBool();
+			  }
+			  if (tmp) {
+				  return new WI_Value("true", WI_Value.WI_BOOL);
+			  }
+			  else {
+				  return new WI_Value("false", WI_Value.WI_BOOL);
+			  }
 		  }
-		  return tmp;
+		  else {
+			  return this.jjtGetChild(0).evaluate();
+		  }
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTNOTTEST) {
 		  if (this.jjtGetChild(0).getId() == GrammarTreeConstants.JJTNOTTEST) {
-			  boolean tmp = !this.jjtGetChild(0).evaluate();
+			  boolean tmp = !this.jjtGetChild(0).evaluate().EvalBool();
 		  
 			  if (!tmp) {
-				  return false;
+				  return new WI_Value("false", WI_Value.WI_BOOL);
+			  }
+			  else {
+				  return new WI_Value("true", WI_Value.WI_BOOL);
 			  }
 		  }
 		  else {
@@ -128,51 +163,51 @@ class SimpleNode implements Node {
 		  }
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTCOMPARISON) {
-		  double lastVal = this.jjtGetChild(0).evaluateExpr();
+		  double lastVal = this.jjtGetChild(0).evaluateExpr().EvalDouble();
 		  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
 			  if (this.jjtGetChild(i).getId() == GrammarTreeConstants.JJTCOMPOP) {
 				  if (this.jjtGetChild(i).getCompOp().equals(">")) {
-					  if (lastVal <= this.jjtGetChild(i+1).evaluateExpr())
-						  return false;
+					  if (lastVal <= this.jjtGetChild(i+1).evaluateExpr().EvalDouble())
+						  return new WI_Value("false", WI_Value.WI_BOOL);
 				  }
 				  else if (this.jjtGetChild(i).getCompOp().equals("<")) {
-					  if (lastVal >= this.jjtGetChild(i+1).evaluateExpr())
-						  return false;
+					  if (lastVal >= this.jjtGetChild(i+1).evaluateExpr().EvalDouble())
+						  return new WI_Value("false", WI_Value.WI_BOOL);
 				  }
 				  else if (this.jjtGetChild(i).getCompOp().equals("==")) {
-					  if (lastVal != this.jjtGetChild(i+1).evaluateExpr())
-						  return false;
+					  if (lastVal != this.jjtGetChild(i+1).evaluateExpr().EvalDouble())
+						  return new WI_Value("false", WI_Value.WI_BOOL);
 				  }
 				  else if (this.jjtGetChild(i).getCompOp().equals(">=")) {
-					  if (lastVal < this.jjtGetChild(i+1).evaluateExpr())
-						  return false;
+					  if (lastVal < this.jjtGetChild(i+1).evaluateExpr().EvalDouble())
+						  return new WI_Value("false", WI_Value.WI_BOOL);
 				  }
 				  else if (this.jjtGetChild(i).getCompOp().equals("<=")) {
-					  if (lastVal > this.jjtGetChild(i+1).evaluateExpr())
-						  return false;
+					  if (lastVal > this.jjtGetChild(i+1).evaluateExpr().EvalDouble())
+						  return new WI_Value("false", WI_Value.WI_BOOL);
 				  }
 				  else if (this.jjtGetChild(i).getCompOp().equals("!=")) {
-					  if (lastVal == this.jjtGetChild(i+1).evaluateExpr())
-						  return false;
+					  if (lastVal == this.jjtGetChild(i+1).evaluateExpr().EvalDouble())
+						  return new WI_Value("false", WI_Value.WI_BOOL);
 				  }
 			  }
 			  else {
-				  lastVal = this.jjtGetChild(i).evaluateExpr();
+				  lastVal = this.jjtGetChild(i).evaluateExpr().EvalDouble();
 			  }
 		  }
 	  }
 	  
-	  return true;
+	  return new WI_Value("true", WI_Value.WI_BOOL);
   }
   
-  public double evaluateExpr() {
+  public WI_Value evaluateExpr() throws ParseException {
 	  if (this.id == GrammarTreeConstants.JJTEXPR) {
 		  if (this.jjtGetNumChildren() > 1) {
-			  int ret = (int) this.jjtGetChild(0).evaluateExpr();
+			  int ret = (int) this.jjtGetChild(0).evaluateExpr().EvalDouble();
 			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
-				  ret = ret | (int) this.jjtGetChild(i).evaluateExpr();
+				  ret = ret | (int) this.jjtGetChild(i).evaluateExpr().EvalDouble();
 			  }
-			  return ret;
+			  return new WI_Value(Integer.toString(ret), WI_Value.WI_NUMBER);
 		  }
 		  else {
 			  return this.jjtGetChild(0).evaluateExpr();
@@ -180,11 +215,11 @@ class SimpleNode implements Node {
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTXOREXPR) {
 		  if (this.jjtGetNumChildren() > 1) {
-			  int ret = (int) this.jjtGetChild(0).evaluateExpr();
+			  int ret = (int) this.jjtGetChild(0).evaluateExpr().EvalDouble();
 			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
-				  ret = ret ^ (int) this.jjtGetChild(i).evaluateExpr();
+				  ret = ret ^ (int) this.jjtGetChild(i).evaluateExpr().EvalDouble();
 			  }
-			  return ret;
+			  return new WI_Value(Integer.toString(ret), WI_Value.WI_NUMBER);
 		  }
 		  else {
 			  return this.jjtGetChild(0).evaluateExpr();
@@ -192,11 +227,11 @@ class SimpleNode implements Node {
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTANDEXPR) {
 		  if (this.jjtGetNumChildren() > 1) {
-			  int ret = (int) this.jjtGetChild(0).evaluateExpr();
+			  int ret = (int) this.jjtGetChild(0).evaluateExpr().EvalDouble();
 			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
-				  ret = ret & (int) this.jjtGetChild(i).evaluateExpr();
+				  ret = ret & (int) this.jjtGetChild(i).evaluateExpr().EvalDouble();
 			  }
-			  return ret;
+			  return new WI_Value(Integer.toString(ret), WI_Value.WI_NUMBER);
 		  }
 		  else {
 			  return this.jjtGetChild(0).evaluateExpr();
@@ -204,54 +239,54 @@ class SimpleNode implements Node {
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTSHIFTEXPR) {
 		  if (this.jjtGetNumChildren() > 1) {
-			  int ret = (int) this.jjtGetChild(0).evaluateExpr();
+			  int ret = (int) this.jjtGetChild(0).evaluateExpr().EvalDouble();
 			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
 				  if (this.ShiftOp.equals(">>")) {
-					  ret >>= (int) this.jjtGetChild(i).evaluateExpr();
+					  ret >>= (int) this.jjtGetChild(i).evaluateExpr().EvalDouble();
 				  }
 				  else if (this.ShiftOp.equals("<<")) {
-					  ret <<= (int) this.jjtGetChild(i).evaluateExpr();
+					  ret <<= (int) this.jjtGetChild(i).evaluateExpr().EvalDouble();
 				  }
 			  }
-			  return ret;
+			  return new WI_Value(Integer.toString(ret), WI_Value.WI_NUMBER);
 		  }
 		  else {
 			  return this.jjtGetChild(0).evaluateExpr();
 		  }
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTARITHEXPR) {
-		  double ret = this.jjtGetChild(0).evaluateExpr();
+		  double ret = this.jjtGetChild(0).evaluateExpr().EvalDouble();
 		  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
 			  if (this.AddOp.equals("+")) {
-				  ret += this.jjtGetChild(i).evaluateExpr();
+				  ret += this.jjtGetChild(i).evaluateExpr().EvalDouble();
 			  }
 			  else if (this.AddOp.equals("-")) {
-				  ret -= this.jjtGetChild(i).evaluateExpr();
+				  ret -= this.jjtGetChild(i).evaluateExpr().EvalDouble();
 			  }
 		  }
-		  return ret;
+		  return new WI_Value(Double.toString(ret), WI_Value.WI_NUMBER);
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTTERM) {
-		  double ret = this.jjtGetChild(0).evaluateExpr();
+		  double ret = this.jjtGetChild(0).evaluateExpr().EvalDouble();
 		  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
 			  if (this.MulOp.equals("*")) {
-				  ret *= this.jjtGetChild(i).evaluateExpr();
+				  ret *= this.jjtGetChild(i).evaluateExpr().EvalDouble();
 			  }
 			  else if (this.MulOp.equals("/")) {
-				  ret /= this.jjtGetChild(i).evaluateExpr();
+				  ret /= this.jjtGetChild(i).evaluateExpr().EvalDouble();
 			  }
 			  else if (this.MulOp.equals("%")) {
-				  ret %= this.jjtGetChild(i).evaluateExpr();
+				  ret %= this.jjtGetChild(i).evaluateExpr().EvalDouble();
 			  }
 			  else if (this.MulOp.equals("//")) {
-				  ret /= this.jjtGetChild(i).evaluateExpr();
+				  ret /= this.jjtGetChild(i).evaluateExpr().EvalDouble();
 				  ret = (int) ret;
 			  }
 		  }
-		  return ret;
+		  return new WI_Value(Double.toString(ret), WI_Value.WI_NUMBER);
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTFACTOR) {
-		  double ret = this.jjtGetChild(0).evaluateExpr();
+		  double ret = this.jjtGetChild(0).evaluateExpr().EvalDouble();
 		  if (this.SignOp != null) {
 			  if (this.SignOp.equals("+"));
 			  else if (this.SignOp.equals("-")) {
@@ -260,21 +295,21 @@ class SimpleNode implements Node {
 			  else if (this.SignOp.equals("~")) {
 				  ret = ~(int)ret;
 			  }
-			  return ret;
+			  return new WI_Value(Double.toString(ret), WI_Value.WI_NUMBER);
 		  }
-		  return ret;
+		  return new WI_Value(Double.toString(ret), WI_Value.WI_NUMBER);
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTPOWER) {
-		  double ret = this.jjtGetChild(0).evaluateExpr();
+		  double ret = this.jjtGetChild(0).evaluateExpr().EvalDouble();
 		  if (this.jjtGetNumChildren() > 1) {
-			  ret = Math.pow(ret, this.jjtGetChild(1).evaluateExpr());
+			  ret = Math.pow(ret, this.jjtGetChild(1).evaluateExpr().EvalDouble());
 		  }
-		  return ret;
+		  return new WI_Value(Double.toString(ret), WI_Value.WI_NUMBER);
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTATOMEXPR) {
-		  double ret = this.jjtGetChild(0).evaluateExpr();
+		  double ret = this.jjtGetChild(0).evaluateExpr().EvalDouble();
 		  // TODO implement rest of ATOMEXPR
-		  return ret;
+		  return new WI_Value(Double.toString(ret), WI_Value.WI_NUMBER);
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTATOM) {
 		  return this.jjtGetChild(0).evaluateExpr();
@@ -282,15 +317,18 @@ class SimpleNode implements Node {
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTNUMBER) {
 		  double ret = Double.parseDouble(this.AtomValue);
-		  return ret;
+		  return new WI_Value(Double.toString(ret), WI_Value.WI_NUMBER);
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTNAME) {
+		  return new WI_Value(this.AtomValue, WI_Value.WI_NAME);
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTSTRING) {
 		  //evaluateString();
 	  }
-	  return 0;
+	  return new WI_Value(Integer.toString(0), WI_Value.WI_NUMBER);
   }
   
-  public void interpret() {
+  public void interpret() throws ParseException {
 	  //System.out.println(GrammarTreeConstants.jjtNodeName[this.id]);
 	  if (this.id == GrammarTreeConstants.JJTINPUT) {
 		  for (int i = 0; i < this.jjtGetNumChildren(); i++) {
@@ -305,26 +343,26 @@ class SimpleNode implements Node {
 	  
 	  else if (this.id == GrammarTreeConstants.JJTASSERTSTMT) {
 		  for (int i = 0; i < this.jjtGetNumChildren(); i++) {
-			  if (!this.jjtGetChild(i).evaluate()) {
+			  if ((this.jjtGetChild(i).evaluate().EvalBool()) == false) {
 				  System.out.println("error");
-				  return;
+				  //return;
 			  }
 		  }
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTEXPRSTMT) {
-		  System.out.println(this.jjtGetNumChildren());
-		  for (int i = 0; i < this.jjtGetNumChildren(); i++) {
-			  this.jjtGetChild(i).interpret();
+		  if (this.jjtGetNumChildren() == 2) {
+			  WI_Value left = this.jjtGetChild(0).evaluate();
+			  WI_Value right = this.jjtGetChild(1).evaluate();
+			  // TODO symbol table assign
+		  }
+		  else if (this.jjtGetNumChildren() == 3) {
+			  WI_Value left = this.jjtGetChild(0).evaluate();
+			  WI_Value right = this.jjtGetChild(2).evaluate();
+			  // TODO symbol table update with help of child #2
 		  }
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTTESTLISTSTAREXPR) {
 		  System.out.println("testliststarexpr");
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTANNASSIGN) {
-		  System.out.println("annassign");
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTAUGASSIGN) {
-		  System.out.println("augassign");
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTYIELDEXPR) {
 		  System.out.println("yieldexpr");

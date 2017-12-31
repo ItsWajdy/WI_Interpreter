@@ -196,20 +196,24 @@ void TestlistStarExpr() :
 }
 
 void Augassign() :
-{}
+{ Token t; }
 {
-  < PLUSEQ >
-| < MINUSEQ >
-| < MULTIPLYEQ >
-| < DIVIDEEQ >
-| < MODEQ >
-| < ANDEQ >
-| < OREQ >
-| < XOREQ >
-| < SHIFTRIGHTEQ >
-| < SHIFTLEFTEQ >
-| < POWEREQ >
-| < DIVIDEINTEQ >
+(  t=< PLUSEQ >
+| t=< MINUSEQ >
+| t=< MULTIPLYEQ >
+| t=< DIVIDEEQ >
+| t=< MODEQ >
+| t=< ANDEQ >
+| t=< OREQ >
+| t=< XOREQ >
+| t=< SHIFTRIGHTEQ >
+| t=< SHIFTLEFTEQ >
+| t=< POWEREQ >
+| t=< DIVIDEINTEQ >
+)
+{
+  jjtThis.AugassignOp = t.image;
+}
 }
 
 void FlowStmt() :
