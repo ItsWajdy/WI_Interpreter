@@ -4,13 +4,15 @@
  */options{  static = true;}PARSER_BEGIN(Grammar)
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.*;
 public class Grammar/*@bgen(jjtree)*/implements GrammarTreeConstants/*@egen*/{/*@bgen(jjtree)*/
   protected static JJTGrammarState jjtree = new JJTGrammarState();
 
 /*@egen*/  public static void main(String args []) throws FileNotFoundException  {    Grammar parser = new Grammar(new FileInputStream("my_tests.txt"));
+    HashMap<String, WI_Value > symbolTable = new HashMap<String, WI_Value >();
     try { 
    		SimpleNode root = parser.Input();
-   		root.interpret();
+   		root.interpret(symbolTable);
    		//root.dump("  ");
   	} catch (ParseException e) {
   	  	System.out.println("Oops!");
@@ -1783,11 +1785,19 @@ void Name() :
   SimpleNode jjtn000 = new SimpleNode(JJTNAME);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
-/*@egen*/}
+/*@egen*/ Token t; }
 {/*@bgen(jjtree) Name */
   try {
 /*@egen*/
-  < NAME >/*@bgen(jjtree)*/
+  t=< NAME >/*@bgen(jjtree)*/
+  {
+    jjtree.closeNodeScope(jjtn000, true);
+    jjtc000 = false;
+  }
+/*@egen*/
+  {
+    jjtn000.AtomValue = t.image;
+  }/*@bgen(jjtree)*/
   } finally {
     if (jjtc000) {
       jjtree.closeNodeScope(jjtn000, true);

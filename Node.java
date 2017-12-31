@@ -4,6 +4,8 @@
    machinery for constructing the parent and child relationships
    between nodes. */
 
+import java.util.*;
+
 public
 interface Node {
 
@@ -31,7 +33,7 @@ interface Node {
   /** Return the number of children the node has. */
   public int jjtGetNumChildren();
   
-  public void interpret() throws ParseException;
+  public void interpret(HashMap<String, WI_Value> st) throws ParseException;
   
   public int getId();
   
@@ -40,5 +42,6 @@ interface Node {
   public WI_Value evaluateExpr() throws ParseException;
   
   public String getCompOp();
+  public String getAugassignOp();
 }
 /* JavaCC - OriginalChecksum=a7d9d685ec867dd5f1d1a896975d7357 (do not edit this line) */
