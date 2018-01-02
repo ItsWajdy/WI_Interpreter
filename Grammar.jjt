@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.util.*;
 public class Grammar{  public static void main(String args []) throws FileNotFoundException  {    Grammar parser = new Grammar(new FileInputStream("my_tests.txt"));
     HashMap<String, WI_Value > symbolTable = new HashMap<String, WI_Value >();
+    ArrayList<HashMap<String, WI_Value >> symbolTables = new ArrayList<HashMap<String, WI_Value >>();
+    symbolTables.add(symbolTable);
     try { 
    		SimpleNode root = parser.Input();
    		root.interpret(symbolTable);
@@ -592,7 +594,7 @@ void Atom() :
 {}
 {
   (    ("(" [YieldExpr() | TestlistComp()] ")")
-  | ("[" [TestlistComp()] "]")
+  | List()
   | Name()
   | Number()
   | < ELLIPSES >
@@ -600,6 +602,12 @@ void Atom() :
   | False()
   | Args()
   | (LOOKAHEAD(2) String())+)
+}
+
+void List() :
+{}
+{
+  "[" [TestlistComp()] "]"
 }
 
 void Name() :
@@ -659,10 +667,10 @@ void TestlistComp() :
   (Test() | StarExpr()) (CompFor() | (< COMMA > (Test() | StarExpr()))*)
 }
 
-void Trailer() :
+void Trailer() #void :
 {}
 {
-  "(" [Arglist()] ")" | "[" Subscriptlist() "]" | < DOT > < NAME >
+  ("(" [Arglist()] ")") | ("[" Subscriptlist() "]") | (< DOT > < NAME >)
 }
 
 void Subscriptlist() :
@@ -978,7 +986,7 @@ TOKEN :
 {
   < NAME : ["a"-"z", "A"-"Z", "$", "_"] (["a"-"z", "A"-"Z", "0"-"9", "$", "_"])* >
 | < NEWLINE : "\n" | "\r" >
-| < STRING : ("\"" (~["\n", "\r"])* "\"") | ("\'" (~["\n", "\r"])* "\'") >
+| < STRING : ("\"" (~["\n", "\r", "\""])* "\"") | ("\'" (~["\n", "\r"])* "\'") >
 }
 
 TOKEN :

@@ -391,19 +391,65 @@ public class SimpleNode implements Node {
 		  }
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTATOMEXPR) {
-		  //double ret = this.jjtGetChild(0).evaluateExpr().EvalDouble();
-		  // TODO implement rest of ATOMEXPR
-		  //return new WI_Value(Double.toString(ret), WI_Value.WI_NUMBER);
+		  // TODO implement rest of AtomExpr
+		  if (this.jjtGetNumChildren() > 1) {
+			  WI_Value ret = this.jjtGetChild(0).evaluateExpr(st);
+			  if (ret.getWiType() == WI_Value.WI_NAME) {
+				  ret = st.get(ret.getValue());
+				  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
+					  if (this.jjtGetChild(i).getId() == GrammarTreeConstants.JJTSUBSCRIPTLIST) {
+						  WI_Value trailer = this.jjtGetChild(i).evaluateExpr(st);
+						  if (ret.getWiType() != WI_Value.WI_LIST) {
+							  System.out.println("not list");
+							  return new WI_Value("\0", WI_Value.WI_UNDEFINED);
+							  // TODO clean
+						  }
+						  ret = ret.getList().get((int)SimpleNode.WItoDouble(trailer, st));
+					  }
+				  }
+				  return ret;
+			  }
+		  }
+		  else {
+			  return this.jjtGetChild(0).evaluateExpr(st);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTSUBSCRIPTLIST) {
+		  // TODO implement multiple Subscripts
 		  return this.jjtGetChild(0).evaluateExpr(st);
 	  }
+	  else if (this.id == GrammarTreeConstants.JJTSUBSCRIPT) {
+		  // TODO implement multiple Tests
+		  return this.jjtGetChild(0).evaluate(st);
+	  }
 	  else if (this.id == GrammarTreeConstants.JJTATOM) {
-		  System.out.println(this.jjtGetNumChildren());
-		  return this.jjtGetChild(0).evaluateExpr(st);
+		  if (this.jjtGetChild(0).getId() == GrammarTreeConstants.JJTLIST) {
+			  return this.jjtGetChild(0).evaluateExpr(st);
+		  }
+		  else {
+			  return this.jjtGetChild(0).evaluateExpr(st);
+		  }
 		  // TODO implement rest of ATOM
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTTESTLISTCOMP) {
-		  // TODO implement comma for testlistcomp definition
-		  return this.jjtGetChild(0).evaluate(st);
+		  if (this.jjtGetNumChildren() > 1) {
+			  ArrayList<WI_Value> list = new ArrayList<WI_Value>();
+			  for (int i =0; i < this.jjtGetNumChildren(); i++) {
+				  list.add(this.jjtGetChild(i).evaluate(st));
+			  }
+			  return new WI_Value(list);
+		  }
+		  else {
+			  return this.jjtGetChild(0).evaluate(st);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTLIST) {
+		  if (this.jjtGetNumChildren() > 0) {
+			  return this.jjtGetChild(0).evaluateExpr(st);
+		  }
+		  else {
+			  return new WI_Value(new ArrayList<WI_Value>());
+		  }
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTNUMBER) {
 		  return new WI_Value(this.AtomValue, WI_Value.WI_NUMBER);
@@ -625,6 +671,10 @@ public class SimpleNode implements Node {
 	  
 	  for(Map.Entry m:symbolTable.entrySet()){  
 		  System.out.println(m.getKey()+" "+((WI_Value)m.getValue()).getValue());  
+		  for (int i = 0; i < ((WI_Value)m.getValue()).getList().size(); i++) {
+			  //System.out.print(((WI_Value)m.getValue()).getList().get(i).getValue() + "  ");
+		  }
+		  System.out.println("");
 	  }
   }
 }

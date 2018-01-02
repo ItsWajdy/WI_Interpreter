@@ -61,14 +61,14 @@ public interface GrammarTreeConstants
   public int JJTPOWER = 57;
   public int JJTATOMEXPR = 58;
   public int JJTATOM = 59;
-  public int JJTNAME = 60;
-  public int JJTNUMBER = 61;
-  public int JJTTRUE = 62;
-  public int JJTFALSE = 63;
-  public int JJTARGS = 64;
-  public int JJTSTRING = 65;
-  public int JJTTESTLISTCOMP = 66;
-  public int JJTTRAILER = 67;
+  public int JJTLIST = 60;
+  public int JJTNAME = 61;
+  public int JJTNUMBER = 62;
+  public int JJTTRUE = 63;
+  public int JJTFALSE = 64;
+  public int JJTARGS = 65;
+  public int JJTSTRING = 66;
+  public int JJTTESTLISTCOMP = 67;
   public int JJTSUBSCRIPTLIST = 68;
   public int JJTSUBSCRIPT = 69;
   public int JJTARGLIST = 70;
@@ -162,6 +162,7 @@ public interface GrammarTreeConstants
     "Power",
     "AtomExpr",
     "Atom",
+    "List",
     "Name",
     "Number",
     "True",
@@ -169,7 +170,6 @@ public interface GrammarTreeConstants
     "Args",
     "String",
     "TestlistComp",
-    "Trailer",
     "Subscriptlist",
     "Subscript",
     "Arglist",
@@ -202,4 +202,4 @@ public interface GrammarTreeConstants
     "error_printmessage",
   };
 }
-/* JavaCC - OriginalChecksum=1d31ae9f8f21863e4ff7f3b3e02b5dd0 (do not edit this line) */
+/* JavaCC - OriginalChecksum=3aef74e40b10668bff1fc66d6399bf9a (do not edit this line) */

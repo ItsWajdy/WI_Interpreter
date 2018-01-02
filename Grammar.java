@@ -7,6 +7,8 @@ public class Grammar/*@bgen(jjtree)*/implements GrammarTreeConstants, GrammarCon
   {
     Grammar parser = new Grammar(new FileInputStream("my_tests.txt"));
     HashMap<String, WI_Value > symbolTable = new HashMap<String, WI_Value >();
+    ArrayList<HashMap<String, WI_Value >> symbolTables = new ArrayList<HashMap<String, WI_Value >>();
+    symbolTables.add(symbolTable);
     try {
                 SimpleNode root = parser.Input();
                 root.interpret(symbolTable);
@@ -3474,30 +3476,7 @@ public class Grammar/*@bgen(jjtree)*/implements GrammarTreeConstants, GrammarCon
         jj_consume_token(83);
         break;
       case 87:
-        jj_consume_token(87);
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case PLUS:
-        case MINUS:
-        case MULTIPLY:
-        case TILDE:
-        case NOT:
-        case ELLIPSES:
-        case LAMBDA:
-        case ARGS:
-        case FALSE:
-        case TRUE:
-        case 82:
-        case 87:
-        case NAME:
-        case STRING:
-        case NUMBER:
-          TestlistComp();
-          break;
-        default:
-          jj_la1[78] = jj_gen;
-          ;
-        }
-        jj_consume_token(88);
+        List();
         break;
       case NAME:
         Name();
@@ -3529,10 +3508,61 @@ public class Grammar/*@bgen(jjtree)*/implements GrammarTreeConstants, GrammarCon
         }
         break;
       default:
-        jj_la1[79] = jj_gen;
+        jj_la1[78] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
+    } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      {if (true) throw (RuntimeException)jjte000;}
+    }
+    if (jjte000 instanceof ParseException) {
+      {if (true) throw (ParseException)jjte000;}
+    }
+    {if (true) throw (Error)jjte000;}
+    } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+    }
+  }
+
+  static final public void List() throws ParseException {
+ /*@bgen(jjtree) List */
+  SimpleNode jjtn000 = new SimpleNode(JJTLIST);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+    try {
+      jj_consume_token(87);
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case PLUS:
+      case MINUS:
+      case MULTIPLY:
+      case TILDE:
+      case NOT:
+      case ELLIPSES:
+      case LAMBDA:
+      case ARGS:
+      case FALSE:
+      case TRUE:
+      case 82:
+      case 87:
+      case NAME:
+      case STRING:
+      case NUMBER:
+        TestlistComp();
+        break;
+      default:
+        jj_la1[79] = jj_gen;
+        ;
+      }
+      jj_consume_token(88);
     } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -3750,70 +3780,46 @@ public class Grammar/*@bgen(jjtree)*/implements GrammarTreeConstants, GrammarCon
   }
 
   static final public void Trailer() throws ParseException {
- /*@bgen(jjtree) Trailer */
-  SimpleNode jjtn000 = new SimpleNode(JJTTRAILER);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-    try {
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case 82:
+      jj_consume_token(82);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case PLUS:
+      case MINUS:
+      case MULTIPLY:
+      case TILDE:
+      case NOT:
+      case ELLIPSES:
+      case LAMBDA:
+      case ARGS:
+      case FALSE:
+      case TRUE:
       case 82:
-        jj_consume_token(82);
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case PLUS:
-        case MINUS:
-        case MULTIPLY:
-        case TILDE:
-        case NOT:
-        case ELLIPSES:
-        case LAMBDA:
-        case ARGS:
-        case FALSE:
-        case TRUE:
-        case 82:
-        case 87:
-        case NAME:
-        case STRING:
-        case NUMBER:
-          Arglist();
-          break;
-        default:
-          jj_la1[84] = jj_gen;
-          ;
-        }
-        jj_consume_token(83);
-        break;
       case 87:
-        jj_consume_token(87);
-        Subscriptlist();
-        jj_consume_token(88);
-        break;
-      case DOT:
-        jj_consume_token(DOT);
-        jj_consume_token(NAME);
+      case NAME:
+      case STRING:
+      case NUMBER:
+        Arglist();
         break;
       default:
-        jj_la1[85] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
+        jj_la1[84] = jj_gen;
+        ;
       }
-    } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      {if (true) throw (RuntimeException)jjte000;}
-    }
-    if (jjte000 instanceof ParseException) {
-      {if (true) throw (ParseException)jjte000;}
-    }
-    {if (true) throw (Error)jjte000;}
-    } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
+      jj_consume_token(83);
+      break;
+    case 87:
+      jj_consume_token(87);
+      Subscriptlist();
+      jj_consume_token(88);
+      break;
+    case DOT:
+      jj_consume_token(DOT);
+      jj_consume_token(NAME);
+      break;
+    default:
+      jj_la1[85] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
     }
   }
 
@@ -7099,34 +7105,6 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     finally { jj_save(64, xla); }
   }
 
-  static private boolean jj_3R_173() {
-    if (jj_scan_token(COMMA)) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_298()) {
-    jj_scanpos = xsp;
-    if (jj_3R_299()) return true;
-    }
-    return false;
-  }
-
-  static private boolean jj_3R_124() {
-    if (jj_scan_token(COMMA)) return true;
-    if (jj_3R_84()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_164() {
-    if (jj_scan_token(DEFINE)) return true;
-    if (jj_scan_token(NAME)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_291() {
-    if (jj_3R_296()) return true;
-    return false;
-  }
-
   static private boolean jj_3R_82() {
     if (jj_3R_84()) return true;
     Token xsp;
@@ -7142,12 +7120,12 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_305() {
-    if (jj_3R_296()) return true;
+  static private boolean jj_3R_306() {
+    if (jj_3R_298()) return true;
     return false;
   }
 
-  static private boolean jj_3R_295() {
+  static private boolean jj_3R_293() {
     if (jj_3R_297()) return true;
     return false;
   }
@@ -7165,7 +7143,7 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_302() {
+  static private boolean jj_3R_299() {
     if (jj_3R_84()) return true;
     return false;
   }
@@ -7189,21 +7167,8 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_294() {
+  static private boolean jj_3R_292() {
     if (jj_3R_84()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_293() {
-    if (jj_3R_196()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_297() {
-    if (jj_scan_token(COLON)) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_302()) jj_scanpos = xsp;
     return false;
   }
 
@@ -7213,26 +7178,39 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
+  static private boolean jj_3R_296() {
+    if (jj_3R_196()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_297() {
+    if (jj_scan_token(COLON)) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_299()) jj_scanpos = xsp;
+    return false;
+  }
+
   static private boolean jj_3R_111() {
     if (jj_3R_155()) return true;
     return false;
   }
 
-  static private boolean jj_3R_303() {
+  static private boolean jj_3R_304() {
     if (jj_scan_token(IF)) return true;
-    if (jj_3R_304()) return true;
+    if (jj_3R_305()) return true;
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_305()) jj_scanpos = xsp;
+    if (jj_3R_306()) jj_scanpos = xsp;
     return false;
   }
 
-  static private boolean jj_3R_301() {
-    if (jj_3R_303()) return true;
+  static private boolean jj_3R_303() {
+    if (jj_3R_304()) return true;
     return false;
   }
 
-  static private boolean jj_3R_292() {
+  static private boolean jj_3R_295() {
     if (jj_3R_84()) return true;
     return false;
   }
@@ -7244,7 +7222,7 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     if (jj_3R_97()) return true;
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_291()) jj_scanpos = xsp;
+    if (jj_3R_294()) jj_scanpos = xsp;
     return false;
   }
 
@@ -7259,49 +7237,49 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     if (jj_3R_227()) jj_scanpos = xsp;
     if (jj_scan_token(COLON)) return true;
     xsp = jj_scanpos;
-    if (jj_3R_294()) jj_scanpos = xsp;
+    if (jj_3R_292()) jj_scanpos = xsp;
     xsp = jj_scanpos;
-    if (jj_3R_295()) jj_scanpos = xsp;
+    if (jj_3R_293()) jj_scanpos = xsp;
     return false;
   }
 
-  static private boolean jj_3R_300() {
+  static private boolean jj_3R_302() {
     if (jj_3R_155()) return true;
     return false;
   }
 
-  static private boolean jj_3R_296() {
+  static private boolean jj_3R_298() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_300()) {
+    if (jj_3R_302()) {
     jj_scanpos = xsp;
-    if (jj_3R_301()) return true;
+    if (jj_3R_303()) return true;
     }
     return false;
   }
 
-  static private boolean jj_3R_288() {
+  static private boolean jj_3R_289() {
     if (jj_scan_token(COMMA)) return true;
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_292()) {
+    if (jj_3R_295()) {
     jj_scanpos = xsp;
-    if (jj_3R_293()) return true;
+    if (jj_3R_296()) return true;
     }
     return false;
   }
 
-  static private boolean jj_3R_290() {
+  static private boolean jj_3R_291() {
     if (jj_scan_token(COMMA)) return true;
     if (jj_3R_212()) return true;
     return false;
   }
 
-  static private boolean jj_3R_287() {
+  static private boolean jj_3R_288() {
     Token xsp;
     while (true) {
       xsp = jj_scanpos;
-      if (jj_3R_288()) { jj_scanpos = xsp; break; }
+      if (jj_3R_289()) { jj_scanpos = xsp; break; }
     }
     return false;
   }
@@ -7311,6 +7289,13 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_111()) jj_scanpos = xsp;
+    return false;
+  }
+
+  static private boolean jj_3R_153() {
+    if (jj_scan_token(87)) return true;
+    if (jj_3R_182()) return true;
+    if (jj_scan_token(88)) return true;
     return false;
   }
 
@@ -7327,14 +7312,7 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_153() {
-    if (jj_scan_token(87)) return true;
-    if (jj_3R_182()) return true;
-    if (jj_scan_token(88)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_289() {
+  static private boolean jj_3R_290() {
     if (jj_scan_token(COMMA)) return true;
     if (jj_3R_203()) return true;
     return false;
@@ -7345,12 +7323,12 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     Token xsp;
     while (true) {
       xsp = jj_scanpos;
-      if (jj_3R_290()) { jj_scanpos = xsp; break; }
+      if (jj_3R_291()) { jj_scanpos = xsp; break; }
     }
     return false;
   }
 
-  static private boolean jj_3R_286() {
+  static private boolean jj_3R_287() {
     if (jj_3R_155()) return true;
     return false;
   }
@@ -7370,22 +7348,22 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_182() {
-    if (jj_3R_203()) return true;
-    Token xsp;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3R_289()) { jj_scanpos = xsp; break; }
-    }
-    return false;
-  }
-
   static private boolean jj_3R_181() {
     if (jj_3R_202()) return true;
     return false;
   }
 
-  static private boolean jj_3R_285() {
+  static private boolean jj_3R_182() {
+    if (jj_3R_203()) return true;
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3R_290()) { jj_scanpos = xsp; break; }
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_286() {
     if (jj_3R_196()) return true;
     return false;
   }
@@ -7412,22 +7390,22 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_284() {
+  static private boolean jj_3R_285() {
     if (jj_3R_84()) return true;
     return false;
   }
 
-  static private boolean jj_3R_283() {
+  static private boolean jj_3R_284() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_284()) {
+    if (jj_3R_285()) {
     jj_scanpos = xsp;
-    if (jj_3R_285()) return true;
+    if (jj_3R_286()) return true;
     }
     xsp = jj_scanpos;
-    if (jj_3R_286()) {
+    if (jj_3R_287()) {
     jj_scanpos = xsp;
-    if (jj_3R_287()) return true;
+    if (jj_3R_288()) return true;
     }
     return false;
   }
@@ -7442,28 +7420,28 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_234() {
+  static private boolean jj_3R_235() {
     if (jj_scan_token(ARGS)) return true;
     return false;
   }
 
-  static private boolean jj_3R_233() {
+  static private boolean jj_3R_234() {
     if (jj_scan_token(FALSE)) return true;
     return false;
   }
 
-  static private boolean jj_3R_232() {
+  static private boolean jj_3R_233() {
     if (jj_scan_token(TRUE)) return true;
     return false;
   }
 
-  static private boolean jj_3R_231() {
+  static private boolean jj_3R_232() {
     if (jj_scan_token(NUMBER)) return true;
     return false;
   }
 
   static private boolean jj_3R_282() {
-    if (jj_3R_283()) return true;
+    if (jj_3R_284()) return true;
     return false;
   }
 
@@ -7472,8 +7450,22 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_230() {
+  static private boolean jj_3R_231() {
     if (jj_scan_token(NAME)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_283() {
+    if (jj_3R_284()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_230() {
+    if (jj_scan_token(87)) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_283()) jj_scanpos = xsp;
+    if (jj_scan_token(88)) return true;
     return false;
   }
 
@@ -7493,21 +7485,16 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
   }
 
   static private boolean jj_3R_223() {
+    if (jj_3R_235()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_222() {
     if (jj_3R_234()) return true;
     return false;
   }
 
   static private boolean jj_3R_280() {
-    if (jj_3R_283()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_222() {
-    if (jj_3R_233()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_279() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_281()) {
@@ -7518,31 +7505,27 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
   }
 
   static private boolean jj_3R_281() {
-    if (jj_3R_273()) return true;
+    if (jj_3R_274()) return true;
     return false;
   }
 
   static private boolean jj_3R_221() {
-    if (jj_3R_232()) return true;
+    if (jj_3R_233()) return true;
     return false;
   }
 
   static private boolean jj_3R_220() {
-    if (jj_3R_231()) return true;
+    if (jj_3R_232()) return true;
     return false;
   }
 
   static private boolean jj_3R_219() {
-    if (jj_3R_230()) return true;
+    if (jj_3R_231()) return true;
     return false;
   }
 
   static private boolean jj_3R_218() {
-    if (jj_scan_token(87)) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_280()) jj_scanpos = xsp;
-    if (jj_scan_token(88)) return true;
+    if (jj_3R_230()) return true;
     return false;
   }
 
@@ -7550,7 +7533,7 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     if (jj_scan_token(82)) return true;
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_279()) jj_scanpos = xsp;
+    if (jj_3R_280()) jj_scanpos = xsp;
     if (jj_scan_token(83)) return true;
     return false;
   }
@@ -7591,7 +7574,7 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_276() {
+  static private boolean jj_3R_277() {
     if (jj_scan_token(POWER)) return true;
     if (jj_3R_108()) return true;
     return false;
@@ -7626,7 +7609,7 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     if (jj_3R_201()) return true;
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_276()) jj_scanpos = xsp;
+    if (jj_3R_277()) jj_scanpos = xsp;
     return false;
   }
 
@@ -7762,8 +7745,8 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_242() {
-    if (jj_3R_248()) return true;
+  static private boolean jj_3R_243() {
+    if (jj_3R_249()) return true;
     return false;
   }
 
@@ -7787,22 +7770,22 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_241() {
-    if (jj_3R_247()) return true;
+  static private boolean jj_3R_242() {
+    if (jj_3R_248()) return true;
     return false;
   }
 
-  static private boolean jj_3R_248() {
+  static private boolean jj_3R_249() {
     if (jj_scan_token(SHIFTRIGHT)) return true;
     return false;
   }
 
-  static private boolean jj_3R_236() {
+  static private boolean jj_3R_237() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_241()) {
+    if (jj_3R_242()) {
     jj_scanpos = xsp;
-    if (jj_3R_242()) return true;
+    if (jj_3R_243()) return true;
     }
     if (jj_3R_210()) return true;
     return false;
@@ -7814,7 +7797,7 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_247() {
+  static private boolean jj_3R_248() {
     if (jj_scan_token(SHIFTLEFT)) return true;
     return false;
   }
@@ -7824,7 +7807,7 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     Token xsp;
     while (true) {
       xsp = jj_scanpos;
-      if (jj_3R_236()) { jj_scanpos = xsp; break; }
+      if (jj_3R_237()) { jj_scanpos = xsp; break; }
     }
     return false;
   }
@@ -8183,6 +8166,11 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
+  static private boolean jj_3_64() {
+    if (jj_scan_token(NEWLINE)) return true;
+    return false;
+  }
+
   static private boolean jj_3_16() {
     if (jj_scan_token(NEWLINE)) return true;
     return false;
@@ -8200,11 +8188,6 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     jj_scanpos = xsp;
     if (jj_3R_186()) return true;
     }
-    return false;
-  }
-
-  static private boolean jj_3_64() {
-    if (jj_scan_token(NEWLINE)) return true;
     return false;
   }
 
@@ -8234,7 +8217,7 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_278() {
+  static private boolean jj_3R_279() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_scan_token(39)) {
@@ -8254,12 +8237,12 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_275() {
+  static private boolean jj_3R_276() {
     Token xsp;
-    if (jj_3R_278()) return true;
+    if (jj_3R_279()) return true;
     while (true) {
       xsp = jj_scanpos;
-      if (jj_3R_278()) { jj_scanpos = xsp; break; }
+      if (jj_3R_279()) { jj_scanpos = xsp; break; }
     }
     return false;
   }
@@ -8322,6 +8305,11 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
 
   static private boolean jj_3_9() {
     if (jj_3R_89()) return true;
+    return false;
+  }
+
+  static private boolean jj_3_65() {
+    if (jj_scan_token(NEWLINE)) return true;
     return false;
   }
 
@@ -8402,19 +8390,19 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3_65() {
-    if (jj_scan_token(NEWLINE)) return true;
-    return false;
-  }
-
   static private boolean jj_3R_129() {
     if (jj_scan_token(DOT)) return true;
     return false;
   }
 
-  static private boolean jj_3R_245() {
+  static private boolean jj_3R_246() {
     if (jj_scan_token(ASSERT)) return true;
     if (jj_3R_84()) return true;
+    return false;
+  }
+
+  static private boolean jj_3_54() {
+    if (jj_scan_token(NEWLINE)) return true;
     return false;
   }
 
@@ -8428,7 +8416,7 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3_54() {
+  static private boolean jj_3_61() {
     if (jj_scan_token(NEWLINE)) return true;
     return false;
   }
@@ -8443,12 +8431,12 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_274() {
-    if (jj_3R_277()) return true;
+  static private boolean jj_3R_275() {
+    if (jj_3R_278()) return true;
     return false;
   }
 
-  static private boolean jj_3_61() {
+  static private boolean jj_3_59() {
     if (jj_scan_token(NEWLINE)) return true;
     return false;
   }
@@ -8459,12 +8447,7 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3_59() {
-    if (jj_scan_token(NEWLINE)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_277() {
+  static private boolean jj_3R_278() {
     if (jj_3R_86()) return true;
     return false;
   }
@@ -8479,38 +8462,19 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_255() {
-    if (jj_3R_266()) return true;
+  static private boolean jj_3R_256() {
+    if (jj_3R_267()) return true;
     return false;
   }
 
-  static private boolean jj_3R_266() {
+  static private boolean jj_3R_267() {
     if (jj_scan_token(FROM)) return true;
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3_6()) {
     jj_scanpos = xsp;
-    if (jj_3R_275()) return true;
+    if (jj_3R_276()) return true;
     }
-    return false;
-  }
-
-  static private boolean jj_3R_126() {
-    if (jj_3R_82()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_265() {
-    if (jj_scan_token(IMPORT)) return true;
-    if (jj_3R_274()) return true;
-    return false;
-  }
-
-  static private boolean jj_3_5() {
-    if (jj_3R_84()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3_4()) jj_scanpos = xsp;
     return false;
   }
 
@@ -8524,22 +8488,41 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_244() {
+  static private boolean jj_3R_126() {
+    if (jj_3R_82()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_266() {
+    if (jj_scan_token(IMPORT)) return true;
+    if (jj_3R_275()) return true;
+    return false;
+  }
+
+  static private boolean jj_3_5() {
+    if (jj_3R_84()) return true;
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_254()) {
+    if (jj_3_4()) jj_scanpos = xsp;
+    return false;
+  }
+
+  static private boolean jj_3R_245() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_255()) {
     jj_scanpos = xsp;
-    if (jj_3R_255()) return true;
+    if (jj_3R_256()) return true;
     }
     return false;
   }
 
-  static private boolean jj_3R_254() {
-    if (jj_3R_265()) return true;
+  static private boolean jj_3R_255() {
+    if (jj_3R_266()) return true;
     return false;
   }
 
-  static private boolean jj_3R_263() {
+  static private boolean jj_3R_264() {
     if (jj_scan_token(RAISE)) return true;
     Token xsp;
     xsp = jj_scanpos;
@@ -8568,19 +8551,6 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3_2() {
-    if (jj_3R_82()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_273() {
-    if (jj_scan_token(YIELD)) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3_3()) jj_scanpos = xsp;
-    return false;
-  }
-
   static private boolean jj_3_56() {
     if (jj_scan_token(NEWLINE)) return true;
     return false;
@@ -8591,8 +8561,16 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_264() {
-    if (jj_3R_273()) return true;
+  static private boolean jj_3_2() {
+    if (jj_3R_82()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_274() {
+    if (jj_scan_token(YIELD)) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3_3()) jj_scanpos = xsp;
     return false;
   }
 
@@ -8606,16 +8584,16 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_262() {
+  static private boolean jj_3R_265() {
+    if (jj_3R_274()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_263() {
     if (jj_scan_token(RETURN)) return true;
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3_2()) jj_scanpos = xsp;
-    return false;
-  }
-
-  static private boolean jj_3R_261() {
-    if (jj_scan_token(CONTINUE)) return true;
     return false;
   }
 
@@ -8624,8 +8602,8 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_260() {
-    if (jj_scan_token(BREAK)) return true;
+  static private boolean jj_3R_262() {
+    if (jj_scan_token(CONTINUE)) return true;
     return false;
   }
 
@@ -8636,6 +8614,26 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
 
   static private boolean jj_3R_133() {
     if (jj_3R_170()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_261() {
+    if (jj_scan_token(BREAK)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_194() {
+    if (jj_3R_206()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_134() {
+    if (jj_3R_169()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_254() {
+    if (jj_3R_265()) return true;
     return false;
   }
 
@@ -8654,8 +8652,27 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_194() {
-    if (jj_3R_206()) return true;
+  static private boolean jj_3R_132() {
+    if (jj_3R_169()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_244() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_250()) {
+    jj_scanpos = xsp;
+    if (jj_3R_251()) {
+    jj_scanpos = xsp;
+    if (jj_3R_252()) {
+    jj_scanpos = xsp;
+    if (jj_3R_253()) {
+    jj_scanpos = xsp;
+    if (jj_3R_254()) return true;
+    }
+    }
+    }
+    }
     return false;
   }
 
@@ -8664,52 +8681,13 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_243() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_249()) {
-    jj_scanpos = xsp;
-    if (jj_3R_250()) {
-    jj_scanpos = xsp;
-    if (jj_3R_251()) {
-    jj_scanpos = xsp;
-    if (jj_3R_252()) {
-    jj_scanpos = xsp;
-    if (jj_3R_253()) return true;
-    }
-    }
-    }
-    }
-    return false;
-  }
-
-  static private boolean jj_3R_249() {
-    if (jj_3R_260()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_134() {
-    if (jj_3R_169()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_269() {
-    if (jj_scan_token(COMMA)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_132() {
-    if (jj_3R_169()) return true;
-    return false;
-  }
-
   static private boolean jj_3R_131() {
     if (jj_3R_170()) return true;
     return false;
   }
 
-  static private boolean jj_3R_258() {
-    if (jj_3R_271()) return true;
+  static private boolean jj_3R_270() {
+    if (jj_scan_token(COMMA)) return true;
     return false;
   }
 
@@ -8718,31 +8696,52 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_268() {
+  static private boolean jj_3R_259() {
+    if (jj_3R_272()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_269() {
     if (jj_3R_196()) return true;
     return false;
   }
 
-  static private boolean jj_3R_272() {
+  static private boolean jj_3R_112() {
+    if (jj_scan_token(NAME)) return true;
+    Token xsp;
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3R_156()) { jj_scanpos = xsp; break; }
+    }
+    if (jj_scan_token(NAME)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_273() {
     if (jj_scan_token(ASSIGN)) return true;
     return false;
   }
 
-  static private boolean jj_3R_259() {
+  static private boolean jj_3R_260() {
     Token xsp;
     while (true) {
       xsp = jj_scanpos;
-      if (jj_3R_272()) { jj_scanpos = xsp; break; }
+      if (jj_3R_273()) { jj_scanpos = xsp; break; }
     }
     return false;
   }
 
-  static private boolean jj_3R_257() {
-    if (jj_3R_270()) return true;
+  static private boolean jj_3R_258() {
+    if (jj_3R_271()) return true;
     return false;
   }
 
-  static private boolean jj_3R_271() {
+  static private boolean jj_3_57() {
+    if (jj_scan_token(NEWLINE)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_272() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_scan_token(24)) {
@@ -8782,38 +8781,8 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_112() {
-    if (jj_scan_token(NAME)) return true;
-    Token xsp;
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3R_156()) { jj_scanpos = xsp; break; }
-    }
-    if (jj_scan_token(NAME)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_267() {
+  static private boolean jj_3R_268() {
     if (jj_3R_84()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_256() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_267()) {
-    jj_scanpos = xsp;
-    if (jj_3R_268()) return true;
-    }
-    while (true) {
-      xsp = jj_scanpos;
-      if (jj_3R_269()) { jj_scanpos = xsp; break; }
-    }
-    return false;
-  }
-
-  static private boolean jj_3_57() {
-    if (jj_scan_token(NEWLINE)) return true;
     return false;
   }
 
@@ -8822,22 +8791,22 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_270() {
-    if (jj_scan_token(COLON)) return true;
+  static private boolean jj_3R_257() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_268()) {
+    jj_scanpos = xsp;
+    if (jj_3R_269()) return true;
+    }
+    while (true) {
+      xsp = jj_scanpos;
+      if (jj_3R_270()) { jj_scanpos = xsp; break; }
+    }
     return false;
   }
 
-  static private boolean jj_3R_246() {
-    if (jj_3R_256()) return true;
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_257()) {
-    jj_scanpos = xsp;
-    if (jj_3R_258()) {
-    jj_scanpos = xsp;
-    if (jj_3R_259()) return true;
-    }
-    }
+  static private boolean jj_3R_271() {
+    if (jj_scan_token(COLON)) return true;
     return false;
   }
 
@@ -8862,9 +8831,28 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
+  static private boolean jj_3R_247() {
+    if (jj_3R_257()) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_258()) {
+    jj_scanpos = xsp;
+    if (jj_3R_259()) {
+    jj_scanpos = xsp;
+    if (jj_3R_260()) return true;
+    }
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_241() {
+    if (jj_3R_247()) return true;
+    if (jj_scan_token(NEWLINE)) return true;
+    return false;
+  }
+
   static private boolean jj_3R_240() {
     if (jj_3R_246()) return true;
-    if (jj_scan_token(NEWLINE)) return true;
     return false;
   }
 
@@ -8873,35 +8861,25 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_238() {
-    if (jj_3R_244()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_235() {
+  static private boolean jj_3R_236() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_237()) {
-    jj_scanpos = xsp;
     if (jj_3R_238()) {
     jj_scanpos = xsp;
     if (jj_3R_239()) {
     jj_scanpos = xsp;
-    if (jj_3R_240()) return true;
+    if (jj_3R_240()) {
+    jj_scanpos = xsp;
+    if (jj_3R_241()) return true;
     }
     }
     }
     return false;
   }
 
-  static private boolean jj_3R_237() {
-    if (jj_3R_243()) return true;
+  static private boolean jj_3R_238() {
+    if (jj_3R_244()) return true;
     if (jj_scan_token(NEWLINE)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_228() {
-    if (jj_3R_235()) return true;
     return false;
   }
 
@@ -8912,8 +8890,8 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_214() {
-    if (jj_3R_228()) return true;
+  static private boolean jj_3R_228() {
+    if (jj_3R_236()) return true;
     return false;
   }
 
@@ -8925,6 +8903,11 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
       if (jj_3R_194()) { jj_scanpos = xsp; break; }
     }
     if (jj_scan_token(CLOSEBRACE)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_214() {
+    if (jj_3R_228()) return true;
     return false;
   }
 
@@ -8986,8 +8969,8 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_306() {
-    if (jj_3R_307()) return true;
+  static private boolean jj_3R_307() {
+    if (jj_3R_308()) return true;
     return false;
   }
 
@@ -9048,12 +9031,12 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_304() {
+  static private boolean jj_3R_305() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3_51()) {
     jj_scanpos = xsp;
-    if (jj_3R_306()) return true;
+    if (jj_3R_307()) return true;
     }
     return false;
   }
@@ -9086,17 +9069,17 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_308() {
+  static private boolean jj_3R_309() {
     if (jj_3R_140()) return true;
     return false;
   }
 
-  static private boolean jj_3R_307() {
+  static private boolean jj_3R_308() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_308()) jj_scanpos = xsp;
+    if (jj_3R_309()) jj_scanpos = xsp;
     if (jj_scan_token(LAMBDA)) return true;
-    if (jj_3R_304()) return true;
+    if (jj_3R_305()) return true;
     return false;
   }
 
@@ -9185,12 +9168,12 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
-  static private boolean jj_3R_299() {
+  static private boolean jj_3R_301() {
     if (jj_3R_196()) return true;
     return false;
   }
 
-  static private boolean jj_3R_298() {
+  static private boolean jj_3R_300() {
     if (jj_3R_100()) return true;
     return false;
   }
@@ -9236,6 +9219,34 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
     return false;
   }
 
+  static private boolean jj_3R_173() {
+    if (jj_scan_token(COMMA)) return true;
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_300()) {
+    jj_scanpos = xsp;
+    if (jj_3R_301()) return true;
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_124() {
+    if (jj_scan_token(COMMA)) return true;
+    if (jj_3R_84()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_294() {
+    if (jj_3R_298()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_164() {
+    if (jj_scan_token(DEFINE)) return true;
+    if (jj_scan_token(NAME)) return true;
+    return false;
+  }
+
   static private boolean jj_initialized_once = false;
   /** Generated Token Manager. */
   static public GrammarTokenManager token_source;
@@ -9258,10 +9269,10 @@ try {System.out.println("\u005cn---------- EXCEPTION ENCOUNTERED ----------");
       jj_la1_init_2();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x400470,0x400470,0x0,0x400470,0x400430,0x100,0x400470,0xff000000,0x100,0x400470,0x0,0x400470,0xff000000,0x0,0x400430,0x0,0x0,0x0,0x0,0x0,0x0,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x400470,0x0,0x400470,0x400470,0x0,0x400470,0x400470,0x0,0x400470,0x400470,0x400470,0x0,0x400470,0x400470,0x0,0x400470,0x0,0x400470,0x0,0x400470,0x0,0x0,0x400470,0x0,0x400470,0x0,0x400430,0x0,0x0,0x0,0x400430,0x7f8000,0x800000,0x0,0x0,0x0,0x6000,0x6000,0x30,0x12c0,0x430,0x430,0x800,0x400470,0x400470,0x400470,0x0,0x400470,0x0,0x400470,0x0,0x400470,0x0,0x0,0x400430,0x400430,0x0,0x400430,0x0,0x0,0x400470,0x0,0x0,0x0,0x400430,0x470,0x0,0x470,0x0,0x0,0x400470,0x0,0x0,0x0,0x0,0x400470,0x0,0x400470,0x0,0x400470,0x0,0x0,0x400470,0x0,0x0,0x400470,0x0,0x0,0x0,0x0,0x400470,0x0,0x100,0x100,0x0,0x0,0x0,0x0,0x100,0x100,0x0,0x400470,0x0,0x400470,0x400470,0x0,0x400470,0x400470,0x0,0x400470,0x400470,0x400470,0x0,0x400470,0x400470,0x0,0x400470,0x0,0x400470,0x0,0x0,0x0,0x0,0x400470,0x400470,0x0,0x0,0x400470,};
+      jj_la1_0 = new int[] {0x400470,0x400470,0x0,0x400470,0x400430,0x100,0x400470,0xff000000,0x100,0x400470,0x0,0x400470,0xff000000,0x0,0x400430,0x0,0x0,0x0,0x0,0x0,0x0,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x400470,0x0,0x400470,0x400470,0x0,0x400470,0x400470,0x0,0x400470,0x400470,0x400470,0x0,0x400470,0x400470,0x0,0x400470,0x0,0x400470,0x0,0x400470,0x0,0x0,0x400470,0x0,0x400470,0x0,0x400430,0x0,0x0,0x0,0x400430,0x7f8000,0x800000,0x0,0x0,0x0,0x6000,0x6000,0x30,0x12c0,0x430,0x430,0x800,0x400470,0x400470,0x0,0x400470,0x400470,0x0,0x400470,0x0,0x400470,0x0,0x0,0x400430,0x400430,0x0,0x400430,0x0,0x0,0x400470,0x0,0x0,0x0,0x400430,0x470,0x0,0x470,0x0,0x0,0x400470,0x0,0x0,0x0,0x0,0x400470,0x0,0x400470,0x0,0x400470,0x0,0x0,0x400470,0x0,0x0,0x400470,0x0,0x0,0x0,0x0,0x400470,0x0,0x100,0x100,0x0,0x0,0x0,0x0,0x100,0x100,0x0,0x400470,0x0,0x400470,0x400470,0x0,0x400470,0x400470,0x0,0x400470,0x400470,0x400470,0x0,0x400470,0x400470,0x0,0x400470,0x0,0x400470,0x0,0x0,0x0,0x0,0x400470,0x400470,0x0,0x0,0x400470,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0xd93f5840,0x910b4840,0x20,0x910b4840,0x1004840,0x0,0x1004840,0x1f,0x0,0x1004840,0x100,0x1004840,0xf,0xa0000,0x11004840,0x90000000,0xc0,0xc0,0xc0,0xc0,0xc0,0x0,0x8000,0x8000,0x100,0x100,0x80,0x100,0x40000000,0x0,0x200000,0x100000,0x1000,0xd93f5a40,0x800000,0xd93f5a40,0xd93f5a40,0x400000,0xd93f5a40,0xd93f5a40,0x400000,0xd93f5a40,0xd93f5a40,0xd93f5a40,0x400000,0xd93f5a40,0xd93f5a40,0x20000000,0xd93f5a40,0x400000,0xd93f5a40,0x2000000,0xd93f5a40,0x22000000,0x8000,0xd93f5840,0x100,0xd93f5a40,0x8000,0x1004040,0x0,0x0,0x2000,0x1004040,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1004040,0x0,0x1004840,0x1004840,0x1004840,0x1004040,0x1004840,0x100,0x1004840,0x8000000,0x1004840,0x80,0x100,0x1004840,0x1004840,0x10,0x1004850,0x100,0x8000000,0x1004840,0x48000000,0x48000000,0x48000000,0x1004840,0x1004040,0x100,0x1004040,0x100,0x0,0xd93f5a40,0x1000,0x10,0x100,0x4000000,0x911b5e40,0x1000,0x911b5840,0x100000,0x910b5840,0x1000,0x0,0xd93f5a40,0x1000,0x0,0xd93f5a40,0x1000,0x1000,0x100,0x10,0x911b5e40,0x0,0x0,0x0,0x100,0x10,0x0,0x0,0x0,0x0,0x800,0xd93f5a40,0x800000,0xd93f5a40,0xd93f5a40,0x400000,0xd93f5a40,0xd93f5a40,0x400000,0xd93f5a40,0xd93f5a40,0xd93f5a40,0x400000,0xd93f5a40,0xd93f5a40,0x400000,0xd93f5840,0x0,0xd93f5a40,0x1000,0x10,0x100,0x4000000,0x911b5e40,0x911b5840,0x1000,0x0,0xd93f5a40,};
+      jj_la1_1 = new int[] {0xd93f5840,0x910b4840,0x20,0x910b4840,0x1004840,0x0,0x1004840,0x1f,0x0,0x1004840,0x100,0x1004840,0xf,0xa0000,0x11004840,0x90000000,0xc0,0xc0,0xc0,0xc0,0xc0,0x0,0x8000,0x8000,0x100,0x100,0x80,0x100,0x40000000,0x0,0x200000,0x100000,0x1000,0xd93f5a40,0x800000,0xd93f5a40,0xd93f5a40,0x400000,0xd93f5a40,0xd93f5a40,0x400000,0xd93f5a40,0xd93f5a40,0xd93f5a40,0x400000,0xd93f5a40,0xd93f5a40,0x20000000,0xd93f5a40,0x400000,0xd93f5a40,0x2000000,0xd93f5a40,0x22000000,0x8000,0xd93f5840,0x100,0xd93f5a40,0x8000,0x1004040,0x0,0x0,0x2000,0x1004040,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1004040,0x0,0x1004840,0x1004840,0x1004040,0x1004840,0x1004840,0x100,0x1004840,0x8000000,0x1004840,0x80,0x100,0x1004840,0x1004840,0x10,0x1004850,0x100,0x8000000,0x1004840,0x48000000,0x48000000,0x48000000,0x1004840,0x1004040,0x100,0x1004040,0x100,0x0,0xd93f5a40,0x1000,0x10,0x100,0x4000000,0x911b5e40,0x1000,0x911b5840,0x100000,0x910b5840,0x1000,0x0,0xd93f5a40,0x1000,0x0,0xd93f5a40,0x1000,0x1000,0x100,0x10,0x911b5e40,0x0,0x0,0x0,0x100,0x10,0x0,0x0,0x0,0x0,0x800,0xd93f5a40,0x800000,0xd93f5a40,0xd93f5a40,0x400000,0xd93f5a40,0xd93f5a40,0x400000,0xd93f5a40,0xd93f5a40,0xd93f5a40,0x400000,0xd93f5a40,0xd93f5a40,0x400000,0xd93f5840,0x0,0xd93f5a40,0x1000,0x10,0x100,0x4000000,0x911b5e40,0x911b5840,0x1000,0x0,0xd93f5a40,};
    }
    private static void jj_la1_init_2() {
       jj_la1_2 = new int[] {0x3c845efd,0x3c844260,0x0,0x34844260,0x34844200,0x0,0x34844200,0x0,0x0,0x34840200,0x0,0x34840200,0x0,0x4060,0x34840200,0x0,0x0,0x0,0x0,0x0,0x0,0x4040000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x800,0x0,0x1400,0x400009c,0x3c845efd,0x0,0x3c845efd,0x3c845efd,0x0,0x3c845efd,0x3c845efd,0x0,0x3c845efd,0x3c845efd,0x3c845efd,0x0,0x3c845efd,0x3c845efd,0x0,0x3c845efd,0x0,0x3c845efd,0x0,0x3c845efd,0x0,0x0,0x3c845efd,0x0,0x3c845efd,0x0,0x34840200,0x2,0x2000,0x0,0x34840200,0x0,0x0,0x100000,0x200000,0x400000,0x0,0x0,0x0,0x0,0x0,0x34840200,0x0,0x34844200,0x34844200,0x34840200,0x34840200,0x34840200,0x0,0x34840200,0x0,0x34840200,0x840000,0x0,0x34840200,0x34840200,0x0,0x34840200,0x0,0x0,0x34840200,0x0,0x0,0x0,0x34840200,0x34840200,0x0,0x34840200,0x0,0x2000000,0x3c845efd,0x9c,0x0,0x0,0x0,0x3c8442fc,0x9c,0x3c8442fc,0x0,0x3c8442fc,0x9c,0x2000000,0x3c845efd,0x9c,0x2000000,0x3c845efd,0x9c,0x9c,0x0,0x0,0x3c8442fc,0x4000000,0x0,0x0,0x0,0x0,0x4000000,0x4000000,0x0,0x0,0x4000000,0x3c845efd,0x0,0x3c845efd,0x3c845efd,0x0,0x3c845efd,0x3c845efd,0x0,0x3c845efd,0x3c845efd,0x3c845efd,0x0,0x3c845efd,0x3c845efd,0x0,0x3c845efd,0x2000000,0x3c845efd,0x9c,0x0,0x0,0x0,0x3c8442fc,0x3c8442fc,0x9c,0x2000000,0x3c845efd,};

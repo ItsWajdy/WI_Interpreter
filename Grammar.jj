@@ -10,6 +10,8 @@ public class Grammar/*@bgen(jjtree)*/implements GrammarTreeConstants/*@egen*/{/
 
 /*@egen*/  public static void main(String args []) throws FileNotFoundException  {    Grammar parser = new Grammar(new FileInputStream("my_tests.txt"));
     HashMap<String, WI_Value > symbolTable = new HashMap<String, WI_Value >();
+    ArrayList<HashMap<String, WI_Value >> symbolTables = new ArrayList<HashMap<String, WI_Value >>();
+    symbolTables.add(symbolTable);
     try { 
    		SimpleNode root = parser.Input();
    		root.interpret(symbolTable);
@@ -1960,7 +1962,7 @@ void Atom() :
   try {
 /*@egen*/
   (    ("(" [YieldExpr() | TestlistComp()] ")")
-  | ("[" [TestlistComp()] "]")
+  | List()
   | Name()
   | Number()
   | < ELLIPSES >
@@ -1968,6 +1970,38 @@ void Atom() :
   | False()
   | Args()
   | (LOOKAHEAD(2) String())+)/*@bgen(jjtree)*/
+  } catch (Throwable jjte000) {
+    if (jjtc000) {
+      jjtree.clearNodeScope(jjtn000);
+      jjtc000 = false;
+    } else {
+      jjtree.popNode();
+    }
+    if (jjte000 instanceof RuntimeException) {
+      throw (RuntimeException)jjte000;
+    }
+    if (jjte000 instanceof ParseException) {
+      throw (ParseException)jjte000;
+    }
+    throw (Error)jjte000;
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+}
+
+void List() :
+{/*@bgen(jjtree) List */
+  SimpleNode jjtn000 = new SimpleNode(JJTLIST);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/}
+{/*@bgen(jjtree) List */
+  try {
+/*@egen*/
+  "[" [TestlistComp()] "]"/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
       jjtree.clearNodeScope(jjtn000);
@@ -2170,36 +2204,10 @@ void TestlistComp() :
 /*@egen*/
 }
 
-void Trailer() :
-{/*@bgen(jjtree) Trailer */
-  SimpleNode jjtn000 = new SimpleNode(JJTTRAILER);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}
-{/*@bgen(jjtree) Trailer */
-  try {
-/*@egen*/
-  "(" [Arglist()] ")" | "[" Subscriptlist() "]" | < DOT > < NAME >/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-  }
-/*@egen*/
+void Trailer()       :
+{}
+{
+  ("(" [Arglist()] ")") | ("[" Subscriptlist() "]") | (< DOT > < NAME >)
 }
 
 void Subscriptlist() :
@@ -3255,7 +3263,7 @@ TOKEN :
 {
   < NAME : ["a"-"z", "A"-"Z", "$", "_"] (["a"-"z", "A"-"Z", "0"-"9", "$", "_"])* >
 | < NEWLINE : "\n" | "\r" >
-| < STRING : ("\"" (~["\n", "\r"])* "\"") | ("\'" (~["\n", "\r"])* "\'") >
+| < STRING : ("\"" (~["\n", "\r", "\""])* "\"") | ("\'" (~["\n", "\r"])* "\'") >
 }
 
 TOKEN :
