@@ -33,13 +33,14 @@ interface Node {
   /** Return the number of children the node has. */
   public int jjtGetNumChildren();
   
-  public void interpret(ArrayList<HashMap<String, WI_Value>> sts) throws ParseException;
+  public WI_Value interpret(ArrayList<HashMap<String, WI_Value>> sts) throws ParseException, Exception;
+  public WI_Value evaluateFunc(ArrayList<HashMap<String, WI_Value>> sts) throws ParseException, Exception;
   
   public int getId();
   
-  public WI_Value evaluate(ArrayList<HashMap<String, WI_Value>> sts) throws ParseException;
+  //public WI_Value evaluate(ArrayList<HashMap<String, WI_Value>> sts) throws ParseException;
   
-  public WI_Value evaluateExpr(ArrayList<HashMap<String, WI_Value>> sts) throws ParseException;
+  //public WI_Value evaluateExpr(ArrayList<HashMap<String, WI_Value>> sts) throws ParseException;
   
   public String getCompOp();
   public String getAugassignOp();

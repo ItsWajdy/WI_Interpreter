@@ -4,7 +4,7 @@
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.*;
-public class Grammar{  public static void main(String args []) throws FileNotFoundException  {    Grammar parser = new Grammar(new FileInputStream("my_tests.txt"));
+public class Grammar{  public static void main(String args []) throws FileNotFoundException, Exception  {    Grammar parser = new Grammar(new FileInputStream("my_tests.txt"));
     HashMap<String, WI_Value > symbolTable = new HashMap<String, WI_Value >();
     ArrayList<HashMap<String, WI_Value >> symbolTables = new ArrayList<HashMap<String, WI_Value >>();
     symbolTables.add(symbolTable);
@@ -152,8 +152,8 @@ SimpleNode Input() :
 void Stmt() #void :
 {}
 {
-  LOOKAHEAD(2) CompoundStmt()
-| SimpleStmt()
+  LOOKAHEAD(3) SimpleStmt()
+| LOOKAHEAD(2) CompoundStmt()
 | Newline()
 }
 
@@ -176,7 +176,7 @@ void SmallStmt() #void :
   FlowStmt() < NEWLINE >
 | ImportStmt() < NEWLINE >
 | AssertStmt() < NEWLINE >
-| ExprStmt() < NEWLINE >
+| LOOKAHEAD(2) ExprStmt() < NEWLINE > 
 }
 
 void ExprStmt() :
@@ -742,9 +742,8 @@ void Testlist() :
 void FuncDef() :
 {}
 {
-  < DEFINE > < NAME > Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())
+  < DEFINE > Name() Parameters() ["->" Test()] (LOOKAHEAD(2) < NEWLINE >)* (Suite() | ERROR_Suite())
 }
-
 
 void ClassDef() :
 {}
@@ -829,7 +828,7 @@ void TypeDArglist() :
 void TfpDef() :
 {}
 {
-  < NAME > [< COLON> Test()]
+  Name() [< COLON> Test()]
 }
 
 void LambDef() :
@@ -986,7 +985,7 @@ TOKEN :
 {
   < NAME : ["a"-"z", "A"-"Z", "$", "_"] (["a"-"z", "A"-"Z", "0"-"9", "$", "_"])* >
 | < NEWLINE : "\n" | "\r" >
-| < STRING : ("\"" (~["\n", "\r", "\""])* "\"") | ("\'" (~["\n", "\r"])* "\'") >
+| < STRING : ("\"" (~["\n", "\r", "\""])* "\"") | ("\'" (~["\n", "\r", "\""])* "\'") >
 }
 
 TOKEN :

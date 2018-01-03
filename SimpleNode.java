@@ -96,7 +96,6 @@ public class SimpleNode implements Node {
 			  else return true;
 		  }
 	  }
-	  // TODO maybe handle STRING
 	  return false;
   }
   
@@ -120,7 +119,6 @@ public class SimpleNode implements Node {
 			  else return 0;
 		  }
 	  }
-	  // TODO maybe handle STRING
 	  return 0;
   }
   
@@ -135,11 +133,18 @@ public class SimpleNode implements Node {
 	  for (int i = sts.size() - 1; i >= 0; i--) {
 		  if (sts.get(i).containsKey(name)) return sts.get(i).get(name);
 	  }
-	  return new WI_Value("\0", WI_Value.WI_UNDEFINED);
+	  return new WI_Value("\0", WI_Value.WI_UNDEFINED, false);
   }
   
-  private static void setReference(String name, WI_Value newVal, ArrayList<HashMap<String, WI_Value>> sts) {
-	  if (SimpleNode.stsContain(name, sts)) {
+  private static void setReference(String name, WI_Value newVal, ArrayList<HashMap<String, WI_Value>> sts) throws Exception {
+	  if (newVal.getWiType() == WI_Value.WI_FUNC) {
+		  if (SimpleNode.stsContain(name, sts)) {
+			  throw new Exception("Function Already Defined: " + newVal.getValue());
+		  }
+		  sts.get(sts.size() - 1).put(name, newVal);
+		  return;
+	  }
+	  else if (SimpleNode.stsContain(name, sts)) {
 		  for (int i = sts.size() - 1; i >= 0; i--) {
 			  if (sts.get(i).containsKey(name)) sts.get(i).put(name, newVal);
 		  }
@@ -147,6 +152,42 @@ public class SimpleNode implements Node {
 	  else {
 		  sts.get(sts.size() - 1).put(name, newVal);
 	  }
+  }
+  
+  private static String print(WI_Value val, ArrayList<HashMap<String, WI_Value>> sts) {
+	  String ret = new String();
+	  if (val.getWiType() == WI_Value.WI_STRING) {
+		  System.out.print(val.getValue());
+		  ret = val.getValue();
+	  }
+	  else if (val.getWiType() == WI_Value.WI_BOOL) {
+		  System.out.print(val.getValue());
+		  ret = val.getValue();
+	  }
+	  else if (val.getWiType() == WI_Value.WI_FUNC) {
+		  System.out.print(val.getValue());
+		  ret = val.getValue();
+	  }
+	  else if (val.getWiType() == WI_Value.WI_NAME) {
+		  ret = SimpleNode.print(SimpleNode.getReference(val.getValue(), sts), sts);
+	  }
+	  else if (val.getWiType() == WI_Value.WI_NUMBER) {
+		  System.out.print(val.getValue());
+		  ret = val.getValue();
+	  }
+	  else if (val.getWiType() == WI_Value.WI_LIST) {
+		  System.out.print("[ ");
+		  ret = "[ ";
+		  for (int i = 0; i < val.getList().size(); i++) {
+			  ret += SimpleNode.print(val.getList().get(i), sts) + ",";
+			  if (i!=val.getList().size() - 1) 
+				  System.out.print(", ");
+		  }
+		  ret += "] ";
+		  System.out.print(" ] ");
+	  }
+	  
+	  return ret;
   }
   
   public String AtomValue;
@@ -165,349 +206,47 @@ public class SimpleNode implements Node {
   public String getShiftOp() { return this.ShiftOp; }
   public String getMulOp() { return this.MulOp; }
   
-  public WI_Value evaluate(ArrayList<HashMap<String, WI_Value>> sts) throws ParseException {
-	  if (this.id == GrammarTreeConstants.JJTTESTLISTSTAREXPR) {
-		  // TODO implement multiple assignment
-		  return this.jjtGetChild(0).evaluate(sts);
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTTESTLIST) {
-		  // TODO implement multiple assignment
-		  return this.jjtGetChild(0).evaluate(sts);
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTTEST) {
-		  if (this.jjtGetNumChildren() == 1) {
-			  return this.jjtGetChild(0).evaluate(sts);
-		  }
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTORTEST) {
-		  if (this.jjtGetNumChildren() > 1) {
-			  boolean ret = false;
-			  for (int i = 0 ; i < this.jjtGetNumChildren(); i++) {
-				  ret |= SimpleNode.WItoBoolean(this.jjtGetChild(i).evaluate(sts), sts);
-			  }
-			  if (ret) {
-				  return new WI_Value("true", WI_Value.WI_BOOL);
-			  }
-			  else {
-				  return new WI_Value("false", WI_Value.WI_BOOL);
-			  }
-		  }
-		  else {
-			  return this.jjtGetChild(0).evaluate(sts);
-		  }
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTXORTEST) {
-		  if (this.jjtGetNumChildren() > 1) {
-			  WI_Value first = this.jjtGetChild(0).evaluate(sts);
-			  boolean ret = SimpleNode.WItoBoolean(first, sts);
-			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
-				  ret ^= SimpleNode.WItoBoolean(this.jjtGetChild(i).evaluate(sts), sts);
-			  }
-			  if (ret) {
-				  return new WI_Value("true", WI_Value.WI_BOOL);
-			  }
-			  else {
-				  return new WI_Value("false", WI_Value.WI_BOOL);
-			  }
-		  }
-		  else {
-			  return this.jjtGetChild(0).evaluate(sts);
-		  }
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTANDTEST) {
-		  if (this.jjtGetNumChildren() > 1) {
-			  boolean ret = true;
-			  for (int i = 0 ; i < this.jjtGetNumChildren(); i++) {
-				  ret &= SimpleNode.WItoBoolean(this.jjtGetChild(i).evaluate(sts), sts);
-			  }
-			  if (ret) {
-				  return new WI_Value("true", WI_Value.WI_BOOL);
-			  }
-			  else {
-				  return new WI_Value("false", WI_Value.WI_BOOL);
-			  }
-		  }
-		  else {
-			  return this.jjtGetChild(0).evaluate(sts);
-		  }
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTNOTTEST) {
-		  if (this.jjtGetChild(0).getId() == GrammarTreeConstants.JJTNOTTEST) {
-			  boolean ret = !SimpleNode.WItoBoolean(this.jjtGetChild(0).evaluate(sts), sts);
+  
+  public WI_Value evaluateFunc(ArrayList<HashMap<String, WI_Value>> sts) throws Exception {
+	  if (this.id == GrammarTreeConstants.JJTFUNCDEF) {
+		  Node suite = this.jjtGetChild(this.jjtGetNumChildren() - 1);
 		  
-			  if (!ret) {
-				  return new WI_Value("false", WI_Value.WI_BOOL);
-			  }
-			  else {
-				  return new WI_Value("true", WI_Value.WI_BOOL);
-			  }
-		  }
-		  else {
-			  return this.jjtGetChild(0).evaluate(sts);
+		  for (int i = 0; i < suite.jjtGetNumChildren(); i++) {
+			  WI_Value tmp = suite.jjtGetChild(i).interpret(sts);
+			  if (tmp.isFromReturnStmt()) return tmp;
 		  }
 	  }
-	  else if (this.id == GrammarTreeConstants.JJTCOMPARISON) {
-		  // TODO implement String comaprison
-		  if (this.jjtGetNumChildren() > 1) {
-			  double lastVal = SimpleNode.WItoDouble(this.jjtGetChild(0).evaluateExpr(sts), sts);
-			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
-				  if (this.jjtGetChild(i).getId() == GrammarTreeConstants.JJTCOMPOP) {
-					  if (this.jjtGetChild(i).getCompOp().equals(">")) {
-						  if (lastVal <= SimpleNode.WItoDouble(this.jjtGetChild(i+1).evaluateExpr(sts), sts))
-							  return new WI_Value("false", WI_Value.WI_BOOL);
-					  }
-					  else if (this.jjtGetChild(i).getCompOp().equals("<")) {
-						  if (lastVal >= SimpleNode.WItoDouble(this.jjtGetChild(i+1).evaluateExpr(sts), sts))
-							  return new WI_Value("false", WI_Value.WI_BOOL);
-					  }
-					  else if (this.jjtGetChild(i).getCompOp().equals("==")) {
-						  if (lastVal != SimpleNode.WItoDouble(this.jjtGetChild(i+1).evaluateExpr(sts), sts))
-							  return new WI_Value("false", WI_Value.WI_BOOL);
-					  }
-					  else if (this.jjtGetChild(i).getCompOp().equals(">=")) {
-						  if (lastVal < SimpleNode.WItoDouble(this.jjtGetChild(i+1).evaluateExpr(sts), sts))
-							  return new WI_Value("false", WI_Value.WI_BOOL);
-					  }
-					  else if (this.jjtGetChild(i).getCompOp().equals("<=")) {
-						  if (lastVal > SimpleNode.WItoDouble(this.jjtGetChild(i+1).evaluateExpr(sts), sts))
-							  return new WI_Value("false", WI_Value.WI_BOOL);
-					  }
-					  else if (this.jjtGetChild(i).getCompOp().equals("!=")) {
-						  if (lastVal == SimpleNode.WItoDouble(this.jjtGetChild(i+1).evaluateExpr(sts), sts))
-							  return new WI_Value("false", WI_Value.WI_BOOL);
-					  }
-				  }
-				  else {
-					  lastVal = SimpleNode.WItoDouble(this.jjtGetChild(i).evaluateExpr(sts), sts);
-				  }
-			  }
-		  }
-		  else {
-			  return this.jjtGetChild(0).evaluateExpr(sts);
-		  }
-	  }
-	  
-	  return new WI_Value("true", WI_Value.WI_BOOL);
+	  return new WI_Value("\0", WI_Value.WI_UNDEFINED, false);
   }
   
-  public WI_Value evaluateExpr(ArrayList<HashMap<String, WI_Value>> sts) throws ParseException {
-	  if (this.id == GrammarTreeConstants.JJTEXPR) {
-		  if (this.jjtGetNumChildren() > 1) {
-			  int ret = (int) SimpleNode.WItoDouble(this.jjtGetChild(0).evaluateExpr(sts), sts);
-			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
-				  ret = ret | (int) SimpleNode.WItoDouble(this.jjtGetChild(i).evaluateExpr(sts), sts);
-			  }
-			  return new WI_Value(Integer.toString(ret), WI_Value.WI_NUMBER);
-		  }
-		  else {
-			  return this.jjtGetChild(0).evaluateExpr(sts);
-		  }
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTXOREXPR) {
-		  if (this.jjtGetNumChildren() > 1) {
-			  int ret = (int) SimpleNode.WItoDouble(this.jjtGetChild(0).evaluateExpr(sts), sts);
-			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
-				  ret = ret ^ (int) SimpleNode.WItoDouble(this.jjtGetChild(i).evaluateExpr(sts), sts);
-			  }
-			  return new WI_Value(Integer.toString(ret), WI_Value.WI_NUMBER);
-		  }
-		  else {
-			  return this.jjtGetChild(0).evaluateExpr(sts);
-		  }
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTANDEXPR) {
-		  if (this.jjtGetNumChildren() > 1) {
-			  int ret = (int) SimpleNode.WItoDouble(this.jjtGetChild(0).evaluateExpr(sts), sts);
-			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
-				  ret = ret & (int) SimpleNode.WItoDouble(this.jjtGetChild(i).evaluateExpr(sts), sts);
-			  }
-			  return new WI_Value(Integer.toString(ret), WI_Value.WI_NUMBER);
-		  }
-		  else {
-			  return this.jjtGetChild(0).evaluateExpr(sts);
-		  }
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTSHIFTEXPR) {
-		  if (this.jjtGetNumChildren() > 1) {
-			  int ret = (int) SimpleNode.WItoDouble(this.jjtGetChild(0).evaluateExpr(sts), sts);
-			  for (int i = 2; i < this.jjtGetNumChildren(); i+=2) {
-				  if (this.jjtGetChild(i-1).getShiftOp().equals(">>")) {
-					  ret >>= (int) SimpleNode.WItoDouble(this.jjtGetChild(i).evaluateExpr(sts), sts);
-				  }
-				  else if (this.jjtGetChild(i-1).getShiftOp().equals("<<")) {
-					  ret <<= (int) SimpleNode.WItoDouble(this.jjtGetChild(i).evaluateExpr(sts), sts);
-				  }
-			  }
-			  return new WI_Value(Integer.toString(ret), WI_Value.WI_NUMBER);
-		  }
-		  else {
-			  return this.jjtGetChild(0).evaluateExpr(sts);
-		  }
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTARITHEXPR) {
-		  //System.out.println(this.jjtGetNumChildren());
-		  if (this.jjtGetNumChildren() > 1) {
-			  double ret = SimpleNode.WItoDouble(this.jjtGetChild(0).evaluateExpr(sts), sts);
-			  for (int i = 2; i < this.jjtGetNumChildren(); i+=2) {
-				  if (this.jjtGetChild(i-1).getAddOp().equals("+")) {
-					  ret += SimpleNode.WItoDouble(this.jjtGetChild(i).evaluateExpr(sts), sts);
-				  }
-				  else if (this.jjtGetChild(i-1).getAddOp().equals("-")) {
-					  ret -= SimpleNode.WItoDouble(this.jjtGetChild(i).evaluateExpr(sts), sts);
-				  }
-			  }
-			  return new WI_Value(Double.toString(ret), WI_Value.WI_NUMBER);
-		  }
-		  else {
-			  return this.jjtGetChild(0).evaluateExpr(sts);
-		  }
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTTERM) {
-		  //System.out.println(this.jjtGetNumChildren());
-		  if (this.jjtGetNumChildren() > 1) {
-			  double ret = SimpleNode.WItoDouble(this.jjtGetChild(0).evaluateExpr(sts), sts);
-			  for (int i = 2; i < this.jjtGetNumChildren(); i+=2) {
-				  if (this.jjtGetChild(i-1).getMulOp().equals("*")) {
-					  ret *= SimpleNode.WItoDouble(this.jjtGetChild(i).evaluateExpr(sts), sts);
-				  }
-				  else if (this.jjtGetChild(i-1).getMulOp().equals("/")) {
-					  ret /= SimpleNode.WItoDouble(this.jjtGetChild(i).evaluateExpr(sts), sts);
-				  }
-				  else if (this.jjtGetChild(i-1).getMulOp().equals("%")) {
-					  ret %= SimpleNode.WItoDouble(this.jjtGetChild(i).evaluateExpr(sts), sts);
-				  }
-				  else if (this.jjtGetChild(i-1).getMulOp().equals("//")) {
-					  ret /= SimpleNode.WItoDouble(this.jjtGetChild(i).evaluateExpr(sts), sts);
-					  ret = (int) ret;
-				  }
-			  }
-			  return new WI_Value(Double.toString(ret), WI_Value.WI_NUMBER);
-		  }
-		  else {
-			  return this.jjtGetChild(0).evaluateExpr(sts);
-		  }
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTFACTOR) {
-		  if (this.jjtGetNumChildren() > 1) {
-			  double ret = SimpleNode.WItoDouble(this.jjtGetChild(1).evaluateExpr(sts), sts);
-			  if (this.jjtGetChild(0).getAddOp().equals("+"));
-			  else if (this.jjtGetChild(0).getAddOp().equals("-")) {
-				  ret *= -1;
-			  }
-			  else if (this.jjtGetChild(0).getAddOp().equals("~")) {
-				  ret = ~(int)ret;
-			  }
-			  return new WI_Value(Double.toString(ret), WI_Value.WI_NUMBER);
-		  }
-		  else {
-			  return this.jjtGetChild(0).evaluateExpr(sts);
-		  }
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTPOWER) {
-		  if (this.jjtGetNumChildren() > 1) {
-			  double ret = SimpleNode.WItoDouble(this.jjtGetChild(0).evaluateExpr(sts), sts);
-			  if (this.jjtGetNumChildren() > 1) {
-				  ret = Math.pow(ret, SimpleNode.WItoDouble(this.jjtGetChild(1).evaluateExpr(sts), sts));
-			  }
-			  return new WI_Value(Double.toString(ret), WI_Value.WI_NUMBER);
-		  }
-		  else {
-			  return this.jjtGetChild(0).evaluateExpr(sts);
-		  }
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTATOMEXPR) {
-		  // TODO implement rest of AtomExpr
-		  if (this.jjtGetNumChildren() > 1) {
-			  WI_Value ret = this.jjtGetChild(0).evaluateExpr(sts);
-			  if (ret.getWiType() == WI_Value.WI_NAME) {
-				  ret = SimpleNode.getReference(ret.getValue(), sts);
-				  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
-					  if (this.jjtGetChild(i).getId() == GrammarTreeConstants.JJTSUBSCRIPTLIST) {
-						  WI_Value trailer = this.jjtGetChild(i).evaluateExpr(sts);
-						  if (ret.getWiType() != WI_Value.WI_LIST) {
-							  System.out.println("not list");
-							  return new WI_Value("\0", WI_Value.WI_UNDEFINED);
-							  // TODO clean
-						  }
-						  ret = ret.getList().get((int)SimpleNode.WItoDouble(trailer, sts));
-					  }
-				  }
-				  return ret;
-			  }
-		  }
-		  else {
-			  return this.jjtGetChild(0).evaluateExpr(sts);
-		  }
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTSUBSCRIPTLIST) {
-		  // TODO implement multiple Subscripts
-		  return this.jjtGetChild(0).evaluateExpr(sts);
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTSUBSCRIPT) {
-		  // TODO implement multiple Tests
-		  return this.jjtGetChild(0).evaluate(sts);
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTATOM) {
-		  if (this.jjtGetChild(0).getId() == GrammarTreeConstants.JJTLIST) {
-			  return this.jjtGetChild(0).evaluateExpr(sts);
-		  }
-		  else {
-			  return this.jjtGetChild(0).evaluateExpr(sts);
-		  }
-		  // TODO implement rest of ATOM
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTTESTLISTCOMP) {
-		  if (this.jjtGetNumChildren() > 1) {
-			  ArrayList<WI_Value> list = new ArrayList<WI_Value>();
-			  for (int i =0; i < this.jjtGetNumChildren(); i++) {
-				  list.add(this.jjtGetChild(i).evaluate(sts));
-			  }
-			  return new WI_Value(list);
-		  }
-		  else {
-			  return this.jjtGetChild(0).evaluate(sts);
-		  }
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTLIST) {
-		  if (this.jjtGetNumChildren() > 0) {
-			  return this.jjtGetChild(0).evaluateExpr(sts);
-		  }
-		  else {
-			  return new WI_Value(new ArrayList<WI_Value>());
-		  }
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTNUMBER) {
-		  return new WI_Value(this.AtomValue, WI_Value.WI_NUMBER);
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTNAME) {
-		  return new WI_Value(this.AtomValue, WI_Value.WI_NAME);
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTSTRING) {
-		  StringBuffer sb = new StringBuffer();
-		  for (int i = 1; i < this.AtomValue.length() - 1; i++) {
-			  sb.append(this.AtomValue.charAt(i));
-		  }
-		  return new WI_Value(sb.toString(), WI_Value.WI_STRING);
-	  }
-	  return new WI_Value(Integer.toString(0), WI_Value.WI_NUMBER);
-  }
-  
-  public void interpret(ArrayList<HashMap<String, WI_Value>> symbolTables) throws ParseException {
+  public WI_Value interpret(ArrayList<HashMap<String, WI_Value>> sts) throws Exception {
 	  if (this.id == GrammarTreeConstants.JJTINPUT) {
 		  for (int i = 0; i < this.jjtGetNumChildren(); i++) {
-			  this.jjtGetChild(i).interpret(symbolTables);
+			  WI_Value tmpWiVal = this.jjtGetChild(i).interpret(sts);
+			  if (tmpWiVal.isFromReturnStmt()) return tmpWiVal;
 		  }
+		  return new WI_Value("\0", WI_Value.WI_UNDEFINED, false);
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTSIMPLESTMT) {
 		  for (int i = 0; i < this.jjtGetNumChildren(); i++) {
-			  this.jjtGetChild(i).interpret(symbolTables);
+			  WI_Value tmpWiVal = this.jjtGetChild(i).interpret(sts);
+			  if (tmpWiVal.isFromReturnStmt()) {
+				  return tmpWiVal;
+			  }
+		  }
+		  return new WI_Value("\0", WI_Value.WI_UNDEFINED, false);
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTFLOWSTMT) {
+		  WI_Value tmpWiVal = this.jjtGetChild(0).interpret(sts);
+		  if (tmpWiVal.isFromReturnStmt()) {
+			  return tmpWiVal;
 		  }
 	  }
 	  
 	  else if (this.id == GrammarTreeConstants.JJTASSERTSTMT) {
 		  for (int i = 0; i < this.jjtGetNumChildren(); i++) {
-			  if ((SimpleNode.WItoBoolean(this.jjtGetChild(i).evaluate(symbolTables), symbolTables)) == false) {
-				  System.out.println("error");
+			  if ((SimpleNode.WItoBoolean(this.jjtGetChild(i).interpret(sts), sts)) == false) {
+				  throw new Exception("Assertion error");
 				  //return;
 			  }
 		  }
@@ -515,220 +254,742 @@ public class SimpleNode implements Node {
 	  else if (this.id == GrammarTreeConstants.JJTEXPRSTMT) {
 		  // TODO yield not implemented
 		  // TODO Annassign not implemented
-		  if (this.jjtGetNumChildren() == 2) {   // Assign
-			  WI_Value left = this.jjtGetChild(0).evaluate(symbolTables);
-			  WI_Value right = this.jjtGetChild(1).evaluate(symbolTables);
+		  if (this.jjtGetNumChildren() == 1) {
+			  WI_Value tmpWiVal = this.jjtGetChild(0).interpret(sts);
+			  if (tmpWiVal.isFromReturnStmt()) return tmpWiVal;
+		  }
+		  else if (this.jjtGetNumChildren() == 2) {   // Assign
+			  WI_Value left = this.jjtGetChild(0).interpret(sts);
+			  WI_Value right = this.jjtGetChild(1).interpret(sts);
 			  
 			  if (left.getWiType() == WI_Value.WI_NAME) {
 				  if (right.getWiType() == WI_Value.WI_NUMBER) {
-					  WI_Value insert = new WI_Value(Double.toString(Double.parseDouble(right.getValue())), right.getWiType());
-					  symbolTables.get(symbolTables.size() - 1).put(left.getValue(), insert);
+					  WI_Value insert = new WI_Value(Double.toString(Double.parseDouble(right.getValue())), right.getWiType(), false);
+					  sts.get(sts.size() - 1).put(left.getValue(), insert);
 				  }
 				  else {
-					  symbolTables.get(symbolTables.size() - 1).put(left.getValue(), right);
+					  sts.get(sts.size() - 1).put(left.getValue(), right);
 				  }
 			  }
 		  }
 		  else if (this.jjtGetNumChildren() == 3) {   // Augassign
-			  WI_Value left = this.jjtGetChild(0).evaluate(symbolTables);
-			  WI_Value right = this.jjtGetChild(2).evaluate(symbolTables);
+			  WI_Value left = this.jjtGetChild(0).interpret(sts);
+			  WI_Value right = this.jjtGetChild(2).interpret(sts);
 			  
 			  if (left.getWiType() == WI_Value.WI_NAME) {
-				  if (!SimpleNode.stsContain(left.getValue(), symbolTables)) {
-					  System.out.println("ERROR!\nNO SUCH KEY " + left.getValue());
-					  return;
-					  // TODO re-do error checking and handling
+				  if (!SimpleNode.stsContain(left.getValue(), sts)) {
+					  throw new Exception("No Such Key: " + left.getValue());
 				  }
 				  
-				  
-				  // TODO error handling
 				  Node child2 = this.jjtGetChild(1);
 				  if (child2.getAugassignOp().equals("+=")) {
-					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), symbolTables);
+					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), sts);
 					  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right.getWiType() == WI_Value.WI_NUMBER) {
 						  double oldVal = Double.parseDouble(left_wi_val.getValue());
 						  double add = Double.parseDouble(right.getValue());
-						  WI_Value newVal = new WI_Value(Double.toString(oldVal+add), WI_Value.WI_NUMBER);
-						  SimpleNode.setReference(left.getValue(), newVal, symbolTables);
+						  WI_Value newVal = new WI_Value(Double.toString(oldVal+add), WI_Value.WI_NUMBER, false);
+						  SimpleNode.setReference(left.getValue(), newVal, sts);
 						  //symbolTable.put(left.getValue(), newVal);
 					  }
 					  else if (left_wi_val.getWiType() == WI_Value.WI_STRING && right.getWiType() == WI_Value.WI_STRING) {
-						  WI_Value newVal = new WI_Value(left_wi_val.getValue() + right.getValue(), WI_Value.WI_STRING);
-						  SimpleNode.setReference(left.getValue(), newVal, symbolTables);
+						  WI_Value newVal = new WI_Value(left_wi_val.getValue() + right.getValue(), WI_Value.WI_STRING, false);
+						  SimpleNode.setReference(left.getValue(), newVal, sts);
 						  //symbolTable.put(left.getValue(), new WI_Value(symbolTable.get(left.getValue()).getValue() + right.getValue(), WI_Value.WI_STRING));
+					  }
+					  else if (right.getWiType() == WI_Value.WI_NAME) {
+						  WI_Value right_wi_val = SimpleNode.getReference(right.getValue(), sts);
+						  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right_wi_val.getWiType() == WI_Value.WI_NUMBER) {
+							  double oldVal = Double.parseDouble(left_wi_val.getValue());
+							  double add = Double.parseDouble(right_wi_val.getValue());
+							  WI_Value newVal = new WI_Value(Double.toString(oldVal+add), WI_Value.WI_NUMBER, false);
+							  SimpleNode.setReference(left.getValue(), newVal, sts);
+						  }
+						  else if (left_wi_val.getWiType() == WI_Value.WI_STRING && right_wi_val.getWiType() == WI_Value.WI_STRING) {
+							  WI_Value newVal = new WI_Value(left_wi_val.getValue() + right_wi_val.getValue(), WI_Value.WI_STRING, false);
+							  SimpleNode.setReference(left.getValue(), newVal, sts);
+							  //symbolTable.put(left.getValue(), new WI_Value(symbolTable.get(left.getValue()).getValue() + right.getValue(), WI_Value.WI_STRING));
+						  }
 					  }
 				  }
 				  else if (child2.getAugassignOp().equals("-=")) {
-					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), symbolTables);
+					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), sts);
 					  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right.getWiType() == WI_Value.WI_NUMBER) {
 						  double oldVal = Double.parseDouble(left_wi_val.getValue());
 						  double sub = Double.parseDouble(right.getValue());
-						  WI_Value newVal = new WI_Value(Double.toString(oldVal-sub), WI_Value.WI_NUMBER);
-						  SimpleNode.setReference(left.getValue(), newVal, symbolTables);
+						  WI_Value newVal = new WI_Value(Double.toString(oldVal-sub), WI_Value.WI_NUMBER, false);
+						  SimpleNode.setReference(left.getValue(), newVal, sts);
 						  //symbolTable.put(left.getValue(), newVal);
+					  }
+					  else if (right.getWiType() == WI_Value.WI_NAME) {
+						  WI_Value right_wi_val = SimpleNode.getReference(right.getValue(), sts);
+						  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right_wi_val.getWiType() == WI_Value.WI_NUMBER) {
+							  double oldVal = Double.parseDouble(left_wi_val.getValue());
+							  double sub = Double.parseDouble(right_wi_val.getValue());
+							  WI_Value newVal = new WI_Value(Double.toString(oldVal-sub), WI_Value.WI_NUMBER, false);
+							  SimpleNode.setReference(left.getValue(), newVal, sts);
+						  }
 					  }
 				  }
 				  else if (child2.getAugassignOp().equals("*=")) {
-					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), symbolTables);
+					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), sts);
 					  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right.getWiType() == WI_Value.WI_NUMBER) {
 						  double oldVal = Double.parseDouble(left_wi_val.getValue());
 						  double mul = Double.parseDouble(right.getValue());
-						  WI_Value newVal = new WI_Value(Double.toString(oldVal*mul), WI_Value.WI_NUMBER);
-						  SimpleNode.setReference(left.getValue(), newVal, symbolTables);
+						  WI_Value newVal = new WI_Value(Double.toString(oldVal*mul), WI_Value.WI_NUMBER, false);
+						  SimpleNode.setReference(left.getValue(), newVal, sts);
 						  //symbolTable.put(left.getValue(), newVal);
+					  }
+					  else if (right.getWiType() == WI_Value.WI_NAME) {
+						  WI_Value right_wi_val = SimpleNode.getReference(right.getValue(), sts);
+						  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right_wi_val.getWiType() == WI_Value.WI_NUMBER) {
+							  double oldVal = Double.parseDouble(left_wi_val.getValue());
+							  double mul = Double.parseDouble(right_wi_val.getValue());
+							  WI_Value newVal = new WI_Value(Double.toString(oldVal*mul), WI_Value.WI_NUMBER, false);
+							  SimpleNode.setReference(left.getValue(), newVal, sts);
+						  }
 					  }
 				  }
 				  else if (child2.getAugassignOp().equals("/=")) {
-					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), symbolTables);
+					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), sts);
 					  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right.getWiType() == WI_Value.WI_NUMBER) {
 						  double oldVal = Double.parseDouble(left_wi_val.getValue());
 						  double div = Double.parseDouble(right.getValue());
-						  WI_Value newVal = new WI_Value(Double.toString(oldVal/div), WI_Value.WI_NUMBER);
-						  SimpleNode.setReference(left.getValue(), newVal, symbolTables);
+						  WI_Value newVal = new WI_Value(Double.toString(oldVal/div), WI_Value.WI_NUMBER, false);
+						  SimpleNode.setReference(left.getValue(), newVal, sts);
 						  //symbolTable.put(left.getValue(), newVal);
+					  }
+					  else if (right.getWiType() == WI_Value.WI_NAME) {
+						  WI_Value right_wi_val = SimpleNode.getReference(right.getValue(), sts);
+						  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right_wi_val.getWiType() == WI_Value.WI_NUMBER) {
+							  double oldVal = Double.parseDouble(left_wi_val.getValue());
+							  double div = Double.parseDouble(right_wi_val.getValue());
+							  WI_Value newVal = new WI_Value(Double.toString(oldVal/div), WI_Value.WI_NUMBER, false);
+							  SimpleNode.setReference(left.getValue(), newVal, sts);
+						  }
 					  }
 				  }
 				  else if (child2.getAugassignOp().equals("%=")) {
-					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), symbolTables);
+					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), sts);
 					  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right.getWiType() == WI_Value.WI_NUMBER) {
 						  double oldVal = Double.parseDouble(left_wi_val.getValue());
 						  double mod = Double.parseDouble(right.getValue());
-						  WI_Value newVal = new WI_Value(Double.toString(oldVal%mod), WI_Value.WI_NUMBER);
-						  SimpleNode.setReference(left.getValue(), newVal, symbolTables);
+						  WI_Value newVal = new WI_Value(Double.toString(oldVal%mod), WI_Value.WI_NUMBER, false);
+						  SimpleNode.setReference(left.getValue(), newVal, sts);
 						  //symbolTable.put(left.getValue(), newVal);
+					  }
+					  else if (right.getWiType() == WI_Value.WI_NAME) {
+						  WI_Value right_wi_val = SimpleNode.getReference(right.getValue(), sts);
+						  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right_wi_val.getWiType() == WI_Value.WI_NUMBER) {
+							  double oldVal = Double.parseDouble(left_wi_val.getValue());
+							  double mod = Double.parseDouble(right_wi_val.getValue());
+							  WI_Value newVal = new WI_Value(Double.toString(oldVal%mod), WI_Value.WI_NUMBER, false);
+							  SimpleNode.setReference(left.getValue(), newVal, sts);
+						  }
 					  }
 				  }
 				  else if (child2.getAugassignOp().equals("&=")) {
-					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), symbolTables);
+					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), sts);
 					  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right.getWiType() == WI_Value.WI_NUMBER) {
 						  int oldVal = (int) Double.parseDouble(left_wi_val.getValue());
 						  int and = (int) Double.parseDouble(right.getValue());
-						  WI_Value newVal = new WI_Value(Double.toString(oldVal&and), WI_Value.WI_NUMBER);
-						  SimpleNode.setReference(left.getValue(), newVal, symbolTables);
+						  WI_Value newVal = new WI_Value(Double.toString(oldVal&and), WI_Value.WI_NUMBER, false);
+						  SimpleNode.setReference(left.getValue(), newVal, sts);
 						  //symbolTable.put(left.getValue(), newVal);
+					  }
+					  else if (right.getWiType() == WI_Value.WI_NAME) {
+						  WI_Value right_wi_val = SimpleNode.getReference(right.getValue(), sts);
+						  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right_wi_val.getWiType() == WI_Value.WI_NUMBER) {
+							  int oldVal = (int) Double.parseDouble(left_wi_val.getValue());
+							  int and = (int) Double.parseDouble(right_wi_val.getValue());
+							  WI_Value newVal = new WI_Value(Double.toString(oldVal&and), WI_Value.WI_NUMBER, false);
+							  SimpleNode.setReference(left.getValue(), newVal, sts);
+						  }
 					  }
 				  }
 				  else if (child2.getAugassignOp().equals("|=")) {
-					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), symbolTables);
+					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), sts);
 					  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right.getWiType() == WI_Value.WI_NUMBER) {
 						  int oldVal = (int) Double.parseDouble(left_wi_val.getValue());
 						  int or = (int) Double.parseDouble(right.getValue());
-						  WI_Value newVal = new WI_Value(Double.toString(oldVal|or), WI_Value.WI_NUMBER);
-						  SimpleNode.setReference(left.getValue(), newVal, symbolTables);
+						  WI_Value newVal = new WI_Value(Double.toString(oldVal|or), WI_Value.WI_NUMBER, false);
+						  SimpleNode.setReference(left.getValue(), newVal, sts);
 						  //symbolTable.put(left.getValue(), newVal);
+					  }
+					  else if (right.getWiType() == WI_Value.WI_NAME) {
+						  WI_Value right_wi_val = SimpleNode.getReference(right.getValue(), sts);
+						  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right_wi_val.getWiType() == WI_Value.WI_NUMBER) {
+							  int oldVal = (int) Double.parseDouble(left_wi_val.getValue());
+							  int or = (int) Double.parseDouble(right_wi_val.getValue());
+							  WI_Value newVal = new WI_Value(Double.toString(oldVal|or), WI_Value.WI_NUMBER, false);
+							  SimpleNode.setReference(left.getValue(), newVal, sts);
+						  }
 					  }
 				  }
 				  else if (child2.getAugassignOp().equals("^=")) {
-					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), symbolTables);
+					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), sts);
 					  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right.getWiType() == WI_Value.WI_NUMBER) {
 						  int oldVal = (int) Double.parseDouble(left_wi_val.getValue());
 						  int xor = (int) Double.parseDouble(right.getValue());
-						  WI_Value newVal = new WI_Value(Double.toString(oldVal^xor), WI_Value.WI_NUMBER);
-						  SimpleNode.setReference(left.getValue(), newVal, symbolTables);
+						  WI_Value newVal = new WI_Value(Double.toString(oldVal^xor), WI_Value.WI_NUMBER, false);
+						  SimpleNode.setReference(left.getValue(), newVal, sts);
 						  //symbolTable.put(left.getValue(), newVal);
+					  }
+					  else if (right.getWiType() == WI_Value.WI_NAME) {
+						  WI_Value right_wi_val = SimpleNode.getReference(right.getValue(), sts);
+						  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right_wi_val.getWiType() == WI_Value.WI_NUMBER) {
+							  int oldVal = (int) Double.parseDouble(left_wi_val.getValue());
+							  int xor = (int) Double.parseDouble(right_wi_val.getValue());
+							  WI_Value newVal = new WI_Value(Double.toString(oldVal^xor), WI_Value.WI_NUMBER, false);
+							  SimpleNode.setReference(left.getValue(), newVal, sts);
+						  }
 					  }
 				  }
 				  else if (child2.getAugassignOp().equals(">>=")) {
-					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), symbolTables);
+					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), sts);
 					  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right.getWiType() == WI_Value.WI_NUMBER) {
 						  int oldVal = (int) Double.parseDouble(left_wi_val.getValue());
 						  int shr = (int) Double.parseDouble(right.getValue());
-						  WI_Value newVal = new WI_Value(Double.toString(oldVal>>shr), WI_Value.WI_NUMBER);
-						  SimpleNode.setReference(left.getValue(), newVal, symbolTables);
+						  WI_Value newVal = new WI_Value(Double.toString(oldVal>>shr), WI_Value.WI_NUMBER, false);
+						  SimpleNode.setReference(left.getValue(), newVal, sts);
 						  //symbolTable.put(left.getValue(), newVal);
+					  }
+					  else if (right.getWiType() == WI_Value.WI_NAME) {
+						  WI_Value right_wi_val = SimpleNode.getReference(right.getValue(), sts);
+						  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right_wi_val.getWiType() == WI_Value.WI_NUMBER) {
+							  int oldVal = (int) Double.parseDouble(left_wi_val.getValue());
+							  int shr = (int) Double.parseDouble(right_wi_val.getValue());
+							  WI_Value newVal = new WI_Value(Double.toString(oldVal>>shr), WI_Value.WI_NUMBER, false);
+							  SimpleNode.setReference(left.getValue(), newVal, sts);
+						  }
 					  }
 				  }
 				  else if (child2.getAugassignOp().equals("<<=")) {
-					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), symbolTables);
+					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), sts);
 					  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right.getWiType() == WI_Value.WI_NUMBER) {
 						  int oldVal = (int) Double.parseDouble(left_wi_val.getValue());
 						  int shl = (int) Double.parseDouble(right.getValue());
-						  WI_Value newVal = new WI_Value(Double.toString(oldVal<<shl), WI_Value.WI_NUMBER);
-						  SimpleNode.setReference(left.getValue(), newVal, symbolTables);
+						  WI_Value newVal = new WI_Value(Double.toString(oldVal<<shl), WI_Value.WI_NUMBER, false);
+						  SimpleNode.setReference(left.getValue(), newVal, sts);
 						  //symbolTable.put(left.getValue(), newVal);
+					  }
+					  else if (right.getWiType() == WI_Value.WI_NAME) {
+						  WI_Value right_wi_val = SimpleNode.getReference(right.getValue(), sts);
+						  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right_wi_val.getWiType() == WI_Value.WI_NUMBER) {
+							  int oldVal = (int) Double.parseDouble(left_wi_val.getValue());
+							  int shl = (int) Double.parseDouble(right_wi_val.getValue());
+							  WI_Value newVal = new WI_Value(Double.toString(oldVal<<shl), WI_Value.WI_NUMBER, false);
+							  SimpleNode.setReference(left.getValue(), newVal, sts);
+						  }
 					  }
 				  }
 				  else if (child2.getAugassignOp().equals("**=")) {
-					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), symbolTables);
+					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), sts);
 					  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right.getWiType() == WI_Value.WI_NUMBER) {
 						  double oldVal = Double.parseDouble(left_wi_val.getValue());
 						  double pow = Double.parseDouble(right.getValue());
-						  WI_Value newVal = new WI_Value(Double.toString(Math.pow(oldVal, pow)), WI_Value.WI_NUMBER);
-						  SimpleNode.setReference(left.getValue(), newVal, symbolTables);
+						  WI_Value newVal = new WI_Value(Double.toString(Math.pow(oldVal, pow)), WI_Value.WI_NUMBER, false);
+						  SimpleNode.setReference(left.getValue(), newVal, sts);
 						  //symbolTable.put(left.getValue(), newVal);
+					  }
+					  else if (right.getWiType() == WI_Value.WI_NAME) {
+						  WI_Value right_wi_val = SimpleNode.getReference(right.getValue(), sts);
+						  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right_wi_val.getWiType() == WI_Value.WI_NUMBER) {
+							  int oldVal = (int) Double.parseDouble(left_wi_val.getValue());
+							  int pow = (int) Double.parseDouble(right_wi_val.getValue());
+							  WI_Value newVal = new WI_Value(Double.toString(Math.pow(oldVal, pow)), WI_Value.WI_NUMBER, false);
+							  SimpleNode.setReference(left.getValue(), newVal, sts);
+						  }
 					  }
 				  }
 				  else if (child2.getAugassignOp().equals("//=")) {
-					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), symbolTables);
+					  WI_Value left_wi_val = SimpleNode.getReference(left.getValue(), sts);
 					  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right.getWiType() == WI_Value.WI_NUMBER) {
 						  double oldVal = Double.parseDouble(left_wi_val.getValue());
 						  double and = Double.parseDouble(right.getValue());
-						  WI_Value newVal = new WI_Value(Double.toString((int)(oldVal/and)), WI_Value.WI_NUMBER);
-						  SimpleNode.setReference(left.getValue(), newVal, symbolTables);
+						  WI_Value newVal = new WI_Value(Double.toString((int)(oldVal/and)), WI_Value.WI_NUMBER, false);
+						  SimpleNode.setReference(left.getValue(), newVal, sts);
 						  //symbolTable.put(left.getValue(), newVal);
+					  }
+					  else if (right.getWiType() == WI_Value.WI_NAME) {
+						  WI_Value right_wi_val = SimpleNode.getReference(right.getValue(), sts);
+						  if (left_wi_val.getWiType() == WI_Value.WI_NUMBER && right_wi_val.getWiType() == WI_Value.WI_NUMBER) {
+							  double oldVal = Double.parseDouble(left_wi_val.getValue());
+							  double and = Double.parseDouble(right_wi_val.getValue());
+							  WI_Value newVal = new WI_Value(Double.toString((int)(oldVal/and)), WI_Value.WI_NUMBER, false);
+							  SimpleNode.setReference(left.getValue(), newVal, sts);
+						  }
 					  }
 				  }
 			  }
 		  }
 	  }
-	  else if (this.id == GrammarTreeConstants.JJTTESTLISTSTAREXPR) {
-		  System.out.println("testliststarexpr");
-	  }
 	  else if (this.id == GrammarTreeConstants.JJTYIELDEXPR) {
-		  System.out.println("yieldexpr");
-	  }
-	  else if (this.id == GrammarTreeConstants.JJTTESTLIST) {
-		  System.out.println("tstlist");
+		  //System.out.println("yieldexpr");
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTCOMPOUNDSTMT) {
 		  for (int i = 0; i < this.jjtGetNumChildren(); i++) {
-			  this.jjtGetChild(i).interpret(symbolTables);
+			  WI_Value tmpWiVal = this.jjtGetChild(i).interpret(sts);
+			  if (tmpWiVal.isFromReturnStmt()) return tmpWiVal;
 		  }
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTIFSTMT) {
+		  int children = this.jjtGetNumChildren();
 		  boolean entered = false;
-		  for (int i = 0; i < this.jjtGetNumChildren(); i+=2) {
-			  if (SimpleNode.WItoBoolean(this.jjtGetChild(i).evaluate(symbolTables), symbolTables)) {
+		  for (int i = 0; i < ((children%2 == 0) ? children : children-1); i+=2) {
+			  if (SimpleNode.WItoBoolean(this.jjtGetChild(i).interpret(sts), sts)) {
 				  entered = true;
-				  this.jjtGetChild(i+1).interpret(symbolTables);
+				  WI_Value tmpWiVal = this.jjtGetChild(i+1).interpret(sts);
+				  if (tmpWiVal.isFromReturnStmt()) {
+					  return tmpWiVal;
+				  }
 				  break;
 			  }
 		  }
 		  if (this.jjtGetNumChildren() % 2 == 1 && !entered) {
-			  this.jjtGetChild(this.jjtGetNumChildren() - 1).interpret(symbolTables);
+			  WI_Value tmpWiVal = this.jjtGetChild(this.jjtGetNumChildren() - 1).interpret(sts);
+			  if (tmpWiVal.isFromReturnStmt()) {
+				  return tmpWiVal;
+			  }
 		  }
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTWHILESTMT) {
-		  while(SimpleNode.WItoBoolean(this.jjtGetChild(0).evaluate(symbolTables), symbolTables)) {
-			  this.jjtGetChild(1).interpret(symbolTables);
+		  while(SimpleNode.WItoBoolean(this.jjtGetChild(0).interpret(sts), sts)) {
+			  WI_Value tmpWiVal = this.jjtGetChild(1).interpret(sts);
+			  if (tmpWiVal.isFromReturnStmt()) return tmpWiVal;
 		  }
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTDOSTMT) {
 		  do {
-			  this.jjtGetChild(0).interpret(symbolTables);
-		  } while (SimpleNode.WItoBoolean(this.jjtGetChild(1).evaluate(symbolTables), symbolTables));
+			  WI_Value tmpWiVal = this.jjtGetChild(0).interpret(sts);
+			  if (tmpWiVal.isFromReturnStmt()) return tmpWiVal;
+		  } while (SimpleNode.WItoBoolean(this.jjtGetChild(1).interpret(sts), sts));
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTFORSTMT) {
-		  //System.out.println(this.jjtGetNumChildren());
+		  WI_Value list = this.jjtGetChild(1).interpret(sts);
+		  if (list.getWiType() != WI_Value.WI_LIST) {
+			  list = SimpleNode.getReference(list.getValue(), sts);
+			  if (list == null || list.getWiType() != WI_Value.WI_LIST)
+				  return new WI_Value("\0", WI_Value.WI_UNDEFINED, false);
+		  }
+		  
+		  WI_Value iter = this.jjtGetChild(0).interpret(sts);
+		  if (iter.getWiType() != WI_Value.WI_NAME)
+			  throw new Exception("Invalid For Statement");
+		  
+		  sts.add(new HashMap<String, WI_Value>());
+		  for (int i = 0; i < list.getList().size(); i++) {
+			  WI_Value insert = new WI_Value(list.getList().get(i).getValue(), list.getList().get(i).getWiType(), false);
+			  sts.get(sts.size() - 1).put(iter.getValue(), insert);
+			  for (int j = 0; j < this.jjtGetChild(2).jjtGetNumChildren(); j++) {
+				  WI_Value tmpWiVal = this.jjtGetChild(2).jjtGetChild(j).interpret(sts);
+				  if (tmpWiVal.isFromReturnStmt()) return tmpWiVal;
+			  }
+		  }
+		  sts.remove(sts.size() - 1);
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTFUNCDEF) {
+		  WI_Value name = this.jjtGetChild(0).interpret(sts);
+		  ArrayList<String> params = new ArrayList<String>();
+		  WI_Value parameters = this.jjtGetChild(1).interpret(sts);
+		  for (int i = 0; i < parameters.getList().size(); i++) {
+			  params.add(parameters.getList().get(i).getValue());
+		  }
+		  WI_Value newVal = new WI_Value(name.getValue(), this, params, false);
+		  SimpleNode.setReference(name.getValue(), newVal, sts);
 	  }
 	  else if (this.id == GrammarTreeConstants.JJTSUITE) {
-		  symbolTables.add(new HashMap<String, WI_Value>());
+		  sts.add(new HashMap<String, WI_Value>());
 		  for (int i = 0; i < this.jjtGetNumChildren(); i++) {
-			  this.jjtGetChild(i).interpret(symbolTables);
+			  WI_Value tmpWiVal = this.jjtGetChild(i).interpret(sts);
+			  if (tmpWiVal.isFromReturnStmt()) {
+				  return tmpWiVal;
+			  }
 		  }
-		  symbolTables.remove(symbolTables.size() - 1);
+		  sts.remove(sts.size() - 1);
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTTESTLISTSTAREXPR) {
+		  // TODO implement multiple assignment
+		  return this.jjtGetChild(0).interpret(sts);
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTTESTLIST) {
+		  // TODO implement multiple assignment
+		  return this.jjtGetChild(0).interpret(sts);
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTTEST) {
+		  if (this.jjtGetNumChildren() == 1) {
+			  return this.jjtGetChild(0).interpret(sts);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTORTEST) {
+		  if (this.jjtGetNumChildren() > 1) {
+			  boolean ret = false;
+			  for (int i = 0 ; i < this.jjtGetNumChildren(); i++) {
+				  ret |= SimpleNode.WItoBoolean(this.jjtGetChild(i).interpret(sts), sts);
+			  }
+			  if (ret) {
+				  return new WI_Value("true", WI_Value.WI_BOOL, false);
+			  }
+			  else {
+				  return new WI_Value("false", WI_Value.WI_BOOL, false);
+			  }
+		  }
+		  else {
+			  return this.jjtGetChild(0).interpret(sts);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTXORTEST) {
+		  if (this.jjtGetNumChildren() > 1) {
+			  WI_Value first = this.jjtGetChild(0).interpret(sts);
+			  boolean ret = SimpleNode.WItoBoolean(first, sts);
+			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
+				  ret ^= SimpleNode.WItoBoolean(this.jjtGetChild(i).interpret(sts), sts);
+			  }
+			  if (ret) {
+				  return new WI_Value("true", WI_Value.WI_BOOL, false);
+			  }
+			  else {
+				  return new WI_Value("false", WI_Value.WI_BOOL, false);
+			  }
+		  }
+		  else {
+			  return this.jjtGetChild(0).interpret(sts);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTANDTEST) {
+		  if (this.jjtGetNumChildren() > 1) {
+			  boolean ret = true;
+			  for (int i = 0 ; i < this.jjtGetNumChildren(); i++) {
+				  ret &= SimpleNode.WItoBoolean(this.jjtGetChild(i).interpret(sts), sts);
+			  }
+			  if (ret) {
+				  return new WI_Value("true", WI_Value.WI_BOOL, false);
+			  }
+			  else {
+				  return new WI_Value("false", WI_Value.WI_BOOL, false);
+			  }
+		  }
+		  else {
+			  return this.jjtGetChild(0).interpret(sts);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTNOTTEST) {
+		  if (this.jjtGetChild(0).getId() == GrammarTreeConstants.JJTNOTTEST) {
+			  boolean ret = !SimpleNode.WItoBoolean(this.jjtGetChild(0).interpret(sts), sts);
+		  
+			  if (!ret) {
+				  return new WI_Value("false", WI_Value.WI_BOOL, false);
+			  }
+			  else {
+				  return new WI_Value("true", WI_Value.WI_BOOL, false);
+			  }
+		  }
+		  else {
+			  return this.jjtGetChild(0).interpret(sts);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTCOMPARISON) {
+		  // TODO implement String comaprison
+		  if (this.jjtGetNumChildren() > 1) {
+			  double lastVal = SimpleNode.WItoDouble(this.jjtGetChild(0).interpret(sts), sts);
+			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
+				  if (this.jjtGetChild(i).getId() == GrammarTreeConstants.JJTCOMPOP) {
+					  if (this.jjtGetChild(i).getCompOp().equals(">")) {
+						  if (lastVal <= SimpleNode.WItoDouble(this.jjtGetChild(i+1).interpret(sts), sts))
+							  return new WI_Value("false", WI_Value.WI_BOOL, false);
+					  }
+					  else if (this.jjtGetChild(i).getCompOp().equals("<")) {
+						  if (lastVal >= SimpleNode.WItoDouble(this.jjtGetChild(i+1).interpret(sts), sts))
+							  return new WI_Value("false", WI_Value.WI_BOOL, false);
+					  }
+					  else if (this.jjtGetChild(i).getCompOp().equals("==")) {
+						  if (lastVal != SimpleNode.WItoDouble(this.jjtGetChild(i+1).interpret(sts), sts))
+							  return new WI_Value("false", WI_Value.WI_BOOL, false);
+					  }
+					  else if (this.jjtGetChild(i).getCompOp().equals(">=")) {
+						  if (lastVal < SimpleNode.WItoDouble(this.jjtGetChild(i+1).interpret(sts), sts))
+							  return new WI_Value("false", WI_Value.WI_BOOL, false);
+					  }
+					  else if (this.jjtGetChild(i).getCompOp().equals("<=")) {
+						  if (lastVal > SimpleNode.WItoDouble(this.jjtGetChild(i+1).interpret(sts), sts))
+							  return new WI_Value("false", WI_Value.WI_BOOL, false);
+					  }
+					  else if (this.jjtGetChild(i).getCompOp().equals("!=")) {
+						  if (lastVal == SimpleNode.WItoDouble(this.jjtGetChild(i+1).interpret(sts), sts))
+							  return new WI_Value("false", WI_Value.WI_BOOL, false);
+					  }
+				  }
+				  else {
+					  lastVal = SimpleNode.WItoDouble(this.jjtGetChild(i).interpret(sts), sts);
+				  }
+			  }
+			  return new WI_Value("true", WI_Value.WI_BOOL, false);
+		  }
+		  else {
+			  return this.jjtGetChild(0).interpret(sts);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTPARAMETERS) {
+		  if (this.jjtGetNumChildren() == 1) return this.jjtGetChild(0).interpret(sts);
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTTYPEDARGLIST) {
+		  // TODO implement rest of TypeDArglist
+		  ArrayList<WI_Value> ret = new ArrayList<WI_Value>();
+		  for (int i = 0 ; i < this.jjtGetNumChildren(); i++) {
+			  ret.add(this.jjtGetChild(i).interpret(sts));
+		  }
+		  return new WI_Value(ret, false);
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTTFPDEF) {
+		  // TODO implement rest of TfpDef
+		  return this.jjtGetChild(0).interpret(sts);
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTEXPRLIST) {
+		  // TODO implement more than 1 child
+		  return this.jjtGetChild(0).interpret(sts);
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTEXPR) {
+		  if (this.jjtGetNumChildren() > 1) {
+			  int ret = (int) SimpleNode.WItoDouble(this.jjtGetChild(0).interpret(sts), sts);
+			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
+				  ret = ret | (int) SimpleNode.WItoDouble(this.jjtGetChild(i).interpret(sts), sts);
+			  }
+			  return new WI_Value(Integer.toString(ret), WI_Value.WI_NUMBER, false);
+		  }
+		  else {
+			  return this.jjtGetChild(0).interpret(sts);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTXOREXPR) {
+		  if (this.jjtGetNumChildren() > 1) {
+			  int ret = (int) SimpleNode.WItoDouble(this.jjtGetChild(0).interpret(sts), sts);
+			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
+				  ret = ret ^ (int) SimpleNode.WItoDouble(this.jjtGetChild(i).interpret(sts), sts);
+			  }
+			  return new WI_Value(Integer.toString(ret), WI_Value.WI_NUMBER, false);
+		  }
+		  else {
+			  return this.jjtGetChild(0).interpret(sts);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTANDEXPR) {
+		  if (this.jjtGetNumChildren() > 1) {
+			  int ret = (int) SimpleNode.WItoDouble(this.jjtGetChild(0).interpret(sts), sts);
+			  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
+				  ret = ret & (int) SimpleNode.WItoDouble(this.jjtGetChild(i).interpret(sts), sts);
+			  }
+			  return new WI_Value(Integer.toString(ret), WI_Value.WI_NUMBER, false);
+		  }
+		  else {
+			  return this.jjtGetChild(0).interpret(sts);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTSHIFTEXPR) {
+		  if (this.jjtGetNumChildren() > 1) {
+			  int ret = (int) SimpleNode.WItoDouble(this.jjtGetChild(0).interpret(sts), sts);
+			  for (int i = 2; i < this.jjtGetNumChildren(); i+=2) {
+				  if (this.jjtGetChild(i-1).getShiftOp().equals(">>")) {
+					  ret >>= (int) SimpleNode.WItoDouble(this.jjtGetChild(i).interpret(sts), sts);
+				  }
+				  else if (this.jjtGetChild(i-1).getShiftOp().equals("<<")) {
+					  ret <<= (int) SimpleNode.WItoDouble(this.jjtGetChild(i).interpret(sts), sts);
+				  }
+			  }
+			  return new WI_Value(Integer.toString(ret), WI_Value.WI_NUMBER, false);
+		  }
+		  else {
+			  return this.jjtGetChild(0).interpret(sts);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTARITHEXPR) {
+		  if (this.jjtGetNumChildren() > 1) {
+			  double ret = SimpleNode.WItoDouble(this.jjtGetChild(0).interpret(sts), sts);
+			  for (int i = 2; i < this.jjtGetNumChildren(); i+=2) {
+				  if (this.jjtGetChild(i-1).getAddOp().equals("+")) {
+					  ret += SimpleNode.WItoDouble(this.jjtGetChild(i).interpret(sts), sts);
+				  }
+				  else if (this.jjtGetChild(i-1).getAddOp().equals("-")) {
+					  ret -= SimpleNode.WItoDouble(this.jjtGetChild(i).interpret(sts), sts);
+				  }
+			  }
+			  return new WI_Value(Double.toString(ret), WI_Value.WI_NUMBER, false);
+		  }
+		  else {
+			  return this.jjtGetChild(0).interpret(sts);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTTERM) {
+		  if (this.jjtGetNumChildren() > 1) {
+			  double ret = SimpleNode.WItoDouble(this.jjtGetChild(0).interpret(sts), sts);
+			  for (int i = 2; i < this.jjtGetNumChildren(); i+=2) {
+				  if (this.jjtGetChild(i-1).getMulOp().equals("*")) {
+					  ret *= SimpleNode.WItoDouble(this.jjtGetChild(i).interpret(sts), sts);
+				  }
+				  else if (this.jjtGetChild(i-1).getMulOp().equals("/")) {
+					  ret /= SimpleNode.WItoDouble(this.jjtGetChild(i).interpret(sts), sts);
+				  }
+				  else if (this.jjtGetChild(i-1).getMulOp().equals("%")) {
+					  ret %= SimpleNode.WItoDouble(this.jjtGetChild(i).interpret(sts), sts);
+				  }
+				  else if (this.jjtGetChild(i-1).getMulOp().equals("//")) {
+					  ret /= SimpleNode.WItoDouble(this.jjtGetChild(i).interpret(sts), sts);
+					  ret = (int) ret;
+				  }
+			  }
+			  return new WI_Value(Double.toString(ret), WI_Value.WI_NUMBER, false);
+		  }
+		  else {
+			  return this.jjtGetChild(0).interpret(sts);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTFACTOR) {
+		  if (this.jjtGetNumChildren() > 1) {
+			  double ret = SimpleNode.WItoDouble(this.jjtGetChild(1).interpret(sts), sts);
+			  if (this.jjtGetChild(0).getAddOp().equals("+"));
+			  else if (this.jjtGetChild(0).getAddOp().equals("-")) {
+				  ret *= -1;
+			  }
+			  else if (this.jjtGetChild(0).getAddOp().equals("~")) {
+				  ret = ~(int)ret;
+			  }
+			  return new WI_Value(Double.toString(ret), WI_Value.WI_NUMBER, false);
+		  }
+		  else {
+			  return this.jjtGetChild(0).interpret(sts);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTPOWER) {
+		  if (this.jjtGetNumChildren() > 1) {
+			  double ret = SimpleNode.WItoDouble(this.jjtGetChild(0).interpret(sts), sts);
+			  if (this.jjtGetNumChildren() > 1) {
+				  ret = Math.pow(ret, SimpleNode.WItoDouble(this.jjtGetChild(1).interpret(sts), sts));
+			  }
+			  return new WI_Value(Double.toString(ret), WI_Value.WI_NUMBER, false);
+		  }
+		  else {
+			  return this.jjtGetChild(0).interpret(sts);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTATOMEXPR) {
+		  // TODO implement rest of AtomExpr
+		  if (this.jjtGetNumChildren() > 1) {
+			  WI_Value ret = this.jjtGetChild(0).interpret(sts);
+			  if (ret.getWiType() == WI_Value.WI_NAME) {
+				  if (!ret.getValue().equals("print"))
+						  ret = SimpleNode.getReference(ret.getValue(), sts);
+				  for (int i = 1; i < this.jjtGetNumChildren(); i++) {
+					  if (this.jjtGetChild(i).getId() == GrammarTreeConstants.JJTSUBSCRIPTLIST) {
+						  WI_Value trailer = this.jjtGetChild(i).interpret(sts);
+						  if (ret.getWiType() != WI_Value.WI_LIST) {
+							  throw new Exception("No List Found: " + ret.getValue());
+						  }
+						  ret = ret.getList().get((int)SimpleNode.WItoDouble(trailer, sts));
+					  }
+					  else if (this.jjtGetChild(i).getId() == GrammarTreeConstants.JJTARGLIST) {
+						  WI_Value trailer = this.jjtGetChild(i).interpret(sts);
+						  if (!ret.getValue().equals("print") && ret.getWiType() != WI_Value.WI_FUNC) {
+							  throw new Exception("No Function Found: " + ret.getValue());
+						  }
+						  
+						  if (trailer.getWiType() != WI_Value.WI_LIST) {
+							  throw new Exception("Impossibe");
+						  }
+						  
+						  if (!ret.getValue().equals("print") && trailer.getList().size() != ret.getParameters().size()) {
+							  // TODO implement args
+							  throw new Exception("Arguments Error");
+						  }
+						  
+						  ArrayList<String> params = ret.getParameters();
+						  if (ret.getValue().equals("print")) {   // DEBUG ONLY
+							  for (int param = 0; param < trailer.getList().size(); param++) {
+								  SimpleNode.print(trailer.getList().get(param), sts);
+								  System.out.print(" ");
+							  }
+							  System.out.println("");
+						  }
+						  else {
+							  sts.add(new HashMap<String, WI_Value>());
+							  for (int j = 0; j < trailer.getList().size(); j++) {
+								  sts.get(sts.size() - 1).put(params.get(j), trailer.getList().get(j));
+							  }
+							  ret = ret.getFuncRef().evaluateFunc(sts);
+							  sts.remove(sts.size() - 1);
+						  }
+					  }
+				  }
+				  return ret;
+			  }
+		  }
+		  else {
+			  return this.jjtGetChild(0).interpret(sts);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTARGLIST) {
+		  ArrayList<WI_Value> list = new ArrayList<WI_Value>();
+		  for (int i = 0; i < this.jjtGetNumChildren(); i++) {
+			  list.add(this.jjtGetChild(i).interpret(sts));
+		  }
+		  return new WI_Value(list, false);
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTARGUMENT) {
+		  return this.jjtGetChild(0).interpret(sts);
 	  }
 	  
-	  for (int j = 0; j < symbolTables.size(); j++) {
-		  HashMap<String, WI_Value> symbolTable = symbolTables.get(j);
-		  for(Map.Entry m:symbolTable.entrySet()){  
-			  System.out.println(m.getKey()+" "+((WI_Value)m.getValue()).getValue());  
-			  for (int i = 0; i < ((WI_Value)m.getValue()).getList().size(); i++) {
-				  //System.out.print(((WI_Value)m.getValue()).getList().get(i).getValue() + "  ");
-			  }
-			  System.out.println("");
+	  else if (this.id == GrammarTreeConstants.JJTRETURNSTMT) {
+		  if (this.jjtGetNumChildren() == 1) {
+			  WI_Value tmp = this.jjtGetChild(0).interpret(sts);
+			  tmp.fromReturnStmt = true;
+			  return tmp;
+		  }
+		  return new WI_Value("\0", WI_Value.WI_UNDEFINED, true);
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTSUBSCRIPTLIST) {
+		  // TODO implement multiple Subscripts
+		  return this.jjtGetChild(0).interpret(sts);
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTATOM) {
+		  if (this.jjtGetChild(0).getId() == GrammarTreeConstants.JJTLIST) {
+			  return this.jjtGetChild(0).interpret(sts);
+		  }
+		  else {
+			  return this.jjtGetChild(0).interpret(sts);
 		  }
 	  }
+	  else if (this.id == GrammarTreeConstants.JJTTESTLISTCOMP) {
+		  if (this.jjtGetNumChildren() > 1) {
+			  ArrayList<WI_Value> list = new ArrayList<WI_Value>();
+			  for (int i =0; i < this.jjtGetNumChildren(); i++) {
+				  list.add(this.jjtGetChild(i).interpret(sts));
+			  }
+			  return new WI_Value(list, false);
+		  }
+		  else {
+			  return this.jjtGetChild(0).interpret(sts);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTLIST) {
+		  if (this.jjtGetNumChildren() > 0) {
+			  return this.jjtGetChild(0).interpret(sts);
+		  }
+		  else {
+			  return new WI_Value(new ArrayList<WI_Value>(), false);
+		  }
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTNUMBER) {
+		  return new WI_Value(this.AtomValue, WI_Value.WI_NUMBER, false);
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTNAME) {
+		  return new WI_Value(this.AtomValue, WI_Value.WI_NAME, false);
+	  }
+	  else if (this.id == GrammarTreeConstants.JJTSTRING) {
+		  StringBuffer sb = new StringBuffer();
+		  for (int i = 1; i < this.AtomValue.length() - 1; i++) {
+			  sb.append(this.AtomValue.charAt(i));
+		  }
+		  return new WI_Value(sb.toString(), WI_Value.WI_STRING, false);
+	  }
+	  
+	  return new WI_Value("\0", WI_Value.WI_UNDEFINED, false);
   }
 }
 

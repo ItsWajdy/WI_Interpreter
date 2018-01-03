@@ -8,28 +8,45 @@ public class WI_Value {
 	public static final int WI_BOOL = 2;
 	public static final int WI_STRING = 3;
 	public static final int WI_LIST = 4;
+	public static final int WI_FUNC = 5;
 	public static final int WI_UNDEFINED = -1;
 	
 	private String value;
 	private ArrayList<WI_Value> list = new ArrayList<WI_Value>();
+	private Node funcRef;
+	private ArrayList<String> parameters;
 	private int wi_type;
+	public boolean fromReturnStmt;
 	
-	public WI_Value(String value, int wi_type) {
+	public WI_Value(String value, int wi_type, boolean isReturn) {
 		this.value = value;
 		this.wi_type = wi_type;
+		this.fromReturnStmt = isReturn;
 	}
 	
-	public WI_Value(ArrayList<WI_Value> list) {
+	public WI_Value(ArrayList<WI_Value> list, boolean isReturn) {
 		this.list = new ArrayList<WI_Value>();
 		for (int i = 0; i < list.size(); i++) {
 			this.list.add(list.get(i));
 		}
 		//this.list = list;
 		this.wi_type = WI_Value.WI_LIST;
+		this.fromReturnStmt = isReturn;
+	}
+	
+	public WI_Value(String value, Node funcRef, ArrayList<String> parameters, boolean isReturn) {
+		this.value = value;
+		this.wi_type = WI_Value.WI_FUNC;
+		this.funcRef = funcRef;
+		this.parameters = parameters;
+		this.fromReturnStmt = isReturn;
 	}
 	
 	public String getValue() { return this.value; }
 	public ArrayList<WI_Value> getList() { return this.list; }
+	public Node getFuncRef() { return this.funcRef; }
+	public ArrayList<String> getParameters() { return this.parameters; }
+	public boolean isFromReturnStmt() { return this.fromReturnStmt; }
 	public int getWiType() { return this.wi_type; }
 	
 	public boolean EvalBool() {
