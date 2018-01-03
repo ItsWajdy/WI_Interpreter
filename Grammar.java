@@ -11,7 +11,7 @@ public class Grammar/*@bgen(jjtree)*/implements GrammarTreeConstants, GrammarCon
     symbolTables.add(symbolTable);
     try {
                 SimpleNode root = parser.Input();
-                root.interpret(symbolTable);
+                root.interpret(symbolTables);
                 //root.dump("  ");
         } catch (ParseException e) {
                 System.out.println("Oops!");
