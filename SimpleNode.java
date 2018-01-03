@@ -903,7 +903,8 @@ public class SimpleNode implements Node {
 						  if (ret.getValue().equals("print")) {   // DEBUG ONLY
 							  for (int param = 0; param < trailer.getList().size(); param++) {
 								  SimpleNode.print(trailer.getList().get(param), sts);
-								  System.out.print(" ");
+								  if (trailer.getList().get(param).getWiType() != WI_Value.WI_STRING)
+									  System.out.print(" ");
 							  }
 							  System.out.println("");
 						  }
