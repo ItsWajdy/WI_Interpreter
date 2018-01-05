@@ -213,7 +213,9 @@ public class SimpleNode implements Node {
 		  
 		  for (int i = 0; i < suite.jjtGetNumChildren(); i++) {
 			  WI_Value tmp = suite.jjtGetChild(i).interpret(sts);
-			  if (tmp.isFromReturnStmt()) return tmp;
+			  if (tmp.isFromReturnStmt()) {
+				  return tmp;
+			  }
 		  }
 	  }
 	  return new WI_Value("\0", WI_Value.WI_UNDEFINED, false);
@@ -914,6 +916,8 @@ public class SimpleNode implements Node {
 								  sts.get(sts.size() - 1).put(params.get(j), trailer.getList().get(j));
 							  }
 							  ret = ret.getFuncRef().evaluateFunc(sts);
+							  if (ret.getWiType() == WI_Value.WI_NAME)
+								  ret = SimpleNode.getReference(ret.getValue(), sts);
 							  sts.remove(sts.size() - 1);
 						  }
 					  }
